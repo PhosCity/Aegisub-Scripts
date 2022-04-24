@@ -2,7 +2,7 @@
 	"dependencyControlFeedFormatVersion": "0.3.0",
 	"name": "PhosCity's Aegisub Scripts",
 	"description": "Main repository for all of PhosCity's automation macros.",
-	"maintainer": "line0",
+	"maintainer": "PhosCity",
 	"knownFeeds": {
 		"a-mo": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json",
 		"ASSFoundation": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
