@@ -27,8 +27,7 @@ jobs:
             if [[ -s "${output_file}" ]]; then
               mv "${output_file}" DependencyControl.json
             else
-              eecho "Something went wrong. The file is empty."
-              exit 1
+              echo "Something went wrong. The file is empty."
             fi
           done < <(find ./macros -name "*lua" -type f)
       - name: Commit changes
