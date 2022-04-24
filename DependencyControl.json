@@ -18,14 +18,14 @@
 			"description": "Make the string wavy",
 			"channels": {
 				"main": {
-					"version": "1.0.0",
+					"version": "1.0.1",
 					"released": "2022-04-24",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "1396400bf965574d061b98a01bca3efe8c6c4025"
+							"sha1": "13b2e49a619b9f0ed0e328e3543dec2c808f2a31"
 						}
 					]
 				}
@@ -43,14 +43,14 @@
 			"description": "Converts a text to a shape and adds wobbling",
 			"channels": {
 				"main": {
-					"version": "1.3.1",
+					"version": "1.3.2",
 					"released": "2022-04-24",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "bdfc89e2267b640e589564dffc55fee1a8c78879"
+							"sha1": "74061b979358caaad657a499da58828399fec756"
 						}
 					],
 					"requiredModules": [
@@ -73,14 +73,14 @@
 			"description": "Snap to close keyframes during timing",
 			"channels": {
 				"main": {
-					"version": "1.0.0",
+					"version": "1.0.1",
 					"released": "2022-04-24",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "a7136b01cb94002c9da96f6ec58b6d934c5f5959"
+							"sha1": "27212935518c71385c1ffa9f964f435663ce967f"
 						}
 					]
 				}
