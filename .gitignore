@@ -1,0 +1,5 @@
+*
+!.git*
+!.github/**
+!macros/*.lua
+!DependencyControl.json

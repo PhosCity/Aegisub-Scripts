@@ -1,11 +1,17 @@
-require("karaskel")
-
 -- Script information
 script_name = "Wave"
 script_description = "Make the string wavy"
 script_author = "PhosCity"
-script_version = "1.0.0"
-script_modified = "18 April 2022"
+script_version = "1.0.1"
+script_namespace = "phos.wave"
+
+require("karaskel")
+local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
+if haveDepCtrl then
+	depRec = DependencyControl({
+		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+	})
+end
 
 local function stringToTable(text)
 	local table = {}
@@ -133,4 +139,8 @@ local function load_macro(subs, sel)
 end
 
 -- Register macro to Aegisub
-aegisub.register_macro(script_author .. "/" .. script_name, script_description, load_macro)
+if haveDepCtrl then
+	depRec:registerMacro(load_macro)
+else
+	aegisub.register_macro(script_author .. "/" .. script_name, script_description, load_macro)
+end

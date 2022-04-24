@@ -1,8 +1,16 @@
 -- SCRIPT PROPERTIES
 script_name = "Snap to closest keyframe"
-script_author = "PhosCity"
-script_version = "0.0.3"
 script_description = "Snap to close keyframes during timing."
+script_author = "PhosCity"
+script_version = "1.0.1"
+script_namespace = "phos.snap"
+
+local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
+if haveDepCtrl then
+	depRec = DependencyControl({
+		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+	})
+end
 
 -- HELPER FUNCTIONS
 local function get_frame(time)
@@ -62,6 +70,22 @@ local function snap_both(subs, sel)
 end
 
 --Register macro
-aegisub.register_macro(script_author .. "/" .. script_name .. "/Snap both to keyframes", script_description, snap_both)
-aegisub.register_macro(script_author .. "/" .. script_name .. "/Snap start to keyframe", script_description, snap_start)
-aegisub.register_macro(script_author .. "/" .. script_name .. "/Snap end to keyframe", script_description, snap_end)
+if haveDepCtrl then
+	depRec:registerMacros({
+		{ "Snap both", "Snap both to keyframes", snap_both },
+		{ "Snap start", "Snap start to keyframes", snap_start },
+		{ "Snap end", "Snap end to keyframes", snap_end },
+	})
+else
+	aegisub.register_macro(
+		script_author .. "/" .. script_name .. "/Snap both to keyframes",
+		script_description,
+		snap_both
+	)
+	aegisub.register_macro(
+		script_author .. "/" .. script_name .. "/Snap start to keyframe",
+		script_description,
+		snap_start
+	)
+	aegisub.register_macro(script_author .. "/" .. script_name .. "/Snap end to keyframe", script_description, snap_end)
+end

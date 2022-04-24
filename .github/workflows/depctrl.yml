@@ -1,0 +1,44 @@
+name: depctrl
+
+on:
+  push:
+    paths:
+      - "macros/*.lua"
+    branches:
+      - main
+
+jobs:
+  depctrl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update sha1 and version
+        run: |
+          output_file="/tmp/SHA.json"
+          while IFS= read -r file; do
+            CHKSUM=$(sha1sum "${file}")
+            SHA=$(echo "${CHKSUM}" | awk '{print $1}')
+            FULL_FILE=$(echo "${CHKSUM}" | awk -F'/' '{print $NF}')
+            FILE=${FULL_FILE//\.lua/}
+            # get version of the script
+            VERSION=$(grep "script_version =" "macros/${FULL_FILE}" | awk -F= '{print $2}' | sed "s/ //")
+            # change the json file
+            jq --tab ".macros.\"${FILE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${FILE}\".channels.main.version=${VERSION}" DependencyControl.json >"${output_file}"
+            if [[ -s "${output_file}" ]]; then
+              mv "${output_file}" DependencyControl.json
+            else
+              eecho "Something went wrong. The file is empty."
+              exit 1
+            fi
+          done < <(find ./macros -name "*lua" -type f)
+      - name: Commit changes
+        env:
+          COMMIT_MSG: |
+            Automatic update of hashes and script version
+            skip-checks: true
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add DependencyControl.json
+          # Only commit and push if we have changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push)

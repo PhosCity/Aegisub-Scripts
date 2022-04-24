@@ -1,0 +1,95 @@
+{
+	"dependencyControlFeedFormatVersion": "0.3.0",
+	"name": "PhosCity's Aegisub Scripts",
+	"description": "Main repository for all of PhosCity's automation macros.",
+	"maintainer": "line0",
+	"knownFeeds": {
+		"a-mo": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json",
+		"ASSFoundation": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+	},
+	"baseUrl": "https://github.com/PhosCity/Aegisub-Scripts",
+	"url": "@{baseUrl}",
+	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/macros/@{channel}/@{namespace}",
+	"macros": {
+		"phos.wave": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Wave",
+			"description": "Make the string wavy",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2022-04-24",
+					"default": true,
+					"files": [
+						{
+							"name": ".lua",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "1396400bf965574d061b98a01bca3efe8c6c4025"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
+		},
+		"phos.wobble": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Wobble",
+			"description": "Converts a text to a shape and adds wobbling",
+			"channels": {
+				"main": {
+					"version": "1.3.1",
+					"released": "2022-04-24",
+					"default": true,
+					"files": [
+						{
+							"name": ".lua",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "bdfc89e2267b640e589564dffc55fee1a8c78879"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "Yutils"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.3.1": [
+					"Initial Release"
+				]
+			}
+		},
+		"phos.snap": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Snap to closest keyframes",
+			"description": "Snap to close keyframes during timing",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2022-04-24",
+					"default": true,
+					"files": [
+						{
+							"name": ".lua",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "a7136b01cb94002c9da96f6ec58b6d934c5f5959"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
+		}
+	}
+}

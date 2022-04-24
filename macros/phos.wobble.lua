@@ -2,13 +2,25 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.3.1"
-script_modified = "09th Febrary 2022"
+script_version = "1.3.2"
+script_namespace = "phos.wobble"
 
 -- Credits to Youka for this
--- Load Yutils library
-local Yutils = include("Yutils.lua")
 require("karaskel")
+
+-- local Yutils
+local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
+if haveDepCtrl then
+	depRec = DependencyControl({
+		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+		{
+			"Yutils",
+		},
+	})
+	Yutils = depRec:requireModules()
+else
+	Yutils = include("Yutils.lua")
+end
 
 -- UI configuration template
 local config_template = {
@@ -216,7 +228,7 @@ local function load_macro(subs, sel)
 	local ok, config = aegisub.dialog.display(config_template, { "Calculate", "Cancel" })
 
 	-- Save UI configuration to template
-	local config_template_n, config_template_entry = #config_template
+	local config_template_n, config_template_entry = #config_template, nil
 	for config_key, config_value in pairs(config) do
 		for i = 1, config_template_n do
 			config_template_entry = config_template[i]
@@ -240,4 +252,9 @@ local function load_macro(subs, sel)
 end
 
 -- Register macro to Aegisub
-aegisub.register_macro(script_author .. "/" .. script_name, script_description, load_macro)
+
+if haveDepCtrl then
+	depRec:registerMacro(load_macro)
+else
+	aegisub.register_macro(script_author .. "/" .. script_name, script_description, load_macro)
+end
