@@ -69,7 +69,7 @@
 		"phos.snap": {
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
-			"name": "Snap to closest keyframes",
+			"name": "Bidirectional Snapping",
 			"description": "Snap to close keyframes during timing",
 			"channels": {
 				"main": {
