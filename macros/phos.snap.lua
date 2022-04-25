@@ -1,8 +1,8 @@
 -- SCRIPT PROPERTIES
-script_name = "Bidirection Snapping"
+script_name = "Bidirectional Snapping"
 script_description = "Snap to close keyframes during timing."
 script_author = "PhosCity"
-script_version = "1.0.2"
+script_version = "1.0.3"
 script_namespace = "phos.snap"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
