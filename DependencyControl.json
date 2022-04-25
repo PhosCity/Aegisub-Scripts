@@ -73,14 +73,14 @@
 			"description": "Snap to close keyframes during timing",
 			"channels": {
 				"main": {
-					"version": "1.0.2",
+					"version": "1.0.3",
 					"released": "2022-04-24",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "f97115bde5a8ebe9640d7517cc52a5cf056c013c"
+							"sha1": "2e433a462272074aa815a7e0fbc5139c632d8e6b"
 						}
 					]
 				}
