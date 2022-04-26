@@ -2,24 +2,22 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.3.2"
+script_version = "1.3.3"
 script_namespace = "phos.wobble"
 
--- Credits to Youka for this
-require("karaskel")
-
--- local Yutils
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
 	depRec = DependencyControl({
 		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
 		{
 			"Yutils",
+			"karaskel",
 		},
 	})
 	Yutils = depRec:requireModules()
 else
 	Yutils = include("Yutils.lua")
+	require("karaskel")
 end
 
 -- UI configuration template

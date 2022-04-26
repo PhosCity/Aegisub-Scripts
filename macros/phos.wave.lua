@@ -2,15 +2,18 @@
 script_name = "Wave"
 script_description = "Make the string wavy"
 script_author = "PhosCity"
-script_version = "1.0.1"
+script_version = "1.0.2"
 script_namespace = "phos.wave"
 
-require("karaskel")
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
 	depRec = DependencyControl({
 		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+		{ "karaskel" },
 	})
+	depRec:requireModules()
+else
+	require("karaskel")
 end
 
 local function stringToTable(text)
