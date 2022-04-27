@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.3.3"
+script_version = "1.4.0"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -209,22 +209,25 @@ local function make_shape(subs, sel, config)
 				text,
 				config
 			)
-			local tags = "{\\p1}"
+
+			local original_tags = ""
 			if line.text:match("{\\[^}]-}") then
-				tags = line.text:match("{\\[^}]-}") .. tags
+				original_tags = line.text:match("{\\[^}]-}")
+				original_tags = original_tags
+					:gsub("\\fn[^}\\]+", "")
+					:gsub("\\fs[%d]+", "")
+					:gsub("\\b[01]", "")
+					:gsub("\\i[01]", "")
+					:gsub("\\u[01]", "")
+					:gsub("\\s[01]", "")
+					:gsub("\\fscx[%d.]+", "")
+					:gsub("\\fscy[%d.]+", "")
+					:gsub("\\fsp[%d.]+", "")
+					:gsub("\\fsp[%d.]+", "")
 			end
-			tags = tags
-				:gsub("\\fn[^}\\]+", "")
-				:gsub("\\fs[%d]+", "")
-				:gsub("\\b[01]", "")
-				:gsub("\\i[01]", "")
-				:gsub("\\u[01]", "")
-				:gsub("\\s[01]", "")
-				:gsub("\\fscx[%d.]+", "")
-				:gsub("\\fscy[%d.]+", "")
-				:gsub("\\fsp[%d.]+", "")
-				:gsub("\\fsp[%d.]+", "")
-				:gsub("}{", "")
+
+			local tags = original_tags .. "{\\fscx100\\fscy100\\p1}"
+			tags = tags:gsub("}{", "")
 
 			line.text = tags .. text_shape
 			subs[j] = line
