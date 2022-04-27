@@ -134,8 +134,13 @@ local function make_shape(subs, sel, config)
 			local scale_x = line.styleref.scale_x
 			local scale_y = line.styleref.scale_y
 			local spacing = line.styleref.spacing
+			local align = line.styleref.align
+
 			-- get line data
 			local text = line.text:gsub("{\\[^}]-}", "")
+			if line.text:match("\\an[1-9]") then
+				align = line.text:match("\\an([1-9])")
+			end
 			if line.text:match("\\fn([^}\\]+)") then
 				fontname = line.text:match("\\fn([^}\\]+)")
 			end
@@ -182,6 +187,13 @@ local function make_shape(subs, sel, config)
 			end
 			if line.text:match("\\fsp([^}\\]+)") then
 				spacing = line.text:match("\\fsp([^}\\]+)")
+			end
+
+			-- Check if the line has alignment of 7. Anything else and the position of output line may not be the same as the input line
+			if tonumber(align) ~= 7 then
+				aegisub.log(
+					"The resulting line may have different position because the alignment is not 7.\nThe script will proceed the operation but if position matters to you, please use '\\an7' in the line."
+				)
 			end
 
 			local text_shape = wobble(
