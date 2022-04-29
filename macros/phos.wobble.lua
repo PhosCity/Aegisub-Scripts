@@ -119,7 +119,6 @@ end
 
 local function make_shape(subs, sel, config)
 	local meta, styles = karaskel.collect_head(subs, false)
-	-- local text_shape = wobble(subs, sel, config)
 	for _, j in ipairs(sel) do
 		if subs[j].class == "dialogue" then
 			local line = subs[j]
