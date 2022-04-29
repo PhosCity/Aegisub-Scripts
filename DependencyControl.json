@@ -44,13 +44,13 @@
 			"channels": {
 				"main": {
 					"version": "1.4.0",
-					"released": "2022-04-24",
+					"released": "2022-04-29",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "65b980a2e6bc77a8e045ca28050eddbc34c73a28"
+							"sha1": "166dc7592d0f28b5e4d0c48679ecdf27e59e254d"
 						}
 					],
 					"requiredModules": [
