@@ -47,8 +47,8 @@ jobs:
             # For example: My script is named phos.wave.lua. Therefore, the first level key is phos.wave
             NAMESPACE=$(echo "${FULL_FILE}" | sed "s|.moon||g;s|.lua||g")
 
-            # Get version of the script (Provided that `script_version = "version"` is in the scripts)
-            VERSION=$(grep "script_version =" "macros/${FULL_FILE}" | awk -F= '{print $2}' | sed "s/ //")
+            # Get version of the script (Provided that `script_version = "version"` is in the scripts - Spaces around '=' or lack of it is accounted for)
+            VERSION=$(grep -E "script_version\s?=\s?" "macros/${FULL_FILE}" | awk -F= '{print $2}' | sed "s/ //")
 
             # Check if the file is added to DependencyControl or not and if version could be found or not
             if grep -q "${NAMESPACE}" DependencyControl.json && [[ -n "${VERSION}" ]]; then
