@@ -9,7 +9,7 @@
 	},
 	"baseUrl": "https://github.com/PhosCity/Aegisub-Scripts",
 	"url": "@{baseUrl}",
-	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/macros/@{channel}/@{namespace}",
+	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/@{channel}/macros/@{namespace}",
 	"macros": {
 		"phos.wave": {
 			"url": "@{baseUrl}#@{namespace}",
