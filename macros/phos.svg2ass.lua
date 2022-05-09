@@ -27,7 +27,7 @@ local function config_setup()
 			width = 5,
 			height = 1,
 			class = "label",
-			label = "Path of svg:",
+			label = "Path of svg2ass executable:",
 		},
 		{
 			x = 0,
@@ -44,7 +44,7 @@ local function config_setup()
 			width = 5,
 			height = 1,
 			class = "label",
-			label = "svg2ass options",
+			label = "svg2ass options:",
 		},
 		{
 			x = 0,
@@ -61,7 +61,7 @@ local function config_setup()
 			width = 5,
 			height = 1,
 			class = "label",
-			label = "Custom Tags",
+			label = "Custom ASS Tags:",
 		},
 		{
 			x = 0,
@@ -83,6 +83,11 @@ local function config_setup()
 		config.c.user_tags = Res.usrtgs
 		config:write()
 	end
+end
+
+local function check_svg2ass(path)
+	local exitcode = os.execute(path .. " -h")
+	return exitcode
 end
 
 local function string2time(timecode)
@@ -154,13 +159,20 @@ local function run_cmd(command)
 end
 
 local function main(subs, sel)
+	config:load()
+	local exitcode = check_svg2ass(config.c.svg2ass_path)
+	if not exitcode then
+		aegisub.log(
+			"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
+		)
+		return
+	end
 	if #sel ~= 1 then
 		aegisub.log(
 			"You must select exactly one line\nThat line's start time, end time and style will be copied to resulting lines."
 		)
 		return
 	end
-	config:load()
 	local ffilter = "SVG Files (.svg)|*.svg"
 	local script_dir = aegisub.decode_path("?script")
 	local fname = aegisub.dialog.open("Select svg file", "", script_dir, ffilter, false, true)
