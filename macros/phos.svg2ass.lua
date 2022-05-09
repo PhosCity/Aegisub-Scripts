@@ -5,7 +5,8 @@ script_author = "PhosCity"
 script_version = "0.0.1"
 script_namespace = "phos.svg"
 
-depRec = require("l0.DependencyControl")
+DependencyControl = require("l0.DependencyControl")
+local depRec = DependencyControl({})
 ConfigHandler = require("l0.DependencyControl.ConfigHandler")
 
 local default_config = {
