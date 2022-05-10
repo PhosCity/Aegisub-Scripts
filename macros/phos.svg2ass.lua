@@ -1,8 +1,8 @@
 -- SCRIPT PROPERTIES
-script_name = "svg2ass(Linux Only)"
+script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "0.0.3"
+script_version = "0.0.5"
 script_namespace = "phos.svg"
 
 DependencyControl = require("l0.DependencyControl")
@@ -27,7 +27,7 @@ local function config_setup()
 			width = 5,
 			height = 1,
 			class = "label",
-			label = "Path of svg2ass executable:",
+			label = "Absoulute path of svg2ass executable:",
 		},
 		{
 			x = 0,
@@ -101,9 +101,17 @@ local function config_setup()
 	end
 end
 
-local function check_svg2ass(path)
-	local exitcode = os.execute(path .. " -h")
-	return exitcode
+-- Check if svg2ass exists in the path given in config
+local function check_svg2ass_exists(path)
+	local cex = io.open(path)
+	if cex == nil then
+		aegisub.log(
+			"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
+		)
+		aegisub.cancel()
+	else
+		cex:close()
+	end
 end
 
 -- Convert timestamp to time in ms
@@ -179,13 +187,7 @@ end
 
 local function main(subs, sel)
 	config:load()
-	local exitcode = check_svg2ass(config.c.svg2ass_path)
-	if not exitcode then
-		aegisub.log(
-			"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
-		)
-		return
-	end
+	check_svg2ass_exists(config.c.svg2ass_path)
 	if #sel ~= 1 then
 		aegisub.log(
 			"You must select exactly one line\nThat line's start time, end time and style will be copied to resulting lines."
@@ -194,7 +196,7 @@ local function main(subs, sel)
 	end
 	local ffilter = "SVG Files (.svg)|*.svg"
 	local script_dir = aegisub.decode_path("?script")
-	local fname = aegisub.dialog.open("Select svg file", "", script_dir, ffilter, false, true)
+	local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
 	local newsel = {}
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
