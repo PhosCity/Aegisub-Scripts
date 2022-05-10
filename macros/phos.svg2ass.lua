@@ -32,7 +32,7 @@ local function config_setup()
 		{
 			x = 0,
 			y = 1,
-			width = 30,
+			width = 20,
 			height = 3,
 			name = "svgpth",
 			class = "edit",
@@ -49,7 +49,7 @@ local function config_setup()
 		{
 			x = 0,
 			y = 5,
-			width = 30,
+			width = 20,
 			height = 3,
 			name = "svgopt",
 			class = "edit",
@@ -66,7 +66,23 @@ local function config_setup()
 		{
 			x = 0,
 			y = 9,
-			width = 30,
+			width = 10,
+			height = 1,
+			class = "label",
+			label = "Default tags added automatically: '\\an7\\pos(0,0)\\p1'",
+		},
+		{
+			x = 0,
+			y = 10,
+			width = 10,
+			height = 1,
+			class = "label",
+			label = "No processing of tags below will be done. Garbage in, Garbage out.",
+		},
+		{
+			x = 0,
+			y = 11,
+			width = 20,
 			height = 3,
 			name = "usrtgs",
 			class = "edit",
@@ -90,6 +106,7 @@ local function check_svg2ass(path)
 	return exitcode
 end
 
+-- Convert timestamp to time in ms
 local function string2time(timecode)
 	timecode = timecode:gsub("(%d):(%d%d):(%d%d)%.(%d%d)", function(a, b, c, d)
 		return d * 10 + c * 1000 + b * 60000 + a * 3600000
@@ -97,6 +114,7 @@ local function string2time(timecode)
 	return timecode
 end
 
+-- Convert a "Dialogue: 0,0:00..." string to a "line" table
 local function string2line(str)
 	local ltype, layer, s_time, e_time, style, actor, margl, margr, margv, eff, txt = str:match(
 		"(%a+): (%d+),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),(.*)"
@@ -121,6 +139,7 @@ local function string2line(str)
 	return l2
 end
 
+-- Convert time in ms to timestamp
 local function time2string(num)
 	local timecode = math.floor(num / 1000)
 	local tc0 = 0
@@ -176,6 +195,7 @@ local function main(subs, sel)
 	local ffilter = "SVG Files (.svg)|*.svg"
 	local script_dir = aegisub.decode_path("?script")
 	local fname = aegisub.dialog.open("Select svg file", "", script_dir, ffilter, false, true)
+	local newsel = {}
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
@@ -191,19 +211,23 @@ local function main(subs, sel)
 					.. line.style
 					.. ' "'
 					.. fname
-					.. '" | tac'
+					.. '"'
 				local result = run_cmd(command)
+				local inserts = 1
 				for j in result:gmatch("[^\n]+") do
-					local line2 = string2line(j)
-					local primary_color = line2.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
+					local newline = string2line(j)
+					local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
 					local tags = "{\\an7\\pos(0,0)" .. config.c.user_tags .. primary_color .. "\\p1}"
-					local text = line2.text:gsub("{\\[^}]-}", "")
-					line2.text = tags .. text
-					subs[-i] = line2
+					local text = newline.text:gsub("{\\[^}]-}", "")
+					newline.text = tags .. text
+					subs.insert(sel[1] - inserts, newline)
+					table.insert(newsel, sel[1] - inserts)
+					inserts = inserts - 1
 				end
 			end
 		end
 	end
+	return newsel
 end
 
 aegisub.register_macro(script_name .. "/" .. "Run", script_description, main)
