@@ -49,6 +49,22 @@ local function config_setup()
 		{
 			x = 0,
 			y = 5,
+			width = 5,
+			height = 1,
+			class = "label",
+			label = "Default options already used: -S, -E, -T ",
+		},
+		{
+			x = 0,
+			y = 6,
+			width = 10,
+			height = 1,
+			class = "label",
+			label = "No processing of options below will be done. Garbage in, Garbage out.",
+		},
+		{
+			x = 0,
+			y = 7,
 			width = 20,
 			height = 3,
 			name = "svgopt",
@@ -57,7 +73,7 @@ local function config_setup()
 		},
 		{
 			x = 0,
-			y = 8,
+			y = 10,
 			width = 5,
 			height = 1,
 			class = "label",
@@ -65,15 +81,15 @@ local function config_setup()
 		},
 		{
 			x = 0,
-			y = 9,
+			y = 11,
 			width = 10,
 			height = 1,
 			class = "label",
-			label = "Default tags added automatically: '\\an7\\pos(0,0)\\p1'",
+			label = "Default tags added automatically: \\an7\\pos(0,0)\\p1",
 		},
 		{
 			x = 0,
-			y = 10,
+			y = 12,
 			width = 10,
 			height = 1,
 			class = "label",
@@ -81,7 +97,7 @@ local function config_setup()
 		},
 		{
 			x = 0,
-			y = 11,
+			y = 13,
 			width = 20,
 			height = 3,
 			name = "usrtgs",
@@ -211,9 +227,10 @@ local function main(subs, sel)
 					.. time2string(line.end_time)
 					.. " -T "
 					.. line.style
-					.. ' "'
-					.. fname
-					.. '"'
+				if config.c.svg2ass_parameters then
+					command = command .. " " .. config.c.svg2ass_parameters
+				end
+				command = command .. ' "' .. fname .. '"'
 				local result = run_cmd(command)
 				local inserts = 1
 				for j in result:gmatch("[^\n]+") do
