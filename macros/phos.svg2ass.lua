@@ -17,10 +17,7 @@ local default_config = {
 local config = ConfigHandler(depRec:getConfigFileName(), default_config, "config")
 
 local function config_setup()
-	ADD = aegisub.dialog.display
-	ADP = aegisub.decode_path
-	AK = aegisub.cancel
-	local GUI = {
+	local CONFIG_GUI = {
 		{
 			x = 0,
 			y = 0,
@@ -106,7 +103,7 @@ local function config_setup()
 		},
 	}
 	Buttons = { "Save", "Cancel" }
-	Pressed, Res = ADD(GUI, Buttons)
+	Pressed, Res = ADD(CONFIG_GUI, Buttons)
 	if Pressed == "Cancel" then
 		AK()
 	elseif Pressed == "Save" then
@@ -194,6 +191,26 @@ local function time2string(num)
 	return timestring
 end
 
+-- Convert shape to clip
+local function shape_to_clip(text)
+	if text:match("^{[^}]-\\p1") then
+		local shape = text:match("}([^{]+)")
+		if shape then
+			text = text:gsub("\\i?clip%([^),]*%)", ""):gsub(shape, ""):gsub("\\p1", "")
+			text = text:gsub("}", "\\clip(" .. shape .. ")}")
+		end
+	end
+	return text
+end
+
+-- Convert clip to iclip
+local function clip_to_iclip(text)
+	if text:match("^{[^}]-\\clip") then
+		text = text:gsub("\\clip", "\\iclip")
+		return text
+	end
+end
+
 local function run_cmd(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
@@ -201,7 +218,7 @@ local function run_cmd(command)
 	return result
 end
 
-local function main(subs, sel)
+local function svg2ass(subs, sel, res)
 	config:load()
 	check_svg2ass_exists(config.c.svg2ass_path)
 	if #sel ~= 1 then
@@ -239,6 +256,13 @@ local function main(subs, sel)
 					local tags = "{\\an7\\pos(0,0)" .. config.c.user_tags .. primary_color .. "\\p1}"
 					local text = newline.text:gsub("{\\[^}]-}", "")
 					newline.text = tags .. text
+					if res.clip then
+						newline.text = shape_to_clip(newline.text)
+					end
+					if res.iclip then
+						newline.text = shape_to_clip(newline.text)
+						newline.text = clip_to_iclip(newline.text)
+					end
 					subs.insert(sel[1] - inserts, newline)
 					table.insert(newsel, sel[1] - inserts)
 					inserts = inserts - 1
@@ -247,6 +271,58 @@ local function main(subs, sel)
 		end
 	end
 	return newsel
+end
+
+local function main(subs, sel)
+	ADD = aegisub.dialog.display
+	ADP = aegisub.decode_path
+	AK = aegisub.cancel
+	local GUI = {
+		{
+			x = 0,
+			y = 0,
+			width = 5,
+			height = 1,
+			class = "label",
+			label = "Please save your file before running the script.",
+		},
+		{
+			x = 0,
+			y = 1,
+			width = 5,
+			height = 1,
+			class = "label",
+			label = "It's in early stage and may crash.\n",
+		},
+		{
+			x = 0,
+			y = 2,
+			name = "drawing",
+			label = "drawing",
+			class = "checkbox",
+		},
+		{
+			x = 1,
+			y = 2,
+			name = "clip",
+			label = "clip",
+			class = "checkbox",
+		},
+		{
+			x = 2,
+			y = 2,
+			name = "iclip",
+			label = "iclip",
+			class = "checkbox",
+		},
+	}
+	Buttons = { "Export", "Cancel" }
+	Pressed, Res = ADD(GUI, Buttons)
+	if Pressed == "Cancel" then
+		AK()
+	elseif Pressed == "Export" then
+		svg2ass(subs, sel, Res)
+	end
 end
 
 aegisub.register_macro(script_name .. "/" .. "Run", script_description, main)
