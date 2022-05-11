@@ -13,7 +13,6 @@ local config = depRec:getConfigHandler({
 	svg2ass_parameters = "",
 	user_tags = "\\bord0\\shad0",
 })
--- local config = depRec:getConfigHandler(depRec:getConfigFileName(), default_config, "config")
 
 local function config_setup()
 	local CONFIG_GUI = {
@@ -198,16 +197,23 @@ local function shape_to_clip(text)
 			text = text:gsub("\\i?clip%([^),]*%)", ""):gsub(shape, ""):gsub("\\p1", "")
 			text = text:gsub("}", "\\clip(" .. shape .. ")}")
 		end
+	else
+		aegisub.log("Something went wrong!")
+		aegisub.cancel()
 	end
 	return text
 end
 
 -- Convert clip to iclip
 local function clip_to_iclip(text)
+	text = shape_to_clip(text)
 	if text:match("^{[^}]-\\clip") then
 		text = text:gsub("\\clip", "\\iclip")
-		return text
+	else
+		aegisub.log("Something went wrong!")
+		aegisub.cancel()
 	end
+	return text
 end
 
 local function run_cmd(command)
@@ -218,9 +224,9 @@ local function run_cmd(command)
 end
 
 -- Progressbar
-function progress(msg)
+local function progress(msg)
 	if aegisub.progress.is_cancelled() then
-		ak()
+		aegisub.cancel()
 	end
 	aegisub.progress.title(msg)
 end
@@ -271,7 +277,6 @@ local function svg2ass(subs, sel, res)
 						newline.text = shape_to_clip(newline.text)
 					end
 					if res.iclip then
-						newline.text = shape_to_clip(newline.text)
 						newline.text = clip_to_iclip(newline.text)
 					end
 					subs.insert(sel[1] - inserts, newline)
@@ -299,7 +304,7 @@ local function main(subs, sel)
 			x = 0,
 			y = 6,
 			name = "drawing",
-			label = "drawing        ",
+			label = "drawing               ",
 			class = "checkbox",
 			value = true,
 		},
@@ -307,7 +312,7 @@ local function main(subs, sel)
 			x = 1,
 			y = 6,
 			name = "clip",
-			label = "clip        ",
+			label = "clip               ",
 			class = "checkbox",
 		},
 		{
@@ -327,5 +332,5 @@ local function main(subs, sel)
 	end
 end
 
-aegisub.register_macro(script_name .. "/" .. "Run", script_description, main)
-aegisub.register_macro(script_name .. "/" .. "Config", script_description, config_setup)
+aegisub.register_macro(script_name .. "/Run", script_description, main)
+aegisub.register_macro(script_name .. "/Config", script_description, config_setup)
