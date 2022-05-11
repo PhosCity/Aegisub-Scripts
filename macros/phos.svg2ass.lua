@@ -31,7 +31,7 @@ local function config_setup()
 			height = 3,
 			name = "svgpth",
 			class = "edit",
-			value = config.c.svg2ass_path,
+			text = config.c.svg2ass_path,
 		},
 		{
 			x = 0,
@@ -64,7 +64,7 @@ local function config_setup()
 			height = 3,
 			name = "svgopt",
 			class = "edit",
-			value = config.c.svg2ass_parameters,
+			text = config.c.svg2ass_parameters,
 		},
 		{
 			x = 0,
@@ -97,7 +97,7 @@ local function config_setup()
 			height = 3,
 			name = "usrtgs",
 			class = "edit",
-			value = config.c.user_tags,
+			text = config.c.user_tags,
 		},
 	}
 	Buttons = { "Save", "Cancel" }
