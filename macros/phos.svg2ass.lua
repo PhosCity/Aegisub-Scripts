@@ -121,14 +121,12 @@ end
 
 -- Check if svg2ass exists in the path given in config
 local function check_svg2ass_exists(path)
-	local cex = io.open(path)
-	if cex == nil then
+	local exitcode = os.execute(path .. " -h")
+	if not exitcode then
 		aegisub.log(
 			"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
 		)
 		aegisub.cancel()
-	else
-		cex:close()
 	end
 end
 
