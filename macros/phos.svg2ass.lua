@@ -7,14 +7,13 @@ script_namespace = "phos.svg"
 
 DependencyControl = require("l0.DependencyControl")
 local depRec = DependencyControl({})
-ConfigHandler = require("l0.DependencyControl.ConfigHandler")
 
-local default_config = {
+local config = depRec:getConfigHandler({
 	svg2ass_path = "svg2ass",
 	svg2ass_parameters = "",
 	user_tags = "\\bord0\\shad0",
-}
-local config = ConfigHandler(depRec:getConfigFileName(), default_config, "config")
+})
+-- local config = depRec:getConfigHandler(depRec:getConfigFileName(), default_config, "config")
 
 local function config_setup()
 	local CONFIG_GUI = {
@@ -103,9 +102,9 @@ local function config_setup()
 		},
 	}
 	Buttons = { "Save", "Cancel" }
-	Pressed, Res = ADD(CONFIG_GUI, Buttons)
+	Pressed, Res = aegisub.dialog.display(CONFIG_GUI, Buttons)
 	if Pressed == "Cancel" then
-		AK()
+		aegisub.cancel()
 	elseif Pressed == "Save" then
 		config.c.svg2ass_path = Res.svgpth
 		config.c.svg2ass_parameters = Res.svgopt
@@ -274,9 +273,6 @@ local function svg2ass(subs, sel, res)
 end
 
 local function main(subs, sel)
-	ADD = aegisub.dialog.display
-	ADP = aegisub.decode_path
-	AK = aegisub.cancel
 	local GUI = {
 		{
 			x = 0,
@@ -317,9 +313,9 @@ local function main(subs, sel)
 		},
 	}
 	Buttons = { "Export", "Cancel" }
-	Pressed, Res = ADD(GUI, Buttons)
+	Pressed, Res = aegisub.dialog.display(GUI, Buttons)
 	if Pressed == "Cancel" then
-		AK()
+		aegisub.cancel()
 	elseif Pressed == "Export" then
 		svg2ass(subs, sel, Res)
 	end
