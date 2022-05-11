@@ -217,6 +217,14 @@ local function run_cmd(command)
 	return result
 end
 
+-- Progressbar
+function progress(msg)
+	if aegisub.progress.is_cancelled() then
+		ak()
+	end
+	aegisub.progress.title(msg)
+end
+
 local function svg2ass(subs, sel, res)
 	config:load()
 	check_svg2ass_exists(config.c.svg2ass_path)
@@ -227,7 +235,6 @@ local function svg2ass(subs, sel, res)
 		return
 	end
 	local ffilter = "SVG Files (.svg)|*.svg"
-	local script_dir = aegisub.decode_path("?script")
 	local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
 	local newsel = {}
 	for _, i in ipairs(sel) do
@@ -248,8 +255,13 @@ local function svg2ass(subs, sel, res)
 				end
 				command = command .. ' "' .. fname .. '"'
 				local result = run_cmd(command)
+
+				local _, line_count = string.gsub(result, "\n", "\n")
 				local inserts = 1
+				local count = 1
 				for j in result:gmatch("[^\n]+") do
+					progress("Progress Occurs")
+					aegisub.progress.set((count * 100) / line_count)
 					local newline = string2line(j)
 					local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
 					local tags = "{\\an7\\pos(0,0)" .. config.c.user_tags .. primary_color .. "\\p1}"
@@ -265,6 +277,7 @@ local function svg2ass(subs, sel, res)
 					subs.insert(sel[1] - inserts, newline)
 					table.insert(newsel, sel[1] - inserts)
 					inserts = inserts - 1
+					count = count + 1
 				end
 			end
 		end
@@ -277,46 +290,39 @@ local function main(subs, sel)
 		{
 			x = 0,
 			y = 0,
-			width = 5,
-			height = 1,
-			class = "label",
-			label = "Please save your file before running the script.",
+			width = 7,
+			height = 5,
+			class = "textbox",
+			value = "have ass, will typeset\nwill also crash Aegisub\nsave file before running",
 		},
 		{
 			x = 0,
-			y = 1,
-			width = 5,
-			height = 1,
-			class = "label",
-			label = "It's in early stage and may crash.\n",
-		},
-		{
-			x = 0,
-			y = 2,
+			y = 6,
 			name = "drawing",
-			label = "drawing",
+			label = "drawing        ",
 			class = "checkbox",
+			value = true,
 		},
 		{
 			x = 1,
-			y = 2,
+			y = 6,
 			name = "clip",
-			label = "clip",
+			label = "clip        ",
 			class = "checkbox",
 		},
 		{
 			x = 2,
-			y = 2,
+			y = 6,
 			name = "iclip",
 			label = "iclip",
 			class = "checkbox",
 		},
 	}
-	Buttons = { "Export", "Cancel" }
+	Buttons = { "Import", "Cancel" }
 	Pressed, Res = aegisub.dialog.display(GUI, Buttons)
 	if Pressed == "Cancel" then
 		aegisub.cancel()
-	elseif Pressed == "Export" then
+	elseif Pressed == "Import" then
 		svg2ass(subs, sel, Res)
 	end
 end
