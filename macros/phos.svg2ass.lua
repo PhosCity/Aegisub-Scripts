@@ -289,21 +289,26 @@ local function svg2ass(subs, sel, res, usetextbox)
 				end
 			else
 				--Grab what is in the textbox
-				result = res.txtbox
-				if result == "have ass, will typeset" then
+				local raw_output = res.txtbox
+				if raw_output == "have ass, will typeset" then
 					aegisub.log("Replace the textbox content with svg2ass output")
 					aegisub.cancel()
 				end
-				result = result:gsub(
-					"(%a+: %d+,)([^,]-,[^,]-,[^,]-)(,[^,]-,[^,]-,[^,]-,[^,]-,[^,]-,.*)",
-					"%1"
-						.. time2string(line.start_time)
-						.. ","
-						.. time2string(line.end_time)
-						.. ","
-						.. line.style
-						.. "%3"
-				)
+
+				result = ""
+				for z in raw_output:gmatch("[^\n]+") do
+					z = z:gsub(
+						"(%a+: %d+,)([^,]-,[^,]-,[^,]-)(,[^,]-,[^,]-,[^,]-,[^,]-,[^,]-,.*)",
+						"%1"
+							.. time2string(line.start_time)
+							.. ","
+							.. time2string(line.end_time)
+							.. ","
+							.. line.style
+							.. "%3"
+					)
+					result = result .. z .. "\n"
+				end
 			end
 
 			-- Count the total number of lines in result
