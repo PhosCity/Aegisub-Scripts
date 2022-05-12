@@ -238,7 +238,7 @@ local function progress(msg)
 end
 
 -- Main function
-local function svg2ass(subs, sel, res)
+local function svg2ass(subs, sel, res, usetextbox)
 	-- Read config
 	config:read()
 	config:updateInterface("main")
@@ -254,67 +254,88 @@ local function svg2ass(subs, sel, res)
 		return
 	end
 
-	-- Select svg file
-	local ffilter = "SVG Files (.svg)|*.svg"
-	local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
-
-	-- Initialize new selection(for new llines that were added)
+	-- Initialize new selection(for new lines that were added)
 	local newsel = {}
 
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
-			if not fname then
-				aegisub.cancel()
+
+			local result
+			if not usetextbox then
+				-- Select svg file
+				local ffilter = "SVG Files (.svg)|*.svg"
+				local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
+
+				if not fname then
+					aegisub.cancel()
+				else
+					-- Generate svg2ass command
+					local command = opt.svgpath
+						.. " -S "
+						.. time2string(line.start_time)
+						.. " -E "
+						.. time2string(line.end_time)
+						.. ' -T "'
+						.. line.style
+						.. '"'
+					if opt.svgopt then
+						command = command .. " " .. opt.svgopt
+					end
+					command = command .. ' "' .. fname .. '"'
+
+					-- Execute the command and grab it's result
+					result = run_cmd(command)
+				end
 			else
-				-- Generate svg2ass command
-				local command = opt.svgpath
-					.. " -S "
-					.. time2string(line.start_time)
-					.. " -E "
-					.. time2string(line.end_time)
-					.. ' -T "'
-					.. line.style
-					.. '"'
-				if opt.svgopt then
-					command = command .. " " .. opt.svgopt
+				--Grab what is in the textbox
+				result = res.txtbox
+				if result == "have ass, will typeset" then
+					aegisub.log("Replace the textbox content with svg2ass output")
+					aegisub.cancel()
 				end
-				command = command .. ' "' .. fname .. '"'
+				result = result:gsub(
+					"(%a+: %d+,)([^,]-,[^,]-,[^,]-)(,[^,]-,[^,]-,[^,]-,[^,]-,[^,]-,.*)",
+					"%1"
+						.. time2string(line.start_time)
+						.. ","
+						.. time2string(line.end_time)
+						.. ","
+						.. line.style
+						.. "%3"
+				)
+			end
 
-				-- Execute the command and grab it's result
-				local result = run_cmd(command)
+			-- Count the total number of lines in result
+			local _, line_count = string.gsub(result, "\n", "\n")
 
-				-- Count the total number of lines in result
-				local _, line_count = string.gsub(result, "\n", "\n")
+			local inserts = 0
+			local count = 1
+			for j in result:gmatch("[^\n]+") do
+				-- Progressbar
+				progress("Progress Occurs")
+				aegisub.progress.set((count * 100) / line_count)
 
-				local inserts = 0
-				local count = 1
-				for j in result:gmatch("[^\n]+") do
-					-- Progressbar
-					progress("Progress Occurs")
-					aegisub.progress.set((count * 100) / line_count)
+				local newline = string2line(j)
+				local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
+				local tags = "{\\an7\\pos(0,0)" .. opt.usertags .. primary_color .. "\\p1}"
+				local text = newline.text:gsub("{\\[^}]-}", "")
+				newline.text = tags .. text
 
-					local newline = string2line(j)
-					local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
-					local tags = "{\\an7\\pos(0,0)" .. opt.usertags .. primary_color .. "\\p1}"
-					local text = newline.text:gsub("{\\[^}]-}", "")
-					newline.text = tags .. text
-
-					-- Convert shape to clip
-					if res.clip then
-						newline.text = shape_to_clip(newline.text)
-					end
-
-					-- Convert shape to iclip
-					if res.iclip then
-						newline.text = clip_to_iclip(newline.text)
-					end
-
-					subs.insert(sel[1] - inserts, newline)
-					table.insert(newsel, sel[1] - inserts)
-					inserts = inserts - 1
-					count = count + 1
+				-- Convert shape to clip
+				if res.clip then
+					newline.text = shape_to_clip(newline.text)
 				end
+
+				-- Convert shape to iclip
+				if res.iclip then
+					newline.text = clip_to_iclip(newline.text)
+				end
+
+				subs.insert(sel[1] - inserts, newline)
+				table.insert(newsel, sel[1] - inserts)
+				inserts = inserts - 1
+				count = count + 1
 			end
 		end
 	end
@@ -328,8 +349,9 @@ local function main(subs, sel)
 			y = 0,
 			width = 7,
 			height = 5,
+			name = "txtbox",
 			class = "textbox",
-			text = "have ass, will typeset\nwill also crash Aegisub\nsave file before running",
+			text = "have ass, will typeset",
 		},
 		{
 			x = 0,
@@ -354,12 +376,14 @@ local function main(subs, sel)
 			class = "checkbox",
 		},
 	}
-	Buttons = { "Import", "Cancel" }
+	Buttons = { "Import", "Textbox", "Cancel" }
 	Pressed, Res = aegisub.dialog.display(GUI, Buttons)
 	if Pressed == "Cancel" then
 		aegisub.cancel()
 	elseif Pressed == "Import" then
-		svg2ass(subs, sel, Res)
+		svg2ass(subs, sel, Res, false)
+	elseif Pressed == "Textbox" then
+		svg2ass(subs, sel, Res, true)
 	end
 end
 
