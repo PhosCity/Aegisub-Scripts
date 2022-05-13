@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "0.0.8"
+script_version = "0.0.9"
 script_namespace = "phos.svg"
 
 DependencyControl = require("l0.DependencyControl")
@@ -121,12 +121,25 @@ end
 
 -- Check if svg2ass exists in the path given in config
 local function check_svg2ass_exists(path)
-	local exitcode = os.execute(path .. " -h")
-	if not exitcode then
-		aegisub.log(
-			"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
-		)
-		aegisub.cancel()
+	local is_windows = package.config:sub(1, 1) == "\\"
+	if is_windows then
+		local cex = io.open(path)
+		if cex == nil then
+			LOG(
+				"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
+			)
+			AK()
+		else
+			cex:close()
+		end
+	else
+		local exitcode = os.execute(path .. " -h")
+		if not exitcode then
+			LOG(
+				"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
+			)
+			AK()
+		end
 	end
 end
 
@@ -203,20 +216,20 @@ local function shape_to_clip(text)
 			text = text:gsub("}", "\\clip(" .. shape .. ")}")
 		end
 	else
-		aegisub.log("Something went wrong!")
-		aegisub.cancel()
+		LOG("Something went wrong when converting shape to clip! The result does not contain shape.\n")
+		AK()
 	end
 	return text
 end
 
 -- Convert clip to iclip
-local function clip_to_iclip(text)
+local function shape_to_iclip(text)
 	text = shape_to_clip(text)
 	if text:match("^{[^}]-\\clip") then
 		text = text:gsub("\\clip", "\\iclip")
 	else
-		aegisub.log("Something went wrong!")
-		aegisub.cancel()
+		LOG("Something went wrong when converting shape to iclip! The result does not contain clip.\n")
+		AK()
 	end
 	return text
 end
@@ -232,7 +245,7 @@ end
 -- Progressbar
 local function progress(msg)
 	if aegisub.progress.is_cancelled() then
-		aegisub.cancel()
+		AK()
 	end
 	aegisub.progress.title(msg)
 end
@@ -244,11 +257,8 @@ local function svg2ass(subs, sel, res, usetextbox)
 	config:updateInterface("main")
 	local opt = config.configuration.main
 
-	-- Check if svg2ass executable exists
-	check_svg2ass_exists(opt.svgpath)
-
 	if #sel ~= 1 then
-		aegisub.log(
+		LOG(
 			"You must select exactly one line\nThat line's start time, end time and style will be copied to resulting lines."
 		)
 		return
@@ -260,15 +270,18 @@ local function svg2ass(subs, sel, res, usetextbox)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
-
 			local result
+
 			if not usetextbox then
+				-- Check if svg2ass executable exists
+				check_svg2ass_exists(opt.svgpath)
+
 				-- Select svg file
 				local ffilter = "SVG Files (.svg)|*.svg"
 				local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
 
 				if not fname then
-					aegisub.cancel()
+					AK()
 				else
 					-- Generate svg2ass command
 					local command = opt.svgpath
@@ -290,9 +303,9 @@ local function svg2ass(subs, sel, res, usetextbox)
 			else
 				--Grab what is in the textbox
 				local raw_output = res.txtbox
-				if raw_output == "have ass, will typeset" then
-					aegisub.log("Replace the textbox content with svg2ass output")
-					aegisub.cancel()
+				if not raw_output:match("^Dialogue") then
+					LOG("Please replace the textbox content with svg2ass output.")
+					AK()
 				end
 
 				result = ""
@@ -334,7 +347,7 @@ local function svg2ass(subs, sel, res, usetextbox)
 
 				-- Convert shape to iclip
 				if res.iclip then
-					newline.text = clip_to_iclip(newline.text)
+					newline.text = shape_to_iclip(newline.text)
 				end
 
 				subs.insert(sel[1] - inserts, newline)
@@ -348,6 +361,10 @@ local function svg2ass(subs, sel, res, usetextbox)
 end
 
 local function main(subs, sel)
+	ADD = aegisub.dialog.display
+	ADP = aegisub.decode_path
+	AK = aegisub.cancel
+	LOG = aegisub.log
 	local GUI = {
 		{
 			x = 0,
@@ -382,9 +399,9 @@ local function main(subs, sel)
 		},
 	}
 	Buttons = { "Import", "Textbox", "Cancel" }
-	Pressed, Res = aegisub.dialog.display(GUI, Buttons)
+	Pressed, Res = ADD(GUI, Buttons)
 	if Pressed == "Cancel" then
-		aegisub.cancel()
+		AK()
 	elseif Pressed == "Import" then
 		svg2ass(subs, sel, Res, false)
 	elseif Pressed == "Textbox" then
