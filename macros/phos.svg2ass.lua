@@ -278,7 +278,8 @@ local function svg2ass(subs, sel, res, usetextbox)
 
 				-- Select svg file
 				local ffilter = "SVG Files (.svg)|*.svg"
-				local fname = aegisub.dialog.open("Select svg file", "", "", ffilter, false, true)
+				local script_folder = ADP("?script")
+				local fname = aegisub.dialog.open("Select svg file", script_folder, "", ffilter, false, true)
 
 				if not fname then
 					AK()
