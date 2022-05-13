@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.0.0"
+script_version = "1.0.1"
 script_namespace = "phos.svg2ass"
 
 DependencyControl = require("l0.DependencyControl")
