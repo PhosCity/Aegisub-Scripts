@@ -90,6 +90,31 @@
 					"Initial Release"
 				]
 			}
+		},
+		"phos.svg2ass": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "svg2ass",
+			"description": "Script that uses svg2ass to convert svg files to ass lines",
+			"channels": {
+				"main": {
+					"version": "0.0.9",
+					"released": "2022-04-24",
+					"default": true,
+					"files": [
+						{
+							"name": ".lua",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "2e433a462272074aa815a7e0fbc5139c632d8e6b"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@ script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
 script_version = "0.0.9"
-script_namespace = "phos.svg"
+script_namespace = "phos.svg2ass"
 
 DependencyControl = require("l0.DependencyControl")
 local depRec = DependencyControl({
