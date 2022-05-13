@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.0.1"
+script_version = "1.0.2"
 script_namespace = "phos.svg2ass"
 
 DependencyControl = require("l0.DependencyControl")
@@ -411,5 +411,7 @@ local function main(subs, sel)
 	end
 end
 
-aegisub.register_macro(script_name .. "/Run", script_description, main)
-aegisub.register_macro(script_name .. "/Config", script_description, config_setup)
+depRec:registerMacros({
+	{ "Run", "Run the script", main },
+	{ "Config", "Configuration for script", config_setup },
+})
