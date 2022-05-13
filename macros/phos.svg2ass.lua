@@ -7,6 +7,7 @@ script_namespace = "phos.svg2ass"
 
 DependencyControl = require("l0.DependencyControl")
 local depRec = DependencyControl({
+	feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
 	{
 		"a-mo.ConfigHandler",
 		version = "1.1.4",
