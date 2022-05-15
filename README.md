@@ -4,6 +4,7 @@
 1. [Wave](#wave)
 1. [Wobble](#wobble)
 1. [svg2ass](#svg2ass)
+1. [Timing Assistant](#timing-assistant)
 
 ## Bidirectional Snapping
 
@@ -60,3 +61,48 @@ The first thing you should do is to set the config and provide the path where yo
 To use this script, simply click on `Import` button and select the svg file. The resulting lines will have the same start time, end time and style as the selected line. If you checked clip or iclip in the gui, the resulting shape will be converted to clip or iclip respectively. Alternatively if you don't have the svg2ass executable, you can get the output of svg2ass from the website and paste the result in the textbox and click on the `Textbox` button. The resulting lines will the same as `Import`
 
 ![svg2ass](./assets/svg2ass.png)
+
+## Timing Assistant
+
+**_Not Available in Dependency Control_**
+
+I made this script knowing full well that no experienced timer would use this but I had to because I loved TPP's convenience but hated that it was too unintelligent to require a separate pass to fix all the errors it generated.
+
+Rationale:
+
+When I time, I always make a series of decision for every line. Do I need to add lead in, lead out, snap to keyframes or link the lines? So I wanted to create a script that allows me to do it in a press of a hotkey. Someone just rolled their eyes and said, "Phos, you just made an inferior TPP". It might be inferior but it is definitely not a TPP. The workflow of using this script is the same as timing without TPP but only difference is that the aforementioned decisions is made for you by the script.
+
+How to use:
+
+![timer](./assets/timer.png)
+
+The first thing to do after you install the script is to set up the config. By default, it contains the values I use and what I consider sane defaults. You are however free to change it and the script will perform as intended as long as the values you put are within reason. The second thing to do is of course hotkey the script in audio section.
+
+Now you are ready for timing. Here, you'll first do the exact timing on the line and then press the hotkey. The script will make the decision for you whether it should add lead in, snap to keyframe, link the lines together or add lead out. You then move to the next line and repeat. _Exact time, hotkey. Exact time, hotkey. That's it._
+
+I have come to like this method because it has the convenience of decision making of TPP but at the same time, if I do not agree with the script, I am free to fix it and move to next line.
+
+**Note**: If the end time of your line exceeds the audio of next line, don't fix it. Go to the next line, exact time it and then press the hotkey. The script will fix it. It works in this manner because it can only make proper decision of line linking of current line in context of start time of next line.
+
+**Note2:** This is just the first release of the script and I understand that it'll not be perfect right now but as I keep timing with it and come across edge cases where it fails, I'll be sure to improve it where I can.
+
+If you want to to check exactly what steps the script takes for decision making, expand the following and let me know if I got something wrong.
+
+<details>
+  <summary>Click here to expand</summary>
+
+For start time:
+
+1. If start time is already snapped to keyframe, it does not make any changed to the start time.
+1. Checks if there is a keyframe within the time specified in the config and snaps to it.
+1. If it was not snapped, it checks the end time of previous line and if it is within the linking time specified in config, it adds lead in to current line and extends the end time of the previous line.
+1. If it was neither snapped nor linked, it simply adds lead in.
+
+For end time:
+
+1. If end time is already snapped to keyframe, it does not make any changed to the end time.
+1. Here's a special step that is only applicable when your keyframe snapping value is greater than 900 ms. Snapping to keyframes 900 - 1000 ms away is very risky. It is not always the correct thing to do, hence this special step. If the script finds that there is a keyframe 900 - 1000 ms away from exact end and you've allowed to snap to that distance in config, then it first checks cps of the line (without leadout). If cps is greater than 15, then it snaps to keyframe. If the cps is less than 15, then it either tries to add lead out to the line or extend the end time such that it is 500 ms away from keyframe whichever is lesser.
+1. If above special case is not true(which is most of the case), it simply checks if there is a keyframe within time specifed in the config and snaps to it.
+1. If it did not snap, it simply adds lead out to the line.
+
+</details>
