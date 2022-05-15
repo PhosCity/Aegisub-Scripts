@@ -2,7 +2,7 @@
 script_name = "Timing Assistant"
 script_description = "A second brain for timers"
 script_author = "PhosCity"
-script_version = "1.0.0"
+script_version = "1.0.1"
 script_namespace = "phos.timingassistant"
 
 DependencyControl = require("l0.DependencyControl")
