@@ -93,15 +93,15 @@ If you want to to check exactly what steps the script takes for decision making,
 
 For start time:
 
-1. If start time is already snapped to keyframe, it does not make any changed to the start time.
+1. If start time is already snapped to keyframe, it does not make any changes to the start time.
 1. Checks if there is a keyframe within the time specified in the config and snaps to it.
 1. If it was not snapped, it checks the end time of previous line and if it is within the linking time specified in config, it adds lead in to current line and extends the end time of the previous line.
 1. If it was neither snapped nor linked, it simply adds lead in.
 
 For end time:
 
-1. If end time is already snapped to keyframe, it does not make any changed to the end time.
-1. Here's a special step that is only applicable when your keyframe snapping value is greater than 900 ms. Snapping to keyframes 900 - 1000 ms away is very risky. It is not always the correct thing to do, hence this special step. If the script finds that there is a keyframe 900 - 1000 ms away from exact end and you've allowed to snap to that distance in config, then it first checks cps of the line (without leadout). If cps is greater than 15, then it snaps to keyframe. If the cps is less than 15, then it either tries to add lead out to the line or extend the end time such that it is 500 ms away from keyframe whichever is lesser.
+1. If end time is already snapped to keyframe, it does not make any changes to the end time.
+1. Here's a special step that is only applicable when your keyframe snapping value is greater than 850 ms. Snapping to keyframes more than 850 ms away is not always the correct thing to do, hence this special step. If the script finds that there is a keyframe 850+ ms away from exact end and you've allowed to snap to that distance in config, then it first checks cps of the line (without leadout). If cps is greater than 15, then it snaps to keyframe. If the cps is less than 15, then it either tries to add lead out to the line or extend the end time such that it is 500 ms away from keyframe whichever is lesser.
 1. If above special case is not true(which is most of the case), it simply checks if there is a keyframe within time specifed in the config and snaps to it.
 1. If it did not snap, it simply adds lead out to the line.
 

@@ -155,7 +155,7 @@ local function time_start(subs, sel)
 			local line = subs[i]
 			local snap, link, end_time_previous
 
-			-- Determine if end time of current line is already snapped to keyframe and exit if it is
+			-- Determine if start time of current line is already snapped to keyframe and exit if it is
 			local is_snapped = is_keyframe(line.start_time)
 			if is_snapped then
 				debug_msg("Line start was already snapped to keyframe")
