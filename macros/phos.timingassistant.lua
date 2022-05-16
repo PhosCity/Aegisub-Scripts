@@ -2,7 +2,7 @@
 script_name = "Timing Assistant"
 script_description = "A second brain for timers"
 script_author = "PhosCity"
-script_version = "1.0.1"
+script_version = "1.0.2"
 script_namespace = "phos.timingassistant"
 
 DependencyControl = require("l0.DependencyControl")
@@ -21,6 +21,7 @@ local default_config = {
 	},
 	debug = false,
 }
+
 local config = depctrl:getConfigHandler({
 	start = {
 		leadin = default_config.start.leadin,
@@ -126,8 +127,24 @@ local function calculate_cps(line)
 	local duration = (line.end_time - line.start_time) / 1000
 	local char = text:gsub("%b{}", ""):gsub("\\[Nnh]", "*"):gsub("%s?%*+%s?", " "):gsub("[%s%p]", "")
 	local linelen = char:len()
-	local cps = math.floor(linelen / duration)
+	local cps = math.ceil(linelen / duration)
 	return cps
+end
+
+local function prev_next_keyframe(time)
+	local previous_keyframe, next_keyframe
+	local keyframes = aegisub.keyframes()
+	local current_kf = get_frame(time)
+	for k, kf in ipairs(keyframes) do
+		if kf < current_kf then
+			previous_keyframe = keyframes[k]
+		end
+		if not next_keyframe and kf > current_kf then
+			next_keyframe = keyframes[k]
+		end
+	end
+
+	return previous_keyframe, next_keyframe
 end
 
 local function time_start(subs, sel)
@@ -136,35 +153,28 @@ local function time_start(subs, sel)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
-			local keyframes = aegisub.keyframes()
-			local snap, link, previous_keyframe, next_keyframe, end_time_previous
+			local snap, link, end_time_previous
+
+			-- Determine if end time of current line is already snapped to keyframe and exit if it is
+			local is_snapped = is_keyframe(line.start_time)
+			if is_snapped then
+				debug_msg("Line start was already snapped to keyframe")
+				return
+			end
 
 			-- Determine the end time of previous line
 			local previous_line = subs[i - 1]
 			end_time_previous = previous_line.end_time
 
 			-- Keyframe Snapping
-			local start_kf = get_frame(line.start_time)
-			for k, kf in ipairs(keyframes) do
-				if kf < start_kf then
-					previous_keyframe = keyframes[k]
-				end
-				if not next_keyframe and kf > start_kf then
-					next_keyframe = keyframes[k]
-				end
-			end
-			if
-				math.abs(get_time(previous_keyframe) - line.start_time) < opt.start.keysnap
-				and not is_keyframe(line.start_time)
-			then
+			local previous_keyframe, next_keyframe = prev_next_keyframe(line.start_time)
+
+			if math.abs(get_time(previous_keyframe) - line.start_time) < opt.start.keysnap then
 				line.start_time = get_time(previous_keyframe)
 				snap = true
 				debug_msg("Start : Keyframe snap behind")
 			end
-			if
-				math.abs(get_time(next_keyframe) - line.start_time) < opt.start.keysnap
-				and not is_keyframe(line.start_time)
-			then
+			if math.abs(get_time(next_keyframe) - line.start_time) < opt.start.keysnap then
 				line.start_time = get_time(next_keyframe)
 				snap = true
 				debug_msg("Start : Keyframe snap ahead")
@@ -187,7 +197,7 @@ local function time_start(subs, sel)
 			end
 
 			-- Lead in
-			if not snap and not link and not is_keyframe(line.start_time) then
+			if not snap and not link then
 				line.start_time = line.start_time - opt.start.leadin
 				debug_msg("Start : Lead In")
 			end
@@ -203,53 +213,51 @@ local function time_end(subs, sel)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
-			local keyframes = aegisub.keyframes()
-			local snap, previous_keyframe, next_keyframe
+			local snap
 
-			-- Determine if end time of current line is already snapped to keyframe or not
+			-- Determine if end time of current line is already snapped to keyframe and exit if it is
 			local is_snapped = is_keyframe(line.end_time)
-
-			-- Keyframe Snapping
-			local end_kf = get_frame(line.end_time)
-			for k, kf in ipairs(keyframes) do
-				if kf < end_kf then
-					previous_keyframe = keyframes[k]
-				end
-				if not next_keyframe and kf > end_kf then
-					next_keyframe = keyframes[k]
-				end
+			if is_snapped then
+				debug_msg("Line end was already snapped to keyframe")
+				return
 			end
 
-			-- If the keyframe is somewhere between 900 to 1000 ms, check the cps
+			-- Find the previous and next keyframe for end time
+			local previous_keyframe, next_keyframe = prev_next_keyframe(line.end_time)
+
+			-- If the keyframe is somewhere between 850 to 1000 ms, check the cps
 			-- If cps is less than 15, then add normal lead out or make the end time 500 ms far from keyframe whichever is lesser
 			-- If cps is more than 15, then snap to keyframe
 			local next_kf_dist = math.abs(get_time(next_keyframe) - line.end_time)
 			local prev_kf_dist = math.abs(get_time(previous_keyframe) - line.end_time)
-			if opt.final.keysnap_after >= 900 and next_kf_dist >= 900 and next_kf_dist <= 1000 and not is_snapped then
+			if opt.final.keysnap_after >= 850 and next_kf_dist >= 850 and next_kf_dist <= opt.final.keysnap_after then
 				local cps = calculate_cps(line)
-				if cps < 15 then
+				if cps <= 15 then
 					line.end_time = line.end_time + math.min(opt.final.leadout, next_kf_dist - 500)
+					debug_msg("End   : cps is less than 15.")
 					debug_msg(
-						"End   : cps is less than 15\n            Adjusting end time so that it's 500 ms away from keyframe or adding lead out whichever is lesser."
+						"            Adjusting end time so that it's 500 ms away from keyframe or adding lead out whichever is lesser."
 					)
 				else
 					line.end_time = get_time(next_keyframe)
-					debug_msg("End   : cps is more than 15\n            Snapping to keyframe more than 900 ms away.")
+					debug_msg("End   : cps is more than 15.")
+					debug_msg("            Snapping to keyframe more than 850 ms away.")
 				end
 			else
-				if prev_kf_dist < opt.final.keysnap_behind and not is_snapped then
+				-- Keyframe Snapping
+				if prev_kf_dist < opt.final.keysnap_behind then
 					line.end_time = get_time(previous_keyframe)
 					snap = true
 					debug_msg("End   : Keyframe snap behind")
 				end
-				if next_kf_dist < opt.final.keysnap_after and not is_snapped then
+				if next_kf_dist < opt.final.keysnap_after then
 					line.end_time = get_time(next_keyframe)
 					snap = true
 					debug_msg("End   : Keyframe snap ahead")
 				end
 
 				-- Lead out
-				if not snap and not is_snapped then
+				if not snap then
 					line.end_time = line.end_time + opt.final.leadout
 					debug_msg("End   : Lead Out")
 				end
@@ -266,8 +274,6 @@ local function time_both(subs, sel)
 end
 
 depctrl:registerMacros({
-	-- { "Time Start", "Time the beginning", time_both },
-	-- { "Time End", "Time the end", time_both },
 	{ "Time", "Time the line after exact timing", time_both },
 	{ "Config", "Configuration for script", config_setup },
 })
