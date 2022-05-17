@@ -12,13 +12,13 @@ jobs:
   depctrl:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Get-changed-files
         id: changed-files-comma
-        uses: tj-actions/changed-files@v19
+        uses: tj-actions/changed-files@v20
         with:
           since_last_remote_commit: 'true'
           separator: ','
@@ -63,6 +63,7 @@ jobs:
                 # If something goes wrong with jq operation, it outputs empty file. We don't want to commit it so a condition to check it.
                 if [[ -s "${output_file}" ]]; then
                   mv "${output_file}" DependencyControl.json
+                  echo "Successfully updated Dependency Control."
                 else
                   echo "Something went wrong while processing ${FULL_FILE}. The file is empty."
                 fi
