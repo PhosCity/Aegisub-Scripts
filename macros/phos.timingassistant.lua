@@ -2,7 +2,7 @@
 script_name = "Timing Assistant"
 script_description = "A second brain for timers"
 script_author = "PhosCity"
-script_version = "1.0.3"
+script_version = "1.0.4"
 script_namespace = "phos.timingassistant"
 
 DependencyControl = require("l0.DependencyControl")
@@ -157,9 +157,10 @@ local function time_start(subs, sel, opt)
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
 			local snap, link, end_time_previous
+			local start_time, end_time = aegisub.get_audio_selection()
 
 			-- Determine if start time of current line is already snapped to keyframe and exit if it is
-			local is_snapped = is_keyframe(line.start_time)
+			local is_snapped = is_keyframe(start_time)
 			if is_snapped then
 				debug_msg("Line start was already snapped to keyframe")
 				return
@@ -170,14 +171,14 @@ local function time_start(subs, sel, opt)
 			end_time_previous = previous_line.end_time
 
 			-- Keyframe Snapping
-			local previous_keyframe, next_keyframe = prev_next_keyframe(line.start_time)
+			local previous_keyframe, next_keyframe = prev_next_keyframe(start_time)
 
-			if math.abs(get_time(previous_keyframe) - line.start_time) < opt.start.keysnap then
+			if math.abs(get_time(previous_keyframe) - start_time) < opt.start.keysnap then
 				line.start_time = get_time(previous_keyframe)
 				snap = true
 				debug_msg("Start : Keyframe snap behind")
 			end
-			if math.abs(get_time(next_keyframe) - line.start_time) < opt.start.keysnap then
+			if math.abs(get_time(next_keyframe) - start_time) < opt.start.keysnap then
 				line.start_time = get_time(next_keyframe)
 				snap = true
 				debug_msg("Start : Keyframe snap ahead")
@@ -186,12 +187,12 @@ local function time_start(subs, sel, opt)
 			-- Link Linking
 			if
 				end_time_previous ~= nil
-				and math.abs(end_time_previous - line.start_time) < opt.start.linelink
+				and math.abs(end_time_previous - start_time) < opt.start.linelink
 				and not is_keyframe(end_time_previous)
 				and not previous_line.comment
 			then
 				if not snap then
-					line.start_time = line.start_time - opt.start.leadin
+					line.start_time = start_time - opt.start.leadin
 				end
 				previous_line.end_time = line.start_time
 				subs[i - 1] = previous_line
@@ -201,10 +202,11 @@ local function time_start(subs, sel, opt)
 
 			-- Lead in
 			if not snap and not link then
-				line.start_time = line.start_time - opt.start.leadin
+				line.start_time = start_time - opt.start.leadin
 				debug_msg("Start : Lead In")
 			end
 
+			line.end_time = end_time
 			subs[i] = line
 		end
 	end
@@ -214,27 +216,28 @@ local function time_end(subs, sel, opt)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
+			local _, end_time = aegisub.get_audio_selection()
 			local snap
 
 			-- Determine if end time of current line is already snapped to keyframe and exit if it is
-			local is_snapped = is_keyframe(line.end_time)
+			local is_snapped = is_keyframe(end_time)
 			if is_snapped then
 				debug_msg("Line end was already snapped to keyframe")
 				return
 			end
 
 			-- Find the previous and next keyframe for end time
-			local previous_keyframe, next_keyframe = prev_next_keyframe(line.end_time)
+			local previous_keyframe, next_keyframe = prev_next_keyframe(end_time)
 
 			-- If the keyframe is somewhere between 850 to 1000 ms, check the cps
 			-- If cps is less than 15, then add normal lead out or make the end time 500 ms far from keyframe whichever is lesser
 			-- If cps is more than 15, then snap to keyframe
-			local next_kf_dist = math.abs(get_time(next_keyframe) - line.end_time)
-			local prev_kf_dist = math.abs(get_time(previous_keyframe) - line.end_time)
+			local next_kf_dist = math.abs(get_time(next_keyframe) - end_time)
+			local prev_kf_dist = math.abs(get_time(previous_keyframe) - end_time)
 			if opt.final.keysnap_after >= 850 and next_kf_dist >= 850 and next_kf_dist <= opt.final.keysnap_after then
 				local cps = calculate_cps(line)
 				if cps <= 15 then
-					line.end_time = line.end_time + math.min(opt.final.leadout, next_kf_dist - 500)
+					line.end_time = end_time + math.min(opt.final.leadout, next_kf_dist - 500)
 					debug_msg("End   : cps is less than 15.")
 					debug_msg(
 						"            Adjusting end time so that it's 500 ms away from keyframe or adding lead out whichever is lesser."
@@ -259,7 +262,7 @@ local function time_end(subs, sel, opt)
 
 				-- Lead out
 				if not snap then
-					line.end_time = line.end_time + opt.final.leadout
+					line.end_time = end_time + opt.final.leadout
 					debug_msg("End   : Lead Out")
 				end
 			end
