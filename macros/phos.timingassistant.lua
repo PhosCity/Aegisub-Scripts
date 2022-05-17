@@ -2,7 +2,7 @@
 script_name = "Timing Assistant"
 script_description = "A second brain for timers"
 script_author = "PhosCity"
-script_version = "1.0.2"
+script_version = "1.0.3"
 script_namespace = "phos.timingassistant"
 
 DependencyControl = require("l0.DependencyControl")
@@ -20,6 +20,7 @@ local default_config = {
 		keysnap_after = 900,
 	},
 	debug = false,
+	automove = false,
 }
 
 local config = depctrl:getConfigHandler({
@@ -34,6 +35,7 @@ local config = depctrl:getConfigHandler({
 		keysnap_after = default_config.final.keysnap_after,
 	},
 	debug = default_config.debug,
+	automove = default_config.automove,
 })
 
 local function config_setup()
@@ -65,6 +67,7 @@ local function config_setup()
 		{ x = 0,	y = 14,		width = 1,	height = 1,	class = "label", 	label = "Key Snap Ahead:", },
 		{ x = 1,	y = 14,		width = 1,	height = 1,	class = "intedit",	name = "end_snap_ahead",	value = config.c.final.keysnap_after, },
 		{ x = 3,	y = 14,		width = 1,	height = 1,	class = "label",	label = "Recommended value: 800-1000 ms", },
+		{ x = 0,	y = 16,		width = 5,	height = 1,	class = "checkbox",	label = "Auto-move to next line after making changes", name="automove", value = config.c.automove},
 		{ x = 3,	y = 0,		width = 1,	height = 1,	class = "checkbox",	label = "Debug",	name = "dbug",		value = config.c.debug,	hint = "Disply debugging messages" },
 
 	}
@@ -81,6 +84,7 @@ local function config_setup()
 		opt.final.leadout = result.end_leadout
 		opt.final.keysnap_behind = result.end_snap_behind
 		opt.final.keysnap_after = result.end_snap_ahead
+		opt.automove = result.automove
 		opt.debug = result.dbug
 		config:write()
 	elseif pressed == "Reset" then
@@ -91,6 +95,7 @@ local function config_setup()
 		opt.final.leadout = default_config.final.leadout
 		opt.final.keysnap_behind = default_config.final.keysnap_behind
 		opt.final.keysnap_after = default_config.final.keysnap_after
+		opt.automove = default_config.automove
 		opt.debug = default_config.debug
 		config:write()
 	end
@@ -147,9 +152,7 @@ local function prev_next_keyframe(time)
 	return previous_keyframe, next_keyframe
 end
 
-local function time_start(subs, sel)
-	config:load()
-	local opt = config.c
+local function time_start(subs, sel, opt)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
@@ -207,9 +210,7 @@ local function time_start(subs, sel)
 	end
 end
 
-local function time_end(subs, sel)
-	config:load()
-	local opt = config.c
+local function time_end(subs, sel, opt)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
@@ -269,8 +270,25 @@ local function time_end(subs, sel)
 end
 
 local function time_both(subs, sel)
-	time_start(subs, sel)
-	time_end(subs, sel)
+	if #sel ~= 1 then
+		aegisub.log("You must select exactly one line\nThis is not a TPP replacement.")
+		return
+	end
+
+	config:load()
+	local opt = config.c
+
+	time_start(subs, sel, opt)
+	time_end(subs, sel, opt)
+
+	if opt.automove then
+		for _, i in ipairs(sel) do
+			if i + 1 <= #subs then
+				sel = { i + 1 }
+			end
+		end
+		return sel
+	end
 end
 
 depctrl:registerMacros({
