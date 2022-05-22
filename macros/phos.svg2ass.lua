@@ -2,9 +2,10 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.0.2"
+script_version = "1.1.0"
 script_namespace = "phos.svg2ass"
 
+local pathsep = package.config:sub(1, 1)
 DependencyControl = require("l0.DependencyControl")
 local depRec = DependencyControl({
 	feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
@@ -122,8 +123,7 @@ end
 
 -- Check if svg2ass exists in the path given in config
 local function check_svg2ass_exists(path)
-	local is_windows = package.config:sub(1, 1) == "\\"
-	if is_windows then
+	if pathsep == "\\" then
 		local cex = io.open(path)
 		if cex == nil then
 			LOG(
@@ -251,6 +251,100 @@ local function progress(msg)
 	aegisub.progress.title(msg)
 end
 
+-- Surveys the selected lines. Returns the least starting time, max end time and a style among them
+local function reconnaissance(subs, sel)
+	local start_time, end_time = math.huge, 0
+	local style_list = {}
+	local style
+	for _, i in ipairs(sel) do
+		start_time = math.min(start_time, subs[i].start_time)
+		end_time = math.max(end_time, subs[i].end_time)
+		local stl = subs[i].style
+		if style_list[stl] == nil then
+			style_list[stl] = 1
+			table.insert(style_list, stl)
+		end
+	end
+	if #style_list > 1 then
+		-- stylua: ignore start
+		local dlg = {{ class = "label", x = 0, y = 0, width = 1, height = 1, label = "Your selection has multiple styles. Please select one:", },}
+		for k, v in ipairs(style_list) do
+			dlg[#dlg + 1] = { class = "checkbox", x = 0, y = k, width = 1, height = 1, label = v, name = "stl" .. tostring(k), }
+		end
+		-- stylua: ignore end
+		local pressed, result = ADD(dlg, { "OK", "Cancel" })
+		if pressed == "Cancel" then
+			AK()
+		elseif pressed == "OK" then
+			for i = 1, #dlg do
+				if result["stl" .. tostring(i)] then
+					style = style_list[i]
+				end
+			end
+		end
+	else
+		style = style_list[1]
+	end
+	return start_time, end_time, style
+end
+
+-- Pastes the shape data over the selected lines while keeping the original tags
+local function pstover(subs, sel, result, line_count, res)
+	if #sel ~= line_count then
+		LOG("Number of selected lines is not equal to output lines. Pasteover failed.")
+		AK()
+	end
+
+	for _, i in ipairs(sel) do
+		if subs[i].class == "dialogue" then
+			local text = subs[i].text
+			if res.clip and not text:match("^{[^}]-\\clip") then
+				LOG("Your selection consists of lines without clip. Pasteover failed.")
+				AK()
+			end
+			if res.iclip and not text:match("^{[^}]-\\iclip") then
+				LOG("Your selection consists of lines without iclip. Pasteover failed.")
+				AK()
+			end
+			if res.drawing and not text:match("^{[^}]-\\p1") then
+				LOG("Your selection consists of lines that are not shape. Pasteover failed.")
+				AK()
+			end
+		end
+	end
+
+	local shape_tbl = {}
+	for j in result:gmatch("[^\n]+") do
+		local line = string2line(j)
+		local shape = line.text:match("}([^{]+)")
+		table.insert(shape_tbl, shape)
+	end
+
+	for k, i in ipairs(sel) do
+		if subs[i].class == "dialogue" then
+			local line = subs[i]
+			local tags = line.text:match("{\\[^}]-}")
+			local shape = shape_tbl[k]
+			line.text = tags .. shape
+
+			-- Convert shape to clip
+			if res.clip then
+				line.text = line.text:gsub("\\clip%(m [%d%a%s%-]+", "\\p1")
+				line.text = shape_to_clip(line.text)
+			end
+
+			-- Convert shape to iclip
+			if res.iclip then
+				line.text = line.text:gsub("\\iclip%(m [%d%a%s%-]+", "\\p1")
+				line.text = shape_to_iclip(line.text)
+			end
+
+			subs[i] = line
+		end
+	end
+	return sel
+end
+
 -- Main function
 local function svg2ass(subs, sel, res, usetextbox)
 	-- Read config
@@ -258,106 +352,94 @@ local function svg2ass(subs, sel, res, usetextbox)
 	config:updateInterface("main")
 	local opt = config.configuration.main
 
-	if #sel ~= 1 then
-		LOG(
-			"You must select exactly one line\nThat line's start time, end time and style will be copied to resulting lines."
-		)
-		return
+	local start_time, end_time, style = reconnaissance(subs, sel)
+	local result
+
+	if not usetextbox then
+		-- Check if svg2ass executable exists
+		check_svg2ass_exists(opt.svgpath)
+
+		-- Select svg file
+		local script_folder
+		if pathsep == "\\" then
+			script_folder = ""
+		else
+			script_folder = ADP("?script")
+		end
+		local fname = aegisub.dialog.open("Select svg file", "", script_folder, "*.svg", false, true)
+
+		if not fname then
+			AK()
+		else
+			-- Generate svg2ass command
+			local command = opt.svgpath
+				.. " -S "
+				.. time2string(start_time)
+				.. " -E "
+				.. time2string(end_time)
+				.. ' -T "'
+				.. style
+				.. '"'
+			if opt.svgopt then
+				command = command .. " " .. opt.svgopt
+			end
+			command = command .. ' "' .. fname .. '"'
+
+			-- Execute the command and grab it's result
+			result = run_cmd(command)
+		end
+	else
+		--Grab what is in the textbox
+		local raw_output = res.txtbox
+		if not raw_output:match("^Dialogue") then
+			LOG("Please replace the textbox content with svg2ass output.")
+			AK()
+		end
+
+		result = ""
+		for z in raw_output:gmatch("[^\n]+") do
+			z = z:gsub(
+				"(%a+: %d+,)([^,]-,[^,]-,[^,]-)(,[^,]-,[^,]-,[^,]-,[^,]-,[^,]-,.*)",
+				"%1" .. time2string(start_time) .. "," .. time2string(end_time) .. "," .. style .. "%3"
+			)
+			result = result .. z .. "\n"
+		end
 	end
 
-	-- Initialize new selection(for new lines that were added)
+	-- Count the total number of lines in result
+	local _, line_count = string.gsub(result, "\n", "\n")
+
 	local newsel = {}
+	if not res.pasteover then
+		local inserts, count = 0, 1
+		for j in result:gmatch("[^\n]+") do
+			-- Progressbar
+			progress("Progress Occurs")
+			aegisub.progress.set((count * 100) / line_count)
 
-	for _, i in ipairs(sel) do
-		if subs[i].class == "dialogue" then
-			local line = subs[i]
-			local result
+			local newline = string2line(j)
+			local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
+			local tags = "{\\an7\\pos(0,0)" .. opt.usertags .. primary_color .. "\\p1}"
+			local text = newline.text:gsub("{\\[^}]-}", "")
+			newline.text = tags .. text
 
-			if not usetextbox then
-				-- Check if svg2ass executable exists
-				check_svg2ass_exists(opt.svgpath)
-
-				-- Select svg file
-				local ffilter = "SVG Files (.svg)|*.svg"
-				local script_folder = ADP("?script")
-				local fname = aegisub.dialog.open("Select svg file", script_folder, "", ffilter, false, true)
-
-				if not fname then
-					AK()
-				else
-					-- Generate svg2ass command
-					local command = opt.svgpath
-						.. " -S "
-						.. time2string(line.start_time)
-						.. " -E "
-						.. time2string(line.end_time)
-						.. ' -T "'
-						.. line.style
-						.. '"'
-					if opt.svgopt then
-						command = command .. " " .. opt.svgopt
-					end
-					command = command .. ' "' .. fname .. '"'
-
-					-- Execute the command and grab it's result
-					result = run_cmd(command)
-				end
-			else
-				--Grab what is in the textbox
-				local raw_output = res.txtbox
-				if not raw_output:match("^Dialogue") then
-					LOG("Please replace the textbox content with svg2ass output.")
-					AK()
-				end
-
-				result = ""
-				for z in raw_output:gmatch("[^\n]+") do
-					z = z:gsub(
-						"(%a+: %d+,)([^,]-,[^,]-,[^,]-)(,[^,]-,[^,]-,[^,]-,[^,]-,[^,]-,.*)",
-						"%1"
-							.. time2string(line.start_time)
-							.. ","
-							.. time2string(line.end_time)
-							.. ","
-							.. line.style
-							.. "%3"
-					)
-					result = result .. z .. "\n"
-				end
+			-- Convert shape to clip
+			if res.clip then
+				newline.text = shape_to_clip(newline.text)
 			end
 
-			-- Count the total number of lines in result
-			local _, line_count = string.gsub(result, "\n", "\n")
-
-			local inserts = 0
-			local count = 1
-			for j in result:gmatch("[^\n]+") do
-				-- Progressbar
-				progress("Progress Occurs")
-				aegisub.progress.set((count * 100) / line_count)
-
-				local newline = string2line(j)
-				local primary_color = newline.text:match("\\1c&H%x+&"):gsub("\\1c&", "\\c&")
-				local tags = "{\\an7\\pos(0,0)" .. opt.usertags .. primary_color .. "\\p1}"
-				local text = newline.text:gsub("{\\[^}]-}", "")
-				newline.text = tags .. text
-
-				-- Convert shape to clip
-				if res.clip then
-					newline.text = shape_to_clip(newline.text)
-				end
-
-				-- Convert shape to iclip
-				if res.iclip then
-					newline.text = shape_to_iclip(newline.text)
-				end
-
-				subs.insert(sel[1] - inserts, newline)
-				table.insert(newsel, sel[1] - inserts)
-				inserts = inserts - 1
-				count = count + 1
+			-- Convert shape to iclip
+			if res.iclip then
+				newline.text = shape_to_iclip(newline.text)
 			end
+
+			subs.insert(sel[1] - inserts, newline)
+			table.insert(newsel, sel[1] - inserts)
+			inserts = inserts - 1
+			count = count + 1
 		end
+	else
+		newsel = pstover(subs, sel, result, line_count, res)
 	end
 	return newsel
 end
@@ -381,23 +463,34 @@ local function main(subs, sel)
 			x = 0,
 			y = 6,
 			name = "drawing",
-			label = "drawing               ",
+			label = "drawing          ",
 			class = "checkbox",
 			value = true,
+			hint = "Convert svg to drawing",
 		},
 		{
 			x = 1,
 			y = 6,
 			name = "clip",
-			label = "clip               ",
+			label = "clip          ",
 			class = "checkbox",
+			hint = "Convert svg to clip",
 		},
 		{
 			x = 2,
 			y = 6,
 			name = "iclip",
-			label = "iclip",
+			label = "iclip          ",
 			class = "checkbox",
+			hint = "Convert svg to iclip",
+		},
+		{
+			x = 3,
+			y = 6,
+			name = "pasteover",
+			label = "pasteover",
+			class = "checkbox",
+			hint = "Convert svg but paste shape date over selected lines",
 		},
 	}
 	Buttons = { "Import", "Textbox", "Cancel" }
