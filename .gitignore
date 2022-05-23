@@ -3,5 +3,6 @@
 !.git*
 !.github/**
 !macros/*.lua
+!macros/*.moon
 !DependencyControl.json
 !/assets/*
