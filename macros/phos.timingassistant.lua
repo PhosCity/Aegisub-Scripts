@@ -16,7 +16,7 @@ local default_config = {
 	},
 	final = {
 		leadout = 400,
-		keysnap_behind = 200,
+		keysnap_behind = 300,
 		keysnap_after = 900,
 	},
 	debug = false,
@@ -62,7 +62,7 @@ local function config_setup()
 		{ x = 0,	y = 11,		width = 5,	height = 1,	class = "label", 	label = "Time to snap to keyframe before the exact end", },
 		{ x = 0,	y = 12,		width = 1,	height = 1,	class = "label", 	label = "Key Snap Behind:", },
 		{ x = 1,	y = 12,		width = 1,	height = 1,	class = "intedit",	name = "end_snap_behind",	value = config.c.final.keysnap_behind, },
-		{ x = 3,	y = 12,		width = 1,	height = 1,	class = "label",	label = "Recommended value: ~500-leadout", },
+		{ x = 3,	y = 12,		width = 1,	height = 1,	class = "label",	label = "Recommended value: 100-300 ms", },
 		{ x = 0,	y = 13,		width = 5,	height = 1,	class = "label", 	label = "Time to snap to keyframe after the exact end", },
 		{ x = 0,	y = 14,		width = 1,	height = 1,	class = "label", 	label = "Key Snap Ahead:", },
 		{ x = 1,	y = 14,		width = 1,	height = 1,	class = "intedit",	name = "end_snap_ahead",	value = config.c.final.keysnap_after, },
@@ -159,6 +159,8 @@ local function time_start(subs, sel, opt)
 			local snap, link, end_time_previous
 			local start_time, end_time = aegisub.get_audio_selection()
 
+			debug_msg("Start:")
+
 			-- Determine if start time of current line is already snapped to keyframe and exit if it is
 			local is_snapped = is_keyframe(start_time)
 			if is_snapped then
@@ -176,12 +178,14 @@ local function time_start(subs, sel, opt)
 			if math.abs(get_time(previous_keyframe) - start_time) < opt.start.keysnap then
 				line.start_time = get_time(previous_keyframe)
 				snap = true
-				debug_msg("Start : Keyframe snap behind")
+				debug_msg("Keyframe snap behind")
 			end
-			if math.abs(get_time(next_keyframe) - start_time) < opt.start.keysnap then
+			if
+				math.abs(get_time(next_keyframe) - start_time) < opt.start.keysnap and not is_keyframe(line.start_time)
+			then
 				line.start_time = get_time(next_keyframe)
 				snap = true
-				debug_msg("Start : Keyframe snap ahead")
+				debug_msg("Keyframe snap ahead")
 			end
 
 			-- Link Linking
@@ -191,19 +195,37 @@ local function time_start(subs, sel, opt)
 				and not is_keyframe(end_time_previous)
 				and not previous_line.comment
 			then
-				if not snap then
-					line.start_time = start_time - opt.start.leadin
+				previous_keyframe, next_keyframe = prev_next_keyframe(end_time_previous)
+				local time_500_after_kf = get_time(previous_keyframe) + 500
+				if start_time < end_time_previous and end_time_previous < time_500_after_kf then
+					if not snap then
+						line.start_time = start_time - opt.start.leadin
+					end
+					previous_line.end_time = get_time(previous_keyframe)
+					debug_msg(
+						"Link lines failed because a keyframe is close. Snap end of last line. Add lead in to current line."
+					)
+				elseif (start_time - opt.start.leadin) > (get_time(next_keyframe) - 500) then
+					if not snap then
+						line.start_time = get_time(next_keyframe) - 500
+					end
+					previous_line.end_time = line.start_time
+					debug_msg("Link lines by ensuring that start time is 500 ms away from next keyframe.")
+				else
+					if not snap then
+						line.start_time = start_time - math.min(opt.start.leadin, start_time - time_500_after_kf)
+					end
+					previous_line.end_time = line.start_time
+					debug_msg("Link lines by adding appropriate lead in to current line.")
 				end
-				previous_line.end_time = line.start_time
 				subs[i - 1] = previous_line
 				link = true
-				debug_msg("Start : Line Link")
 			end
 
 			-- Lead in
 			if not snap and not link then
 				line.start_time = start_time - opt.start.leadin
-				debug_msg("Start : Lead In")
+				debug_msg("Lead In")
 			end
 
 			line.end_time = end_time
@@ -218,6 +240,7 @@ local function time_end(subs, sel, opt)
 			local line = subs[i]
 			local _, end_time = aegisub.get_audio_selection()
 			local snap
+			debug_msg("\nEnd:")
 
 			-- Determine if end time of current line is already snapped to keyframe and exit if it is
 			local is_snapped = is_keyframe(end_time)
@@ -234,36 +257,39 @@ local function time_end(subs, sel, opt)
 			-- If cps is more than 15, then snap to keyframe
 			local next_kf_dist = math.abs(get_time(next_keyframe) - end_time)
 			local prev_kf_dist = math.abs(get_time(previous_keyframe) - end_time)
-			if opt.final.keysnap_after >= 850 and next_kf_dist >= 850 and next_kf_dist <= opt.final.keysnap_after then
+			if
+				opt.final.keysnap_after >= 850
+				and next_kf_dist >= 850
+				and next_kf_dist <= opt.final.keysnap_after
+				and prev_kf_dist > opt.final.keysnap_behind
+			then
 				local cps = calculate_cps(line)
 				if cps <= 15 then
 					line.end_time = end_time + math.min(opt.final.leadout, next_kf_dist - 500)
-					debug_msg("End   : cps is less than 15.")
 					debug_msg(
-						"            Adjusting end time so that it's 500 ms away from keyframe or adding lead out whichever is lesser."
+						"cps is less than 15.\nAdjusting end time so that it's 500 ms away from keyframe or adding lead out whichever is lesser."
 					)
 				else
 					line.end_time = get_time(next_keyframe)
-					debug_msg("End   : cps is more than 15.")
-					debug_msg("            Snapping to keyframe more than 850 ms away.")
+					debug_msg("cps is more than 15.\nSnapping to keyframe more than 850 ms away.")
 				end
 			else
 				-- Keyframe Snapping
 				if prev_kf_dist < opt.final.keysnap_behind then
 					line.end_time = get_time(previous_keyframe)
 					snap = true
-					debug_msg("End   : Keyframe snap behind")
+					debug_msg("Keyframe snap behind")
 				end
-				if next_kf_dist < opt.final.keysnap_after then
+				if next_kf_dist < opt.final.keysnap_after and not is_keyframe(line.end_time) then
 					line.end_time = get_time(next_keyframe)
 					snap = true
-					debug_msg("End   : Keyframe snap ahead")
+					debug_msg("Keyframe snap ahead")
 				end
 
 				-- Lead out
 				if not snap then
 					line.end_time = end_time + opt.final.leadout
-					debug_msg("End   : Lead Out")
+					debug_msg("Lead Out")
 				end
 			end
 
