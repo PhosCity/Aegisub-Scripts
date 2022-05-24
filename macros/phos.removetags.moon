@@ -2,7 +2,7 @@ export script_name = "#BETA# Remove Tags"
 export script_description = "Dynamically remove tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.removetags"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 
 DependencyControl = require "l0.DependencyControl"
 depCtrl = DependencyControl{
@@ -31,17 +31,14 @@ collect_tags = (subs, sel) ->
 
 sort_tags = (tag_table) ->
 	sort_order ={"r", "an", "q", "pos", "move", "org", "fad", "fade", "blur", "be", "bord", "xbord", "ybord", "shad", "xshad", "yshad", "fscx", "fscy", "frx", "fry", "frz", "fax", "fay", "fn", "fs", "fsp", "c", "1c", "2c", "3c", "4c", "alpha", "1a", "2a", "3a", "4a", "clip", "iclip", "b", "i", "u", "s", "p", "k", "kf", "K", "ko", "t"}
-	sorted_tags = {}
-	for _, tag in ipairs sort_order
-		if tag_table[tag] ~= nil
-			table.insert sorted_tags, tag
+	sorted_tags = [tag for tag in *sort_order when tag_table[tag] != nil]
 	return sorted_tags
 
 create_gui = (tag_table) ->
 	dialog = {
 		{x:0, y:0, class: "checkbox", width:1, height:1, label: "Start tags", name: "start", hint: "Remove from start tags only" },
 		{x:1, y:0, class: "checkbox", width:1, height:1, label: "Inline tags", name: "inline", hint: "Remove from inline tags only" },
-		{x:2, y:0, class: "checkbox", width:1, height:1, label: "Transform", name: "transform", hing: "Remove from transform only" },
+		{x:2, y:0, class: "checkbox", width:1, height:1, label: "Transform", name: "transform", hint: "Remove from transform only" },
 	}
 
 	-- Determine the number of columns in gui
@@ -76,8 +73,7 @@ remove_tags = (subs, sel, tags_to_delete, res) ->
 			line.text = LibLyger.line_exclude line.text, tags_to_delete
 
 		-- Some cleanup after deleting tags
-		line.text = line.text\gsub "\\t%([%-%.%d,]*%)", ""
-		line.text = line.text\gsub "{}", ""
+		line.text = line.text\gsub("\\t%([%-%.%d,]*%)", "")\gsub("{}", "")
 		subs[i] = line
 
 remove_all_tags = (subs, sel) ->
@@ -95,10 +91,7 @@ main = (subs, sel) ->
 	if btn == "Cancel"
 		aegisub.cancel!
 	elseif btn == "Apply"
-		tags_to_delete = {}
-		for k, v in ipairs tag_table
-			if res[v] then
-				table.insert tags_to_delete, v
+		tags_to_delete = [tag for tag in *tag_table when res[tag]]
 		remove_tags subs, sel, tags_to_delete, res
 	else
 		remove_all_tags subs, sel
