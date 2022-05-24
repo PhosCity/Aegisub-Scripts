@@ -18,7 +18,7 @@ collect_tags = (subs, sel) ->
 
 	for i in *sel
 		line = subs[i]
-		for tagname in line.text\gmatch("\\([1-4]?%a+)[^\\{}]*") do
+		for tagname in line.text\gmatch("\\([1-4]?[a-z]+)[^\\{}]*")
 			if tag_table[tagname] == nil then
 				tag_table[tagname] = 1
 				table.insert tag_table,tagname
@@ -30,7 +30,7 @@ collect_tags = (subs, sel) ->
 		return tag_table
 
 sort_tags = (tag_table) ->
-	sort_order ={"r", "an", "q", "pos", "move", "org", "fad", "fade", "blur", "be", "bord", "xbord", "ybord", "shad", "xshad", "yshad", "fscx", "fscy", "frx", "fry", "frz", "fax", "fay", "fn", "fs", "fsp", "1c", "2c", "3c", "4c", "alpha", "1a", "2a", "3a", "4a", "clip", "iclip", "b", "i", "u", "s", "p", "k", "kf", "K", "ko", "t"}
+	sort_order ={"r", "an", "q", "pos", "move", "org", "fad", "fade", "blur", "be", "bord", "xbord", "ybord", "shad", "xshad", "yshad", "fscx", "fscy", "frx", "fry", "frz", "fax", "fay", "fn", "fs", "fsp", "c", "1c", "2c", "3c", "4c", "alpha", "1a", "2a", "3a", "4a", "clip", "iclip", "b", "i", "u", "s", "p", "k", "kf", "K", "ko", "t"}
 	sorted_tags = {}
 	for _, tag in ipairs sort_order
 		if tag_table[tag] ~= nil
@@ -38,40 +38,70 @@ sort_tags = (tag_table) ->
 	return sorted_tags
 
 create_gui = (tag_table) ->
-	dialog = {}
+	dialog = {
+		{x:0, y:0, class: "checkbox", width:1, height:1, label: "Start tags", name: "start", hint: "Remove from start tags only" },
+		{x:1, y:0, class: "checkbox", width:1, height:1, label: "Inline tags", name: "inline", hint: "Remove from inline tags only" },
+		{x:2, y:0, class: "checkbox", width:1, height:1, label: "Transform", name: "transform", hing: "Remove from transform only" },
+	}
 
 	-- Determine the number of columns in gui
-	column = math.ceil(math.sqrt #tag_table)-1
+	column = math.max math.ceil(math.sqrt #tag_table), 3
 
 	-- Dynamically create gui
 	count = 0
-	for i = 0, column
-		for j = 0, (column-1)
+	for i = 1, column
+		for j = 0, column-1
 			count += 1
 			if count <= #tag_table
 				dialog[#dialog+1] = { label: tag_table[count], class: "checkbox",  x: j, y: i, width: 1,  height: 1  , name: tag_table[count], }
 	
 	return dialog
 
-remove_tags = (subs, sel, tags_to_delete) ->
+remove_tags = (subs, sel, tags_to_delete, res) ->
 	for i in *sel
 		line = subs[i]
-		line.text = LibLyger.line_exclude line.text, tags_to_delete
+		if res.start
+			start_tags = line.text\match "^{>?\\[^}]-}"
+			line.text = line.text\gsub LibLyger.esc(start_tags), ""
+			start_tags = LibLyger.line_exclude start_tags, tags_to_delete
+			line.text  = start_tags .. line.text
+		elseif res.inline
+			start_tags = line.text\match "^{>?\\[^}]-}"
+			line.text = line.text\gsub LibLyger.esc(start_tags), ""
+			line.text = LibLyger.line_exclude line.text, tags_to_delete
+			line.text = start_tags .. line.text
+		elseif res.transform
+			line.text = LibLyger.time_exclude line.text, tags_to_delete
+		else
+			line.text = LibLyger.line_exclude line.text, tags_to_delete
+
+		-- Some cleanup after deleting tags
+		line.text = line.text\gsub "\\t%([%-%.%d,]*%)", ""
+		line.text = line.text\gsub "{}", ""
 		subs[i] = line
 
+remove_all_tags = (subs, sel) ->
+	for i in *sel
+		line = subs[i]
+		line.text = line.text\gsub("{[*>]?\\[^}]-}","")
+		subs[i] = line
 
 main = (subs, sel) ->
 	tag_table = collect_tags subs, sel
 	sorted_tags = sort_tags tag_table
 	GUI = create_gui sorted_tags
-	btn, res = aegisub.dialog.display GUI
-	-- tags_to_delete = { k,tag for k, tag in ipairs tag_table when res[tag]}
-	tags_to_delete = {}
-	for k, v in ipairs tag_table
-		if res[v] then
-			table.insert tags_to_delete, v
+	buttons = {"Apply", "Cancel", "Remove All"}
+	btn, res = aegisub.dialog.display GUI, buttons
+	if btn == "Cancel"
+		aegisub.cancel!
+	elseif btn == "Apply"
+		tags_to_delete = {}
+		for k, v in ipairs tag_table
+			if res[v] then
+				table.insert tags_to_delete, v
+		remove_tags subs, sel, tags_to_delete, res
+	else
+		remove_all_tags subs, sel
 
-	if btn
-		remove_tags subs, sel, tags_to_delete
 
 depCtrl\registerMacro main
