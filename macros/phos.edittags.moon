@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.5"
+export script_version = "0.0.6"
 
 -- Initialize some variables
 export row = 0
@@ -13,11 +13,10 @@ export column_limit = 10
 
 tagClass = {
 	alpha: "dropdown", "1a": "dropdown", "2a": "dropdown", "3a": "dropdown", "4a": "dropdown",
+	c: "color", "1c": "color", "2c": "color", "3c": "color", "4c": "color",
 	q: "dropdown",
 	an: "dropdown",
-	c: "color", "1c": "color", "2c": "color", "3c": "color", "4c": "color",
-	blur: "floatedit",
-	be: "floatedit",
+	blur: "floatedit", be: "floatedit",
 	bord: "floatedit", xbord: "floatedit", ybord:  "floatedit",
 	shad: "floatedit", xshad: "floatedit", yshad: "floatedit",
 	fscx: "floatedit", fscy: "floatedit",
@@ -26,13 +25,9 @@ tagClass = {
 	fs: "floatedit", fsp: "floatedit",
 	i: "checkbox", b: "checkbox", u: "checkbox", s: "checkbox",
 	pos: "coordinate", org: "coordinate",
-	fad: "coordinate",
-	fade: "complex",
+	fad: "coordinate", fade: "complex",
 	move: "complex",
-	clip: "complex",
-	iclip: "complex",
-	fn: "edit",
-	p: "edit",
+	clip: "complex", iclip: "complex",
 	t: "transform",
 	}
 
@@ -58,7 +53,6 @@ untransform = (line) ->
 collect_section = (subs, act) ->
 	section = {}
 	line = subs[act]
-
 	line.text = untransform line.text
 
 	for item in line.text\gmatch "{[^{}]*}[^{}]*"
@@ -162,6 +156,7 @@ guiHelper = (tagname, tagvalue, section_count) ->
 		row += 1
 		column = 0
 
+-- Receives a section and adds all its tags to gui
 addsectiontoGUI = (section, section_count ) ->
 	tagTable, text = analyzeSection section
 
@@ -178,6 +173,7 @@ addsectiontoGUI = (section, section_count ) ->
 		else
 			guiHelper tag, tagTable[tag], section_count
 
+-- Adds inline tags to gui. For gbc, it just adds all of them to textbox
 inlinetagsGUI = (tagtextsection) ->
 	row += 1
 	column = 0
@@ -200,6 +196,7 @@ inlinetagsGUI = (tagtextsection) ->
 		dlg[#dlg+1] = { x: column, y:row, width: column_limit, height: math.min(math.ceil(#tagtextsection*0.7),20), class: "textbox", value: inline, name: "inline" }
 		row += math.min(math.ceil(#tagtextsection*0.7),20)
 
+-- Adds transforms to gui along with it's time and accel
 transformGUI = () ->
 	transform_count = 0
 	for index, item in ipairs transformTable
@@ -234,45 +231,44 @@ transformGUI = () ->
 				column = 0
 			guiHelper tagname, tagvalue, "tr"..index
 
+-- Rebuilds a section from the values users puts in gui
 rebuildsection = (section, section_count, text, transform_count, res) ->
 	tagTable, _ = analyzeSection section
+	newval = ""
 	text = text .."{"
 	for _, tag in ipairs tagTable
 		klass = tagClass[tag]
 		if tag\match "t[%d]+"
-			tagvalue = tagTable[tag]
 			transform_count += 1
 			trstart = res["trstart"..transform_count]
 			trend = res["trend"..transform_count]
 			traccel = res["traccel"..transform_count]
-			tra = "\\t(" .. trstart .. "," .. trend .. "," .. traccel .. ","
-			tra = tra\gsub(",,,", ",")\gsub(",,",",")\gsub("\\t%(,","\\t(")
+			newval= "(" .. trstart .. "," .. trend .. "," .. traccel .. ","
+			newval= newval\gsub(",,,", ",")\gsub(",,",",")\gsub("\\t%(,","\\t(")
 
+			tagvalue = tagTable[tag]
 			for t in tagvalue\gmatch "|([1-4]?[a-z]+)[^|{}]*"
-				tra = tra .. "\\" .. t .. res[t .. "tr" .. transform_count]
-			tra = tra .. ")"
-			text = text .. tra
+				newval= newval.. "\\" .. t .. res[t .. "tr" .. transform_count]
+			newval= newval.. ")"
+			tag = "t"
 		elseif klass == "coordinate"
 			val_x = res[tag.."x"..section_count]
 			val_y = res[tag.."y"..section_count]
 			newval = "("..val_x..","..val_y..")"
-			text = text .. "\\".. tag .. newval
 		elseif klass == "checkbox"
 			newval = switch res[tag..section_count]
 				when true then 1
 				when false then 0
-			text = text .. "\\".. tag .. newval
 		elseif klass == "dropdown"
 			newval = res[tag..section_count]
 			if tag == "alpha" or tag == "1a" or tag == "2a" or tag == "3a" or tag == "4a"
 				newval = newval\gsub("^", "&H")\gsub("$", "&")
-			text = text .. "\\".. tag .. newval
 		elseif klass == "color"
 			newval = res[tag..section_count]
 			newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
-			text = text .. "\\".. tag .. newval
 		else
-			text = text .. "\\".. tag .. res[tag..section_count]
+			newval = res[tag..section_count]
+		text = text .. "\\".. tag .. newval
 	text = text .."}".. res["text"..section_count]
 	return text, transform_count
 
@@ -281,20 +277,20 @@ main = (subs, sel, act) ->
 
 	row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
 	-- Dynamically create GUI
-	addsectiontoGUI section[1], 1									-- Start tags
-	if #section > 1											-- Inline tags
+	addsectiontoGUI section[1], 1												-- Start tags
+	if #section > 1														-- Inline tags
 		inlinetagsGUI section
-	if #transformTable > 0										-- Transforms
+	if #transformTable > 0													-- Transforms
 		transformGUI!
 
 	btn, res = aegisub.dialog.display dlg, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
 	if btn
 		transform_count, text = 0, ""
-		if #section < 10
+		if #section < 10												-- Non gbc lines
 			for section_count, sec in ipairs section
 				text, transform_count = rebuildsection sec, section_count, text, transform_count, res
-		else
-			text, transform_count = rebuildsection section[1], 1, text, transform_count, res
+		else														-- Gbc lines
+			text, _ = rebuildsection section[1], 1, text, transform_count, res
 			new_inline = res["inline"]
 			new_inline = new_inline\gsub("\n", "")
 			text = text .. new_inline
