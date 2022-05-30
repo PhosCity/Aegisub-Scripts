@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 
 tagClass = {
 	alpha: "dropdown", "1a": "dropdown", "2a": "dropdown", "3a": "dropdown", "4a": "dropdown",
@@ -25,17 +25,19 @@ tagClass = {
 	clip: "complex",
 	iclip: "complex",
 	fn: "edit",
-	p: "intedit",
+	p: "edit",
 	t: "transform",
-	k: "edit", kf: "edit", K: "edit", ko: "edit"
 	}
 
 esc = (str) ->
 	str = str\gsub "[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1"
 	return str
 
-logg = (msg) ->
-	aegisub.log tostring(msg).."\n"
+table_contains = (tbl, x) ->
+	found = false
+	for item in *tbl
+		found = true if item == x
+	return found
 
 -- Deactivate the tags inside transform by changing \ to |
 untransform = (line) ->
@@ -49,6 +51,7 @@ untransform = (line) ->
 collect_section = (subs, act) ->
 	section = {}
 	line = subs[act]
+
 	line.text = untransform line.text
 
 	for item in line.text\gmatch "{[^{}]*}[^{}]*"
@@ -59,20 +62,6 @@ collect_section = (subs, act) ->
 		aegisub.cancel!
 	else
 		return section
-
-sortTags = (tagTable) ->
-	sort_order = {"pos", "org", "fad", "blur", "be", "bord", "xbord", "ybord", "shad", "xshad", "yshad", "fscx", "fscy", "frx", "fry", "frz", "fax", "fay", "fn", "fs", "fsp", "c", "1c", "2c", "3c", "4c", "alpha", "1a", "2a", "3a", "4a", "p", "an", "q", "b", "i", "u", "s", "p", "k", "kf", "K", "ko", "move", "fade", "clip", "iclip", }
-	sorted_tags = [tag for tag in *sort_order when tagTable[tag] != nil]
-	for _, tag in ipairs sorted_tags
-		sorted_tags[tag] = tagTable[tag]
-
-	-- Incase some unexpected tag is present, append them to the end
-	for _, tag in ipairs tagTable
-		if sorted_tags[tag] == nil
-			table.insert sorted_tags, tag
-			sorted_tags[tag] = tagTable[tag]
-
-	return sorted_tags
 
 -- Takes in a {tag}text section and creates a table with key-value pair of tag and it's value
 analyzeSection = (section) ->
@@ -93,13 +82,8 @@ analyzeSection = (section) ->
 
 guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 	klass = tagClass[tagname]
+	klass = "edit" if not klass
 	if klass == "dropdown"
-		if tagname == "alpha" or tagname == "1a" or tagname == "2a" or tagname == "3a" or tagname == "4a"
-			tagvalue = tagvalue\gsub("[H&]", "")
-
-		taglabel = tagname
-		taglabel = "Alignment" if tagname == "an"
-
 		alphaitem = { "00", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A0", "B0", "C0", "D0", "E0", "F0", "F8", "FF" }
 		dropdownItems = switch tagname
 			when "q" then { "0", "1", "2", "3" }
@@ -109,6 +93,15 @@ guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 			when "2a" then alphaitem
 			when "3a" then alphaitem
 			when "4a" then alphaitem
+
+		if tagname == "alpha" or tagname == "1a" or tagname == "2a" or tagname == "3a" or tagname == "4a"
+			tagvalue = tagvalue\gsub("[H&]", "")
+			if not table_contains alphaitem, tagvalue
+				table.insert alphaitem, tagvalue
+
+		taglabel = tagname
+		taglabel = "Alignment" if tagname == "an"
+
 
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: taglabel }
 		column +=1
@@ -158,6 +151,8 @@ guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: tagname }
 		column += 1
 		dlg[#dlg+1] = { x: column, y:row, width: 10, class: "edit", name: tagname..section_count, value: tagvalue }
+		row += 1
+		column = 0
 
 	return dlg, row, column
 
@@ -174,13 +169,12 @@ createGUI = (tagtextsection) ->
 				inline_count += 1
 
 		tagTable, text = analyzeSection section, true
-		tagTable = sortTags tagTable
 
 		dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", value: text, name: "text"..section_count }
 		row += 1
 
 		for tag in *tagTable
-			if column >= (column_limit-1)
+			if column >= (column_limit-1) and tagClass[tag] != "complex"
 				row += 1
 				column = 0
 
@@ -199,6 +193,7 @@ createGUI = (tagtextsection) ->
 			transform_count += 1
 		tag_start, tag_end = item\match "%(([%d.-]+),([%d.-]+)[^)]*%)"
 		accel = item\match "%([%d.-]+,[%d.-]+,([%d.-]+)[^)]*%)"
+
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: index..". Start: " }
 		column+=1
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: tag_start, name: "trstart"..index }
@@ -206,11 +201,10 @@ createGUI = (tagtextsection) ->
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "End: " }
 		column+=1
 		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: tag_end, name: "trend"..index }
-		if accel
-			column+=1
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Accel: " }
-			column +=1
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: accel, name: "traccel"..index }
+		column+=1
+		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Accel: " }
+		column +=1
+		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: accel, name: "traccel"..index }
 		row += 1
 		column = 0
 
@@ -235,9 +229,8 @@ editLines = (subs, act, res, tagtextsection) ->
 				trstart = res["trstart"..transform_count]
 				trend = res["trend"..transform_count]
 				traccel = res["traccel"..transform_count]
-				tra = "\\t(" .. trstart .. "," .. trend .. ","
-				if traccel
-					tra = tra .. traccel .. ","
+				tra = "\\t(" .. trstart .. "," .. trend .. "," .. traccel .. ","
+				tra = tra\gsub(",,,", ",")\gsub(",,",",")\gsub("\\t%(,","\\t(")
 
 				for t in tagvalue\gmatch "|([1-4]?[a-z]+)[^|{}]*"
 					tra = tra .. "\\" .. t .. res[t .. "tr" .. transform_count]
