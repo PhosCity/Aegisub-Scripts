@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.3"
+export script_version = "0.0.4"
 
 tagClass = {
 	alpha: "dropdown", "1a": "dropdown", "2a": "dropdown", "3a": "dropdown", "4a": "dropdown",
@@ -80,6 +80,7 @@ analyzeSection = (section) ->
 
 	return tagTable, text
 
+-- Add tags and it's value to gui based on the type of tag
 guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 	klass = tagClass[tagname]
 	klass = "edit" if not klass
@@ -156,33 +157,50 @@ guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 
 	return dlg, row, column
 
-createGUI = (tagtextsection) ->
-	row, column, column_limit, inline_count, transform_count, dlg, transformTable = 0, 0, 10, 0, 0, {}, {}
-	for section_count, section in ipairs tagtextsection
-		if section_count != 1
+addsectiontoGUI = (dlg, row, column, section, section_count, transformTable ) ->
+	tagTable, text = analyzeSection section
+
+	dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", value: text, name: "text"..section_count }
+	row += 1
+
+	for tag in *tagTable
+		if column >= (column_limit-1) and tagClass[tag] != "complex"
 			row += 1
 			column = 0
-			if inline_count < 1
-				dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Inline Tags:" }
-				row += 1
-				column = 0
-				inline_count += 1
 
-		tagTable, text = analyzeSection section, true
+		if tag\match "(t[%d]+)"
+			table.insert transformTable, tagTable[tag]
+		else
+			dlg, row, column = guiHelper dlg, row, column, tag, tagTable[tag], section_count
+	
+	return dlg, row, column, transformTable
 
-		dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", value: text, name: "text"..section_count }
-		row += 1
+inlinetagsGUI = (tagtextsection, dlg, row, column, transformTable) ->
+	row += 1
+	column = 0
+	dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Inline Tags:" }
+	row += 1
+	column = 0
 
-		for tag in *tagTable
-			if column >= (column_limit-1) and tagClass[tag] != "complex"
-				row += 1
-				column = 0
+	if #tagtextsection < 10 
+		for section_count, section in ipairs tagtextsection
+			if section_count > 1
+				dlg, row, column, transformTable = addsectiontoGUI dlg, row, column, section, section_count, transformTable
+			row += 1
+			column = 0
+	else
+		inline = ""
+		for section_count, section in ipairs tagtextsection
+			if section_count > 1
+				inline = inline .. section .. "\n"
 
-			if tag\match "(t[%d]+)"
-				table.insert transformTable, tagTable[tag]
-			else
-				dlg, row, column = guiHelper dlg, row, column, tag, tagTable[tag], section_count
-			
+		dlg[#dlg+1] = { x: column, y:row, width: column_limit, height: math.ceil(#tagtextsection*0.75), class: "textbox", value: inline, name: "inline" }
+		row += math.ceil(#tagtextsection*0.75)
+
+	return dlg, row, column, transformTable
+
+transformGUI = (transformTable, dlg, row, column) ->
+	transform_count = 0
 	for index, item in ipairs transformTable
 		row += 1
 		column = 0
@@ -216,58 +234,74 @@ createGUI = (tagtextsection) ->
 			dlg, row, column = guiHelper dlg, row, column, tagname, tagvalue, "tr"..index
 	return dlg
 
-editLines = (subs, act, res, tagtextsection) ->
-	transform_count, text = 0, ""
-	for section_count, section in ipairs tagtextsection
-		tagTable, _ = analyzeSection section
-		text = text .."{"
-		for _, tag in ipairs tagTable
-			klass = tagClass[tag]
-			if tag\match "t[%d]+"
-				tagvalue = tagTable[tag]
-				transform_count += 1
-				trstart = res["trstart"..transform_count]
-				trend = res["trend"..transform_count]
-				traccel = res["traccel"..transform_count]
-				tra = "\\t(" .. trstart .. "," .. trend .. "," .. traccel .. ","
-				tra = tra\gsub(",,,", ",")\gsub(",,",",")\gsub("\\t%(,","\\t(")
+rebuildsection = (section, section_count, text, transform_count, res) ->
+	tagTable, _ = analyzeSection section
+	text = text .."{"
+	for _, tag in ipairs tagTable
+		klass = tagClass[tag]
+		if tag\match "t[%d]+"
+			tagvalue = tagTable[tag]
+			transform_count += 1
+			trstart = res["trstart"..transform_count]
+			trend = res["trend"..transform_count]
+			traccel = res["traccel"..transform_count]
+			tra = "\\t(" .. trstart .. "," .. trend .. "," .. traccel .. ","
+			tra = tra\gsub(",,,", ",")\gsub(",,",",")\gsub("\\t%(,","\\t(")
 
-				for t in tagvalue\gmatch "|([1-4]?[a-z]+)[^|{}]*"
-					tra = tra .. "\\" .. t .. res[t .. "tr" .. transform_count]
-				tra = tra .. ")"
-				text = text .. tra
-			elseif klass == "coordinate"
-				val_x = res[tag.."x"..section_count]
-				val_y = res[tag.."y"..section_count]
-				newval = "("..val_x..","..val_y..")"
-				text = text .. "\\".. tag .. newval
-			elseif klass == "checkbox"
-				newval = switch res[tag..section_count]
-					when true then 1
-					when false then 0
-				text = text .. "\\".. tag .. newval
-			elseif klass == "dropdown"
-				newval = res[tag..section_count]
-				if tag == "alpha" or tag == "1a" or tag == "2a" or tag == "3a" or tag == "4a"
-					newval = newval\gsub("^", "&H")\gsub("$", "&")
-				text = text .. "\\".. tag .. newval
-			elseif klass == "color"
-				newval = res[tag..section_count]
-				newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
-				text = text .. "\\".. tag .. newval
-			else
-				text = text .. "\\".. tag .. res[tag..section_count]
-		text = text .."}".. res["text"..section_count]
-
-	line = subs[act]
-	line.text = text
-	subs[act] = line
+			for t in tagvalue\gmatch "|([1-4]?[a-z]+)[^|{}]*"
+				tra = tra .. "\\" .. t .. res[t .. "tr" .. transform_count]
+			tra = tra .. ")"
+			text = text .. tra
+		elseif klass == "coordinate"
+			val_x = res[tag.."x"..section_count]
+			val_y = res[tag.."y"..section_count]
+			newval = "("..val_x..","..val_y..")"
+			text = text .. "\\".. tag .. newval
+		elseif klass == "checkbox"
+			newval = switch res[tag..section_count]
+				when true then 1
+				when false then 0
+			text = text .. "\\".. tag .. newval
+		elseif klass == "dropdown"
+			newval = res[tag..section_count]
+			if tag == "alpha" or tag == "1a" or tag == "2a" or tag == "3a" or tag == "4a"
+				newval = newval\gsub("^", "&H")\gsub("$", "&")
+			text = text .. "\\".. tag .. newval
+		elseif klass == "color"
+			newval = res[tag..section_count]
+			newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
+			text = text .. "\\".. tag .. newval
+		else
+			text = text .. "\\".. tag .. res[tag..section_count]
+	text = text .."}".. res["text"..section_count]
+	return text, transform_count
 
 main = (subs, sel, act) ->
+	export column_limit = 10
 	section = collect_section subs, act
-	GUI = createGUI section
-	btn, res = aegisub.dialog.display GUI, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
+
+	-- Dynamically create GUI
+	row, column, dlg, transformTable = 0, 0, {}, {}
+	dlg, row, column, transformTable = addsectiontoGUI dlg, row, column, section[1], 1, transformTable		-- Start tags
+	if #section > 1													-- Inline tags
+		dlg, row, column, transformTable = inlinetagsGUI section, dlg, row, column, transformTable
+	if #transformTable > 0												-- Transforms
+		dlg = transformGUI transformTable, dlg, row, column
+
+	btn, res = aegisub.dialog.display dlg, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
 	if btn
-		editLines subs, act, res, section
+		transform_count, text = 0, ""
+		if #section > 10
+			text, transform_count = rebuildsection section[1], 1, text, transform_count, res
+			new_inline = res["inline"]
+			new_inline = new_inline\gsub("\n", "")
+			text = text .. new_inline
+		else
+			for section_count, sec in ipairs section
+				text, transform_count = rebuildsection sec, section_count, text, transform_count, res
+
+		line = subs[act]
+		line.text = text
+		subs[act] = line
 
 aegisub.register_macro script_name, script_description, main
