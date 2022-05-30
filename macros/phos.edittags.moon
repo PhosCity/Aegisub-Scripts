@@ -2,7 +2,14 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.4"
+export script_version = "0.0.5"
+
+-- Initialize some variables
+export row = 0
+export column = 0
+export dlg = {}
+export transformTable = {}
+export column_limit = 10
 
 tagClass = {
 	alpha: "dropdown", "1a": "dropdown", "2a": "dropdown", "3a": "dropdown", "4a": "dropdown",
@@ -81,7 +88,7 @@ analyzeSection = (section) ->
 	return tagTable, text
 
 -- Add tags and it's value to gui based on the type of tag
-guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
+guiHelper = (tagname, tagvalue, section_count) ->
 	klass = tagClass[tagname]
 	klass = "edit" if not klass
 	if klass == "dropdown"
@@ -155,9 +162,7 @@ guiHelper = (dlg, row, column, tagname, tagvalue, section_count) ->
 		row += 1
 		column = 0
 
-	return dlg, row, column
-
-addsectiontoGUI = (dlg, row, column, section, section_count, transformTable ) ->
+addsectiontoGUI = (section, section_count ) ->
 	tagTable, text = analyzeSection section
 
 	dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", value: text, name: "text"..section_count }
@@ -171,35 +176,31 @@ addsectiontoGUI = (dlg, row, column, section, section_count, transformTable ) ->
 		if tag\match "(t[%d]+)"
 			table.insert transformTable, tagTable[tag]
 		else
-			dlg, row, column = guiHelper dlg, row, column, tag, tagTable[tag], section_count
-	
-	return dlg, row, column, transformTable
+			guiHelper tag, tagTable[tag], section_count
 
-inlinetagsGUI = (tagtextsection, dlg, row, column, transformTable) ->
+inlinetagsGUI = (tagtextsection) ->
 	row += 1
 	column = 0
 	dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Inline Tags:" }
-	row += 1
-	column = 0
 
 	if #tagtextsection < 10 
 		for section_count, section in ipairs tagtextsection
 			if section_count > 1
-				dlg, row, column, transformTable = addsectiontoGUI dlg, row, column, section, section_count, transformTable
+				addsectiontoGUI section, section_count
 			row += 1
 			column = 0
 	else
+		row += 1
+		column = 0
 		inline = ""
 		for section_count, section in ipairs tagtextsection
 			if section_count > 1
 				inline = inline .. section .. "\n"
 
-		dlg[#dlg+1] = { x: column, y:row, width: column_limit, height: math.ceil(#tagtextsection*0.75), class: "textbox", value: inline, name: "inline" }
-		row += math.ceil(#tagtextsection*0.75)
+		dlg[#dlg+1] = { x: column, y:row, width: column_limit, height: math.min(math.ceil(#tagtextsection*0.7),20), class: "textbox", value: inline, name: "inline" }
+		row += math.min(math.ceil(#tagtextsection*0.7),20)
 
-	return dlg, row, column, transformTable
-
-transformGUI = (transformTable, dlg, row, column) ->
+transformGUI = () ->
 	transform_count = 0
 	for index, item in ipairs transformTable
 		row += 1
@@ -231,8 +232,7 @@ transformGUI = (transformTable, dlg, row, column) ->
 			if column >= (column_limit-1)
 				row += 1
 				column = 0
-			dlg, row, column = guiHelper dlg, row, column, tagname, tagvalue, "tr"..index
-	return dlg
+			guiHelper tagname, tagvalue, "tr"..index
 
 rebuildsection = (section, section_count, text, transform_count, res) ->
 	tagTable, _ = analyzeSection section
@@ -277,28 +277,27 @@ rebuildsection = (section, section_count, text, transform_count, res) ->
 	return text, transform_count
 
 main = (subs, sel, act) ->
-	export column_limit = 10
 	section = collect_section subs, act
 
+	row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
 	-- Dynamically create GUI
-	row, column, dlg, transformTable = 0, 0, {}, {}
-	dlg, row, column, transformTable = addsectiontoGUI dlg, row, column, section[1], 1, transformTable		-- Start tags
-	if #section > 1													-- Inline tags
-		dlg, row, column, transformTable = inlinetagsGUI section, dlg, row, column, transformTable
-	if #transformTable > 0												-- Transforms
-		dlg = transformGUI transformTable, dlg, row, column
+	addsectiontoGUI section[1], 1									-- Start tags
+	if #section > 1											-- Inline tags
+		inlinetagsGUI section
+	if #transformTable > 0										-- Transforms
+		transformGUI!
 
 	btn, res = aegisub.dialog.display dlg, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
 	if btn
 		transform_count, text = 0, ""
-		if #section > 10
+		if #section < 10
+			for section_count, sec in ipairs section
+				text, transform_count = rebuildsection sec, section_count, text, transform_count, res
+		else
 			text, transform_count = rebuildsection section[1], 1, text, transform_count, res
 			new_inline = res["inline"]
 			new_inline = new_inline\gsub("\n", "")
 			text = text .. new_inline
-		else
-			for section_count, sec in ipairs section
-				text, transform_count = rebuildsection sec, section_count, text, transform_count, res
 
 		line = subs[act]
 		line.text = text
