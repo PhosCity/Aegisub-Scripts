@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.7"
+export script_version = "0.0.8"
 
 -- Initialize some variables
 export row = 0
@@ -239,13 +239,31 @@ transformGUI = () ->
 				column = 0
 			guiHelper tagname, tagvalue, "tr"..index
 
+getnewvalues = (tag, res, section_count) ->
+	klass = tagClass[tag]
+	newval = res[tag..section_count]
+	if klass == "coordinate"
+		val_x = res[tag.."x"..section_count]
+		val_y = res[tag.."y"..section_count]
+		newval = "("..val_x..","..val_y..")"
+	elseif klass == "checkbox"
+		newval = switch newval
+			when true then 1
+			when false then 0
+	elseif klass == "dropdown"
+		if tag == "alpha" or tag == "1a" or tag == "2a" or tag == "3a" or tag == "4a"
+			newval = newval\gsub("^", "&H")\gsub("$", "&")
+	elseif klass == "color"
+		newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
+
+	return newval
+
 -- Rebuilds a section from the values users puts in gui
 rebuildsection = (section, section_count, text, transform_count, res) ->
 	tagTable, _ = analyzeSection section
 	newval = ""
 	text = text .."{"
 	for _, tag in ipairs tagTable
-		klass = tagClass[tag]
 		if tag\match "t[%d]+"
 			transform_count += 1
 			trstart = res["trstart"..transform_count]
@@ -256,26 +274,11 @@ rebuildsection = (section, section_count, text, transform_count, res) ->
 
 			tagvalue = tagTable[tag]
 			for t in tagvalue\gmatch "|([1-4]?[a-z]+)[^|{}]*"
-				newval= newval.. "\\" .. t .. res[t .. "tr" .. transform_count]
+				newval= newval.. "\\" .. t .. getnewvalues(t, res, "tr"..transform_count)
 			newval= newval.. ")"
 			tag = "t"
-		elseif klass == "coordinate"
-			val_x = res[tag.."x"..section_count]
-			val_y = res[tag.."y"..section_count]
-			newval = "("..val_x..","..val_y..")"
-		elseif klass == "checkbox"
-			newval = switch res[tag..section_count]
-				when true then 1
-				when false then 0
-		elseif klass == "dropdown"
-			newval = res[tag..section_count]
-			if tag == "alpha" or tag == "1a" or tag == "2a" or tag == "3a" or tag == "4a"
-				newval = newval\gsub("^", "&H")\gsub("$", "&")
-		elseif klass == "color"
-			newval = res[tag..section_count]
-			newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
 		else
-			newval = res[tag..section_count]
+			newval = getnewvalues tag, res, section_count
 		text = text .. "\\".. tag .. newval
 	text = text .."}".. res["text"..section_count]
 	return text, transform_count
