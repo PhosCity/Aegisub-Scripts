@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.6"
+export script_version = "0.0.7"
 
 -- Initialize some variables
 export row = 0
@@ -43,9 +43,16 @@ table_contains = (tbl, x) ->
 
 -- Deactivate the tags inside transform by changing \ to |
 untransform = (line) ->
+	-- I cannot find a way to match transform tag that has a clip inside it.
+	if line\match "\\i?clip"
+		line = line\gsub "(\\i?clip)%(([^)]+)%)", "%1|s|%2|e|" 
+
 	for tr in line\gmatch "\\t%([^)]+%)"
 		new_tr = tr\gsub("\\", "|")\gsub("|t", "\\t")
 		line = line\gsub esc(tr), new_tr
+	
+	-- Reverting the clip
+	line = line\gsub("|s|", "(")\gsub("|e|", ")")
 
 	return line
 
@@ -54,8 +61,10 @@ collect_section = (subs, act) ->
 	section = {}
 	line = subs[act]
 	line.text = untransform line.text
+	line.text = line.text\gsub "{([^\\}]-)}", "|s|%1|e|"				-- A bit hacky way to deactivate the comments so that they are treated as text and not tags
 
 	for item in line.text\gmatch "{[^{}]*}[^{}]*"
+		item = item\gsub("|s|", "{")\gsub("|e|", "}")				-- Revert the comments to it's former glory
 		table.insert section, item
 
 	if #section == 0
@@ -67,8 +76,7 @@ collect_section = (subs, act) ->
 -- Takes in a {tag}text section and creates a table with key-value pair of tag and it's value
 analyzeSection = (section) ->
 	transform_count, tagTable = 0, {}
-	text = section\gsub "^{%*?\\[^}]-}", ""
-	tag = section\gsub esc(text), ""
+	tag, text = section\match "^({%*?\\[^}]-})(.*)"
 
 	for tagname, tagvalue in tag\gmatch "\\([1-4]?[a-z]+)([^\\{}]*)"
 		-- Since transform can appear multiple times in a same section, number it for later processing
@@ -224,7 +232,7 @@ transformGUI = () ->
 		row += 1
 		column = 0
 
-		item = item\gsub("\\t%(", "")\gsub("%)", "")
+		item = item\gsub("\\t%(", "")\gsub("%)$", "")
 		for tagname, tagvalue in item\gmatch "|([1-4]?[a-z]+)([^|{}]*)"
 			if column >= (column_limit-1)
 				row += 1
