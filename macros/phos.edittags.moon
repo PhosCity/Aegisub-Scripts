@@ -2,7 +2,7 @@ export script_name = "#BETA# Edit tags"
 export script_description = "Dynamically edit tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.0.9"
+export script_version = "0.1.0"
 
 -- Initialize some variables
 export row = 0
@@ -108,9 +108,9 @@ guiHelper = (tagname, tagvalue, section_count) ->
 		taglabel = tagname
 		taglabel = "Alignment" if tagname == "an"
 
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: taglabel }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: taglabel }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "dropdown", items: dropdownItems, value: tagvalue, name: tagname..section_count }
+		dlg[#dlg+1] = { x: column, y:row, class: "dropdown", items: dropdownItems, value: tagvalue, name: tagname..section_count }
 		column +=1
 	elseif klass == "color"
 		lbl = switch tagname
@@ -120,9 +120,9 @@ guiHelper = (tagname, tagvalue, section_count) ->
                 	when "3c" then "Border"
                 	when "4c" then "Shadow"
 
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: lbl }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: lbl }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "color", name: tagname..section_count, value: tagvalue }
+		dlg[#dlg+1] = { x: column, y:row, class: "color", name: tagname..section_count, value: tagvalue }
 		column +=1
 	elseif klass == "checkbox"
 		tagvalue = switch tagvalue
@@ -138,82 +138,68 @@ guiHelper = (tagname, tagvalue, section_count) ->
 			when "s" then "Strikeout"
 
 		if tagname == "b" and tagvalue != true and tagvalue != false				-- Non-boolean font weights
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: taglabel }
+			dlg[#dlg+1] = { x: column, y:row, class: "label", label: taglabel }
 			column +=1
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", name: tagname..section_count, value: tagvalue }
+			dlg[#dlg+1] = { x: column, y:row, class: "edit", name: tagname..section_count, value: tagvalue }
 		else
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: klass, name: tagname..section_count, value: tagvalue, label: taglabel }
+			dlg[#dlg+1] = { x: column, y:row, class: klass, name: tagname..section_count, value: tagvalue, label: taglabel }
 		column +=1
 	elseif klass == "coordinate"
 		first_item, second_item = tagvalue\match "%(([%d%.%-]+),([%d%.%-]+)%)"
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: tagname }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "floatedit", name: tagname.."x"..section_count, value: first_item }
+		dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."x"..section_count, value: first_item }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "floatedit", name: tagname.."y"..section_count, value: second_item }
+		dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."y"..section_count, value: second_item }
 		column +=1
 	elseif klass == "edit" or klass == "floatedit" or klass == "intedit"
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: tagname }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: klass, name: tagname..section_count, value: tagvalue }
+		dlg[#dlg+1] = { x: column, y:row, class: klass, name: tagname..section_count, value: tagvalue }
 		column +=1
 	elseif klass == "complex"
 		if column != 0
 			row += 1
 			column = 0
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: tagname }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column += 1
+		a, b, c, d, e, f, g, hint = nil, nil, nil, nil, nil, nil, nil, {}
 		switch tagname
 			when "fade"
 				a, b , c, d, e, f, g = tagvalue\match "%((%d+),(%d+),(%d+),([%-%d]+),([%-%d]+),([%-%d]+),([%-%d]+)%)"
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."a"..section_count, value: a, hint: "a1" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."b"..section_count, value: b, hint: "a2" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."c"..section_count, value: c, hint: "a3" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."d"..section_count, value: d, hint: "t1" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."e"..section_count, value: e, hint: "t2" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."f"..section_count, value: f, hint: "t3" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."g"..section_count, value: g, hint: "t4" }
-				column +=1
+				hint = {"a1", "a2", "a3", "t1", "t3", "t4" }
 			when "move"
-				a, b, c, d, e, f = "", "", "", "", "", ""
 				if tagvalue\match "%([%-%d%.]+,[%-%d%.]+,[%-%d%.]+,[%-%d%.]+%)"
 					a, b, c, d = tagvalue\match "%(([%-%d%.]+),([%-%d%.]+),([%-%d%.]+),([%-%d%.]+)%)"
 				else
 					a, b, c, d, e, f = tagvalue\match "%(([%-%d%.]+),([%-%d%.]+),([%-%d%.]+),([%-%d%.]+),([%-%d]+),([%-%d]+)%)"
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."a"..section_count, value: a, hint: "x1" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."b"..section_count, value: b, hint: "y1" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."c"..section_count, value: c, hint: "x2" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."d"..section_count, value: d, hint: "y2" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."e"..section_count, value: e, hint: "t1" }
-				column +=1
-				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."f"..section_count, value: f, hint: "t2" }
-				column +=1
+				hint = {"x1", "y1", "x2", "y2", "t1", "t2" }
 			else		--clip or iclip
 				if tagvalue\match "%([%-%d%.]+,[%-%d%.]+,[%-%d%.]+,[%-%d%.]+%)"
 					a, b, c, d = tagvalue\match "%(([%-%d%.]+),([%-%d%.]+),([%-%d%.]+),([%-%d%.]+)%)"
-					dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."a"..section_count, value: a, hint: "x1" }
-					column +=1
-					dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."b"..section_count, value: b, hint: "y1" }
-					column +=1
-					dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."c"..section_count, value: c, hint: "x2" }
-					column +=1
-					dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."d"..section_count, value: d, hint: "y2" }
-					column +=1
-				else
-					dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", name: tagname..section_count, value: tagvalue }
+					hint = {"x1", "y1", "x2", "y2" }
+		if a
+			dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."a"..section_count, value: a, hint: hint[1] }
+			column +=1
+			dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."b"..section_count, value: b, hint: hint[2] }
+			column +=1
+			dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."c"..section_count, value: c, hint: hint[3] }
+			column +=1
+			dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."d"..section_count, value: d, hint: hint[4] }
+			column +=1
+			if tagname == "fade" or tagname =="move"
+				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."e"..section_count, value: e, hint: hint[5] }
+				column +=1
+				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."f"..section_count, value: f, hint: hint[6] }
+				column +=1
+			if tagname == "fade"
+				dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."g"..section_count, value: g, hint: hint[7] }
+				column +=1
+		else
+			dlg[#dlg+1] = { x: column, y:row, width: column_limit, class: "edit", name: tagname..section_count, value: tagvalue }
 		column = column_limit
 
--- Receives a section and adds all its tags to gui
+-- Receives a {tag}text section and adds all its tags to gui
 addsectiontoGUI = (section, section_count ) ->
 	tagTable, text = analyzeSection section
 
@@ -224,17 +210,16 @@ addsectiontoGUI = (section, section_count ) ->
 		if column >= (column_limit-1) and tagClass[tag] != "complex"
 			row += 1
 			column = 0
-
 		if tag\match "(t[%d]+)"
 			table.insert transformTable, tagTable[tag]
 		else
 			guiHelper tag, tagTable[tag], section_count
 
--- Adds inline tags to gui. For gbc, it just adds all of them to textbox
+-- Adds inline tags to gui. For long gbc, it just adds all of them to textbox
 inlinetagsGUI = (tagtextsection) ->
 	row += 1
 	column = 0
-	dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Inline Tags:" }
+	dlg[#dlg+1] = { x: column, y:row, class: "label", label: "Inline Tags:" }
 
 	if #tagtextsection < 10 
 		for section_count, section in ipairs tagtextsection
@@ -260,24 +245,24 @@ transformGUI = () ->
 		row += 1
 		column = 0
 		if transform_count < 1
-			dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Transform:" }
+			dlg[#dlg+1] = { x: column, y:row, class: "label", label: "Transform:" }
 			row += 1
 			column = 0
 			transform_count += 1
 		tag_start, tag_end = item\match "%(([%d.-]+),([%d.-]+)[^)]*%)"
 		accel = item\match "%([%d.-]+,[%d.-]+,([%d.-]+)[^)]*%)"
 
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: index..". Start: " }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: index..". Start: " }
 		column+=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: tag_start, name: "trstart"..index }
+		dlg[#dlg+1] = { x: column, y:row, class: "edit", value: tag_start, name: "trstart"..index }
 		column+=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "End: " }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: "End: " }
 		column+=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: tag_end, name: "trend"..index }
+		dlg[#dlg+1] = { x: column, y:row, class: "edit", value: tag_end, name: "trend"..index }
 		column+=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "label", label: "Accel: " }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: "Accel: " }
 		column +=1
-		dlg[#dlg+1] = { x: column, y:row, width: 1, class: "edit", value: accel, name: "traccel"..index }
+		dlg[#dlg+1] = { x: column, y:row, class: "edit", value: accel, name: "traccel"..index }
 		row += 1
 		column = 0
 
@@ -288,7 +273,7 @@ transformGUI = () ->
 				column = 0
 			guiHelper tagname, tagvalue, "tr"..index
 
--- Gets the valuse from gui
+-- Gets the user input values from gui
 getnewvalues = (tag, res, section_count) ->
 	klass = tagClass[tag]
 	newval = res[tag..section_count]
@@ -311,12 +296,12 @@ getnewvalues = (tag, res, section_count) ->
 			when "fade"
 				newval = "("..a..","..b..","..c..","..d..","..e..","..f..","..g..")"
 			when "move"
-				if e and f != 0
+				if e and f != 0								-- move with time
 					newval = "("..a..","..b..","..c..","..d..","..e..","..f..")"
-				else
+				else									-- move without time
 					newval = "("..a..","..b..","..c..","..d..")"
 			else
-				if a
+				if a									-- rect clip or iclip
 					newval = "("..a..","..b..","..c..","..d..")"
 
 	return newval
@@ -358,10 +343,10 @@ main = (subs, sel, act) ->
 	btn, res = aegisub.dialog.display dlg, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
 	if btn
 		transform_count, text = 0, ""
-		if #section < 10												-- Non gbc lines
+		if #section < 10												-- Non or short gbc lines
 			for section_count, sec in ipairs section
 				text, transform_count = rebuildsection sec, section_count, text, transform_count, res
-		else														-- Gbc lines
+		else														-- Long gbc lines
 			text, _ = rebuildsection section[1], 1, text, transform_count, res
 			new_inline = res["inline"]
 			new_inline = new_inline\gsub("\n", "")
