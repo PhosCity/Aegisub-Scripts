@@ -2,99 +2,164 @@ export script_name = "#BETA# Remove Tags"
 export script_description = "Dynamically remove tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.removetags"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 
 DependencyControl = require "l0.DependencyControl"
 depCtrl = DependencyControl{
-    feed: "",
     {
         {"lyger.LibLyger", version: "2.0.0", url: "http://github.com/TypesettingTools/lyger-Aegisub-Scripts"},
     }
 }
 LibLyger = depCtrl\requireModules!
 
+tags_color = {"c", "1c", "2c", "3c", "4c"}
+tags_alphas = {"alpha", "1a", "2a", "3a", "4a"}
+tags_rotation = {"frz", "frx", "fry"}
+tags_scale = {"fs", "fscx", "fscy"}
+tags_perspective = {"frz", "frx", "fry", "fax", "fay", "org"}
+buttons = {}
+
+table_contains = (tbl, x) ->
+	for item in *tbl
+		return true if item == x
+	return false
+
+cleanup = (line) -> line\gsub("\\t%([%-%.%d,]*%)", "")\gsub("{[*]?}", "")
+
 collect_tags = (subs, sel) ->
 	tag_table = {}
+	remove_groups = { color: false, alphas: false, rotation: false, scale: false, perspective: false, inline_except_last: false }
 
 	for i in *sel
 		line = subs[i]
+
+		_, tag_section = line.text\gsub "{[*>]?\\[^}]-}", ""
+		if tag_section > 2 remove_groups["inline_except_last"] = true
+
 		for tagname in line.text\gmatch("\\([1-4]?[a-z]+)[^\\{}]*")
 			if tag_table[tagname] == nil then
 				tag_table[tagname] = 1
 				table.insert tag_table,tagname
+				if table_contains tags_color, tagname then remove_groups["color"] = true
+				if table_contains tags_alphas, tagname then remove_groups["alphas"] = true
+				if table_contains tags_rotation, tagname then remove_groups["rotation"] = true
+				if table_contains tags_scale, tagname then remove_groups["scale"] = true
+				if table_contains tags_perspective, tagname then remove_groups["perspective"] = true
+
+	for k, v in pairs remove_groups
+		if v == true and not table_contains(buttons, "Run Selected")
+			table.insert buttons, 1, "Run Selected"
 
 	if #tag_table == 0
 		aegisub.log "No tags found in the selected line."
 		aegisub.cancel!
 	else
-		return tag_table
+		return tag_table, remove_groups
 
 sort_tags = (tag_table) ->
 	sort_order ={"r", "an", "q", "pos", "move", "org", "fad", "fade", "blur", "be", "bord", "xbord", "ybord", "shad", "xshad", "yshad", "fscx", "fscy", "frx", "fry", "frz", "fax", "fay", "fn", "fs", "fsp", "c", "1c", "2c", "3c", "4c", "alpha", "1a", "2a", "3a", "4a", "clip", "iclip", "b", "i", "u", "s", "p", "k", "kf", "K", "ko", "t"}
 	sorted_tags = [tag for tag in *sort_order when tag_table[tag] != nil]
 	return sorted_tags
 
-create_gui = (tag_table) ->
-	dialog = {
-		{x:0, y:0, class: "checkbox", width:1, height:1, label: "Start tags", name: "start", hint: "Remove from start tags only" },
-		{x:1, y:0, class: "checkbox", width:1, height:1, label: "Inline tags", name: "inline", hint: "Remove from inline tags only" },
-		{x:2, y:0, class: "checkbox", width:1, height:1, label: "Transform", name: "transform", hint: "Remove from transform only" },
-	}
+create_gui = (tag_table, remove_groups) ->
+	dialog = {}
+	-- Left portion of GUI
+	count = 0
+	for k, v in pairs remove_groups
+		label = k\gsub("^", "Remove all ")\gsub("_", " ")
+		if v == true
+			dialog[#dialog+1]= {x:0, y: count, class: "checkbox", label: label, name: k}
+			count += 1
+
+	-- Right portion of GUI
+	start_x = 0
+	if count > 0 then start_x = 1
+	dialog[#dialog+1] = {x: start_x, y:0, class: "checkbox", label: "Start tags", name: "start", hint: "Remove from start tags only"}
+	dialog[#dialog+1] = {x: start_x + 1, y:0, class: "checkbox", label: "Inline tags", name: "inline", hint: "Remove from inline tags only"}
+	dialog[#dialog+1] = {x: start_x + 2, y:0, class: "checkbox", label: "Transform", name: "transform", hint: "Remove from transform only"}
+	dialog[#dialog+1] = {x: start_x + 3, y:0, class: "checkbox", label: "Invert", name: "invert", hint: "Remove all except selected"}
 
 	-- Determine the number of columns in gui
-	column = math.max math.ceil(math.sqrt #tag_table), 3
+	column = math.max math.ceil(math.sqrt #tag_table), 4
 
 	-- Dynamically create gui
 	count = 0
 	for i = 1, column
-		for j = 0, column-1
+		for j = start_x, column+start_x-1
 			count += 1
 			if count <= #tag_table
-				dialog[#dialog+1] = { label: tag_table[count], class: "checkbox",  x: j, y: i, width: 1,  height: 1  , name: tag_table[count], }
+				dialog[#dialog+1] = {x: j, y: i, class: "checkbox", label: tag_table[count], name: tag_table[count]}
 	
 	return dialog
 
 remove_tags = (subs, sel, tags_to_delete, res) ->
+	delete = LibLyger.line_exclude
+	if res["invert"] then delete = LibLyger.line_exclude_except
 	for i in *sel
 		line = subs[i]
 		if res.start
 			start_tags = line.text\match "^{>?\\[^}]-}"
 			line.text = line.text\gsub LibLyger.esc(start_tags), ""
-			start_tags = LibLyger.line_exclude start_tags, tags_to_delete
+			start_tags = delete start_tags, tags_to_delete
 			line.text  = start_tags .. line.text
 		elseif res.inline
 			start_tags = line.text\match "^{>?\\[^}]-}"
 			line.text = line.text\gsub LibLyger.esc(start_tags), ""
-			line.text = LibLyger.line_exclude line.text, tags_to_delete
+			line.text = delete line.text, tags_to_delete
 			line.text = start_tags .. line.text
 		elseif res.transform
 			line.text = LibLyger.time_exclude line.text, tags_to_delete
 		else
-			line.text = LibLyger.line_exclude line.text, tags_to_delete
-
-		-- Some cleanup after deleting tags
-		line.text = line.text\gsub("\\t%([%-%.%d,]*%)", "")\gsub("{}", "")
+			line.text = delete line.text, tags_to_delete
+		line.text = cleanup(line.text)
 		subs[i] = line
 
-remove_all_tags = (subs, sel) ->
+remove_all_tags = (subs, sel, res) ->
 	for i in *sel
 		line = subs[i]
-		line.text = line.text\gsub("{[*>]?\\[^}]-}","")
+		if res.start
+			line.text = line.text\gsub "^{>?\\[^}]-}", ""
+		elseif res.inline
+			start_tags = line.text\match "^{>?\\[^}]-}"
+			line.text = line.text\gsub("{[*>]?\\[^}]-}","")
+			line.text = start_tags .. line.text
+		else
+			line.text = line.text\gsub("{[*>]?\\[^}]-}","")
+		subs[i] = line
+
+run_selected = (subs, sel, res) ->
+	for i in *sel
+		line = subs[i]
+		if res["color"]
+			line.text = LibLyger.line_exclude line.text, tags_color
+		if res["alphas"]
+			line.text = LibLyger.line_exclude line.text, tags_alphas
+		if res["rotation"]
+			line.text = LibLyger.line_exclude line.text, tags_rotation
+		if res["scale"]
+			line.text = LibLyger.line_exclude line.text, tags_scale
+		if res["perspective"]
+			line.text = LibLyger.line_exclude line.text, tags_perspective
+		if res["inline_except_last"]
+			r = math.huge
+			while r != 0
+				line.text, r = line.text\gsub "(.){[*>]?\\[^}]-}(.-{%*?\\)", "%1%2"
+		line.text = cleanup(line.text)
 		subs[i] = line
 
 main = (subs, sel) ->
-	tag_table = collect_tags subs, sel
+	buttons = {"Kill Tags", "Remove All", "Cancel"}
+	tag_table, remove_groups = collect_tags subs, sel
 	sorted_tags = sort_tags tag_table
-	GUI = create_gui sorted_tags
-	buttons = {"Apply", "Cancel", "Remove All"}
+	GUI = create_gui sorted_tags, remove_groups
 	btn, res = aegisub.dialog.display GUI, buttons
-	if btn == "Cancel"
-		aegisub.cancel!
-	elseif btn == "Apply"
-		tags_to_delete = [tag for tag in *tag_table when res[tag]]
-		remove_tags subs, sel, tags_to_delete, res
-	else
-		remove_all_tags subs, sel
+	switch btn
+		when "Cancel" then aegisub.cancel!
+		when "Run Selected" then run_selected subs, sel, res
+		when "Remove All" then remove_all_tags subs, sel, res
+		when "Kill Tags"
+			tags_to_delete = [tag for tag in *tag_table when res[tag]]
+			remove_tags subs, sel, tags_to_delete, res
 
 
 depCtrl\registerMacro main
