@@ -1,8 +1,8 @@
-export script_name = "#BETA# Remove Tags"
+export script_name = "Remove Tags"
 export script_description = "Dynamically remove tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.removetags"
-export script_version = "0.0.3"
+export script_version = "1.0.0"
 
 DependencyControl = require "l0.DependencyControl"
 depCtrl = DependencyControl{
@@ -46,10 +46,6 @@ collect_tags = (subs, sel) ->
 				if table_contains tags_scale, tagname then remove_groups["scale"] = true
 				if table_contains tags_perspective, tagname then remove_groups["perspective"] = true
 
-	for k, v in pairs remove_groups
-		if v == true and not table_contains(buttons, "Run Selected")
-			table.insert buttons, 1, "Run Selected"
-
 	if #tag_table == 0
 		aegisub.log "No tags found in the selected line."
 		aegisub.cancel!
@@ -67,9 +63,17 @@ create_gui = (tag_table, remove_groups) ->
 	count = 0
 	for k, v in pairs remove_groups
 		label = k\gsub("^", "Remove all ")\gsub("_", " ")
+		hint = ""
 		if v == true
-			dialog[#dialog+1]= {x:0, y: count, class: "checkbox", label: label, name: k}
+			switch k
+				when "color" then hint = table.concat(tags_color, ",")
+				when "alphas" then hint = table.concat(tags_alphas, ",")
+				when "rotation" then hint = table.concat(tags_rotation, ",")
+				when "scale" then hint = table.concat(tags_scale, ",")
+				when "perspective" then hint = table.concat(tags_perspective, ",")
+			dialog[#dialog+1]= {x:0, y: count, class: "checkbox", label: label, name: k, hint: hint}
 			count += 1
+			table.insert buttons, 1, "Run Selected" unless table_contains buttons, "Run Selected"
 
 	-- Right portion of GUI
 	start_x = 0
@@ -152,6 +156,7 @@ main = (subs, sel) ->
 	tag_table, remove_groups = collect_tags subs, sel
 	sorted_tags = sort_tags tag_table
 	GUI = create_gui sorted_tags, remove_groups
+
 	btn, res = aegisub.dialog.display GUI, buttons
 	switch btn
 		when "Cancel" then aegisub.cancel!
