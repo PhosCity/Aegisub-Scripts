@@ -2,7 +2,7 @@ export script_name = "Edit tags"
 export script_description = "Edit tags of current lines"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 -- Initialize some variables
 row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
@@ -232,7 +232,7 @@ transformGUI = () ->
 			column = 0
 			transform_count += 1
 		tag_start, tag_end = item\match "%(([%d.-]+),([%d.-]+)[^)]*%)"
-		accel = item\match "%([%d.-]+,[%d.-]+,([%d.-]+)[^)]*%)"
+		accel = item\match "%([%d.-]-,[%d.-]-,([%d.-]-),|[^)]*%)"
 
 		dlg[#dlg+1] = { x: column, y:row, class: "label", label: index..". Start: " }
 		column+=1
