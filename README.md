@@ -5,6 +5,7 @@
 1. [Wobble](#wobble)
 1. [svg2ass](#svg2ass)
 1. [Timing Assistant](#timing-assistant)
+1. [Remove tags](#remove-tags)
 
 ## Bidirectional Snapping
 
@@ -106,3 +107,38 @@ For end time:
 1. If it did not snap, it simply adds lead out to the line.
 
 </details>
+
+## Remove Tags
+
+**_Not Available in Dependency Control_**
+
+_Lyger's module is a dependency. If you have downloaded lyger's script from dependency control, chances are you already have it. You can also get it from [here](https://github.com/TypesettingTools/lyger-Aegisub-Scripts/blob/master/modules/LibLyger.moon)_
+
+![image](./assets/remove_tags.png)
+
+This is undoubtedly a clone of unanimated's script called `Script Cleanup` but there are two major differences. The first being that as the name suggests, this script only has the portions of `Script Cleanup` that deals with removing tags. The second being that the GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove.
+
+### `Remove All` button
+
+- If you simply click the `Remove All` button, it removes all the tags form the selected lines.
+- If you check `Start tags` in the top row and then press `Remove All` button, it removes all start tags from selected lines.
+- Similarly, checking `Inline tags` in top row removes all inline tags.
+
+### `Kill Tags` button
+
+- All the tags that you individually selected would be removed.
+- If `Start tags` is checked, the selected tags will only be removed from start tags.
+- If `Inline tags` is checked, the selected tags will only be removed from inline tags.
+- If `Transform` is checked, the selected tags will only be removed from transforms.
+- If `Inverse` is checked, all the tags except the selected ones will be deleted.
+
+### `Run Selected` button
+
+This button executes the things you select in the left column and is mostly used to delete groups of tags at once. Staying true to it's mission, the script also dynamically creates this section. Which means that if your selection does not contain any color tags, the option to remove color tags won't be available. The groups available are:
+
+- All color tags (c, 1c, 2c, 3c, 4c)
+- All alpha tags (alpha, 1a, 2a, 3a, 4a)
+- All rotation tags (frz, frx, fry)
+- All scale tags (fs, fscx, fscy)
+- All perspective tags (frz, frx, fry, fax, fay, org)
+- All inline tags except last (useful for undoing gradient)
