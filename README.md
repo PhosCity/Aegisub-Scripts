@@ -6,6 +6,7 @@
 1. [svg2ass](#svg2ass)
 1. [Timing Assistant](#timing-assistant)
 1. [Remove tags](#remove-tags)
+1. [Edit Tags](#edit-tags)
 
 ## Bidirectional Snapping
 
@@ -142,3 +143,29 @@ This button executes the things you select in the left column and is mostly used
 - All scale tags (fs, fscx, fscy)
 - All perspective tags (frz, frx, fry, fax, fay, org)
 - All inline tags except last (useful for undoing gradient)
+
+## Edit Tags
+
+**_Not Available in Dependency Control_**
+
+The main idea is that it presents the tags and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It seperates start tags, inline tags and transforms in different sections for easy editing.
+
+Since the GUI is dynamically generated, it may sometime produce sub-optimal GUI but for 99% of lines, it should work without issue. Just don't go using this script in the line you generated using ktemplates or programming. You shouldn't be editing such lines manually anyway.
+
+Take the following line with transforms, move and clips.
+
+```
+{\an9\blur1\c&HEEE7DD&\fscx126\fscy126\clip(868,612,1736,942)\move(1716.96,667.57,2151.04,667.64,21,3942)\t(21,3942,\blur1\fscx126\fscy126\clip(868,596,988,942))\t(300,1500,1.2,\blur2)}Whenever people\Nget near me,
+```
+
+When you run the script on this line, following gui is genreated:
+
+![image](./assets/edittags1.png)
+
+Similarly for following line with gradient by character:
+
+```
+{\an4\pos(977.06,961.97)\fscx29.52\fscy16.17\frz-199.62\fax-0.13\fnStatic Bold\b1\c&H6460F6&\3c&HFFFFFF&\blur0.9\iclip(m 845.3 955.18 b 844.97 954.36 843.03 953.8 840.78 953.13 838.53 952.45 835.86 951.89 832.83 950.88 829.79 949.86 822.21 947.39 816.25 945.7 810.29 944.01 807.47 942.78 807.47 942.78 807.47 942.78 813.23 935.49 813.7 934.9 814.9 933.4 828.51 915.06 831.1 911.58 833.69 908.09 835.79 904.94 835.67 904.15 835.56 903.36 835.38 901.83 834.81 901.04 834.25 900.25 833.42 897.44 833.2 896.65 832.97 895.86 833.05 894.1 832.6 893.42 832.15 892.75 829.53 892.08 825.63 890.72 822.12 889.51 819.55 889.04 814.83 887.8 810.1 886.56 801.44 884.46 798.85 883.67 796.26 882.89 785.09 879.33 785.09 879.33 l 684.4 842.2 540.4 1020.4 754 1094.8 767.65 1101.85 832.9 992.42 837.55 985.67 b 837.55 985.67 840.93 981.36 841.22 980.69 841.53 980.01 845.33 975.09 845.33 974.73 845.33 974.49 845.61 966.06 845.61 966.06 845.61 964.85 845.7 962.15 845.7 960.58 845.7 959 845.98 956.75 845.3 955.18)}S{\fax-0.14}t{\fax-0.15}o{\fax-0.16}p {\fax-0.18}w{\fax-0.19}o{\fax-0.2}r{\fax-0.21}r{\fax-0.22}y{\fax-0.23}i{\fax-0.24}n{\fax-0.25}g {\fax-0.27\c&H3E3C3E&}a{\fax-0.28}b{\fax-0.29}o{\fax-0.3}u{\fax-0.31}t {\fax-0.32}t{\fax-0.33}a{\fax-0.34}l{\fax-0.35}k{\fax-0.36}i{\fax-0.37}n{\fax-0.38}g {\fax-0.4}t{\fax-0.41}o {\fax-0.43}o{\fax-0.44}t{\fax-0.45}h{\fax-0.46}e{\fax-0.47}r{\fax-0.48}s{\fax-0.49}!
+```
+
+![image](./assets/edittags2.png)
