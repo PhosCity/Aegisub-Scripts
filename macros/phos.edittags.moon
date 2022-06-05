@@ -1,15 +1,11 @@
-export script_name = "#BETA# Edit tags"
-export script_description = "Dynamically edit tags based on selection"
+export script_name = "Edit tags"
+export script_description = "Edit tags of current lines"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "0.1.0"
+export script_version = "1.0.0"
 
 -- Initialize some variables
-export row = 0
-export column = 0
-export dlg = {}
-export transformTable = {}
-export column_limit = 10
+row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
 
 tagClass = {
 	alpha: "dropdown", "1a": "dropdown", "2a": "dropdown", "3a": "dropdown", "4a": "dropdown",
@@ -32,13 +28,11 @@ tagClass = {
 	}
 
 esc = (str) ->
-	str = str\gsub "[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1"
-	return str
+	return str\gsub "[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1"
 
 table_contains = (tbl, x) ->
 	for item in *tbl
-		if item == x
-			return true
+		return true if item == x
 	return false
 
 -- Deactivate the tags inside transform by changing \ to |
@@ -105,22 +99,12 @@ guiHelper = (tagname, tagvalue, section_count) ->
 			if not table_contains alphaitem, tagvalue
 				table.insert alphaitem, tagvalue
 
-		taglabel = tagname
-		taglabel = "Alignment" if tagname == "an"
-
-		dlg[#dlg+1] = { x: column, y:row, class: "label", label: taglabel }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column +=1
 		dlg[#dlg+1] = { x: column, y:row, class: "dropdown", items: dropdownItems, value: tagvalue, name: tagname..section_count }
 		column +=1
 	elseif klass == "color"
-		lbl = switch tagname
-			when "c" then "Primary"
-                	when "1c" then "Primary"
-                	when "2c" then "2c"
-                	when "3c" then "Border"
-                	when "4c" then "Shadow"
-
-		dlg[#dlg+1] = { x: column, y:row, class: "label", label: lbl }
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column +=1
 		dlg[#dlg+1] = { x: column, y:row, class: "color", name: tagname..section_count, value: tagvalue }
 		column +=1
@@ -129,7 +113,6 @@ guiHelper = (tagname, tagvalue, section_count) ->
 			when "1" then true
 			when "0" then false
 			else tagvalue
-
 
 		taglabel = switch tagname
 			when "i" then "Italics"
@@ -221,10 +204,10 @@ inlinetagsGUI = (tagtextsection) ->
 	column = 0
 	dlg[#dlg+1] = { x: column, y:row, class: "label", label: "Inline Tags:" }
 
-	if #tagtextsection < 10 
+	-- Somewhat arbitary number 10. Any longer and put inline tags in textbox cuz the gui produced will be big and will go over the screen in the small monitors
+	if #tagtextsection < 10
 		for section_count, section in ipairs tagtextsection
-			if section_count > 1
-				addsectiontoGUI section, section_count
+			if section_count > 1 then addsectiontoGUI section, section_count
 			row += 1
 			column = 0
 	else
@@ -232,8 +215,7 @@ inlinetagsGUI = (tagtextsection) ->
 		column = 0
 		inline = ""
 		for section_count, section in ipairs tagtextsection
-			if section_count > 1
-				inline = inline .. section .. "\n"
+			if section_count > 1 then inline = inline .. section .. "\n"
 
 		dlg[#dlg+1] = { x: column, y:row, width: column_limit, height: math.min(math.ceil(#tagtextsection*0.7),20), class: "textbox", value: inline, name: "inline" }
 		row += math.min(math.ceil(#tagtextsection*0.7),20)
@@ -273,7 +255,7 @@ transformGUI = () ->
 				column = 0
 			guiHelper tagname, tagvalue, "tr"..index
 
--- Gets the user input values from gui
+-- Gets the user input values from gui for the given tag
 getnewvalues = (tag, res, section_count) ->
 	klass = tagClass[tag]
 	newval = res[tag..section_count]
@@ -292,21 +274,16 @@ getnewvalues = (tag, res, section_count) ->
 		newval = newval\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
 	elseif klass == "complex"
 		a, b, c, d, e, f, g = res[tag.."a"..section_count], res[tag.."b"..section_count], res[tag.."c"..section_count], res[tag.."d"..section_count], res[tag.."e"..section_count], res[tag.."f"..section_count], res[tag.."g"..section_count]
+		if a then newval = "("..a..","..b..","..c..","..d..")"			-- move without time or rect [i]clip
 		switch tag
-			when "fade"
-				newval = "("..a..","..b..","..c..","..d..","..e..","..f..","..g..")"
 			when "move"
-				if e and f != 0								-- move with time
-					newval = "("..a..","..b..","..c..","..d..","..e..","..f..")"
-				else									-- move without time
-					newval = "("..a..","..b..","..c..","..d..")"
-			else
-				if a									-- rect clip or iclip
-					newval = "("..a..","..b..","..c..","..d..")"
+				if e and f != 0 then newval = newval\gsub "%)", ","..e..","..f..")"		-- move with time
+			when "fade"
+				newval = newval\gsub "%)", ","..e..","..f..","..g..")"
 
 	return newval
 
--- Rebuilds a section from the values users puts in gui
+-- Rebuilds a {tag}text section from the values users puts in gui
 rebuildsection = (section, section_count, text, transform_count, res) ->
 	tagTable, _ = analyzeSection section
 	newval = ""
@@ -332,13 +309,11 @@ rebuildsection = (section, section_count, text, transform_count, res) ->
 main = (subs, sel, act) ->
 	section = collect_section subs, act
 
-	row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
 	-- Dynamically create GUI
-	addsectiontoGUI section[1], 1												-- Start tags
-	if #section > 1														-- Inline tags
-		inlinetagsGUI section
-	if #transformTable > 0													-- Transforms
-		transformGUI!
+	row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
+	addsectiontoGUI section[1], 1						-- Start tags
+	if #section > 1 then inlinetagsGUI section				-- Inline tags
+	if #transformTable > 0 then  transformGUI!				-- Transforms
 
 	btn, res = aegisub.dialog.display dlg, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"}
 	if btn
