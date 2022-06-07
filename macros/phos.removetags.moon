@@ -1,8 +1,9 @@
 export script_name = "Remove Tags"
+
 export script_description = "Dynamically remove tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.removetags"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 DependencyControl = require "l0.DependencyControl"
 depCtrl = DependencyControl{
@@ -17,7 +18,7 @@ tags_alphas = {"alpha", "1a", "2a", "3a", "4a"}
 tags_rotation = {"frz", "frx", "fry"}
 tags_scale = {"fs", "fscx", "fscy"}
 tags_perspective = {"frz", "frx", "fry", "fax", "fay", "org"}
-buttons = {}
+buttons, top_row = {}, {}
 
 table_contains = (tbl, x) ->
 	for item in *tbl
@@ -33,9 +34,6 @@ collect_tags = (subs, sel) ->
 	for i in *sel
 		line = subs[i]
 
-		_, tag_section = line.text\gsub "{[*>]?\\[^}]-}", ""
-		if tag_section > 2 remove_groups["inline_except_last"] = true
-
 		for tagname in line.text\gmatch("\\([1-4]?[a-z]+)[^\\{}]*")
 			if tag_table[tagname] == nil then
 				tag_table[tagname] = 1
@@ -45,6 +43,13 @@ collect_tags = (subs, sel) ->
 				if table_contains tags_rotation, tagname then remove_groups["rotation"] = true
 				if table_contains tags_scale, tagname then remove_groups["scale"] = true
 				if table_contains tags_perspective, tagname then remove_groups["perspective"] = true
+
+		_, tag_section = line.text\gsub "{[*>]?\\[^}]-}", ""
+		if tag_section > 1 top_row["inline_tags"] = true
+		if tag_section > 2 remove_groups["inline_except_last"] = true
+
+		if tag_table["t"] != nil then top_row["transform"] = true
+
 
 	if #tag_table == 0
 		aegisub.log "No tags found in the selected line."
@@ -78,13 +83,23 @@ create_gui = (tag_table, remove_groups) ->
 	-- Right portion of GUI
 	start_x = 0
 	if count > 0 then start_x = 1
-	dialog[#dialog+1] = {x: start_x, y:0, class: "checkbox", label: "Start tags", name: "start", hint: "Remove from start tags only"}
-	dialog[#dialog+1] = {x: start_x + 1, y:0, class: "checkbox", label: "Inline tags", name: "inline", hint: "Remove from inline tags only"}
-	dialog[#dialog+1] = {x: start_x + 2, y:0, class: "checkbox", label: "Transform", name: "transform", hint: "Remove from transform only"}
-	dialog[#dialog+1] = {x: start_x + 3, y:0, class: "checkbox", label: "Invert", name: "invert", hint: "Remove all except selected"}
+	count = start_x
+
+	sort_order = {"start_tags", "inline_tags", "transform", "invert"}		-- Lua doesn't loop through table in order
+	sorted_table = [item for item in *sort_order when top_row[item] == true]
+	for item in * sorted_table
+		label = item\gsub "_", " "
+		hint = ""
+		switch item
+			when "start_tags" then hint = "Remove from start tags only"
+			when "inline_tags" then hint = "Remove from inline tags only" 
+			when "transform" then hint = "Remove from transform only"
+			when "invert" then hint = "Remove all except selected"
+		dialog[#dialog+1]= {x:count, y: 0, class: "checkbox", label: label, name: item, hint: hint}
+		count += 1
 
 	-- Determine the number of columns in gui
-	column = math.max math.ceil(math.sqrt #tag_table), 4
+	column = math.max math.ceil(math.sqrt #tag_table), count
 
 	-- Dynamically create gui
 	count = 0
@@ -101,12 +116,12 @@ remove_tags = (subs, sel, tags_to_delete, res) ->
 	if res["invert"] then delete = LibLyger.line_exclude_except
 	for i in *sel
 		line = subs[i]
-		if res.start
+		if res.start_tags
 			start_tags = line.text\match "^{>?\\[^}]-}"
 			line.text = line.text\gsub LibLyger.esc(start_tags), ""
 			start_tags = delete start_tags, tags_to_delete
 			line.text  = start_tags .. line.text
-		elseif res.inline
+		elseif res.inline_tags
 			start_tags = line.text\match "^{>?\\[^}]-}"
 			line.text = line.text\gsub LibLyger.esc(start_tags), ""
 			line.text = delete line.text, tags_to_delete
@@ -121,9 +136,9 @@ remove_tags = (subs, sel, tags_to_delete, res) ->
 remove_all_tags = (subs, sel, res) ->
 	for i in *sel
 		line = subs[i]
-		if res.start
+		if res.start_tags
 			line.text = line.text\gsub "^{>?\\[^}]-}", ""
-		elseif res.inline
+		elseif res.inline_tags
 			start_tags = line.text\match "^{>?\\[^}]-}"
 			line.text = line.text\gsub("{[*>]?\\[^}]-}","")
 			line.text = start_tags .. line.text
@@ -153,6 +168,7 @@ run_selected = (subs, sel, res) ->
 
 main = (subs, sel) ->
 	buttons = {"Kill Tags", "Remove All", "Cancel"}
+	top_row = {start_tags: true, inline_tags: false, transform: false, invert: true}
 	tag_table, remove_groups = collect_tags subs, sel
 	sorted_tags = sort_tags tag_table
 	GUI = create_gui sorted_tags, remove_groups
