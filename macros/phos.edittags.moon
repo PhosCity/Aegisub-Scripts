@@ -2,7 +2,7 @@ export script_name = "Edit tags"
 export script_description = "Edit tags of current lines"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 
 -- Initialize some variables
 row, column, column_limit, dlg, transformTable = 0, 0, 10, {}, {}
@@ -87,7 +87,12 @@ analyzeSection = (section) ->
 guiHelper = (tagname, tagvalue, section_count) ->
 	klass = tagClass[tagname]
 	klass = "edit" if not klass
-	if klass == "dropdown"
+	if klass == "edit" or klass == "floatedit" or klass == "intedit" or klass == "color"
+		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
+		column +=1
+		dlg[#dlg+1] = { x: column, y:row, class: klass, name: tagname..section_count, value: tagvalue }
+		column +=1
+	elseif klass == "dropdown"
 		alphaitem = { "00", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A0", "B0", "C0", "D0", "E0", "F0", "F8", "FF" }
 		dropdownItems = switch tagname
 			when "q" then { "0", "1", "2", "3" }
@@ -102,11 +107,6 @@ guiHelper = (tagname, tagvalue, section_count) ->
 		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
 		column +=1
 		dlg[#dlg+1] = { x: column, y:row, class: "dropdown", items: dropdownItems, value: tagvalue, name: tagname..section_count }
-		column +=1
-	elseif klass == "color"
-		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
-		column +=1
-		dlg[#dlg+1] = { x: column, y:row, class: "color", name: tagname..section_count, value: tagvalue }
 		column +=1
 	elseif klass == "checkbox"
 		tagvalue = switch tagvalue
@@ -134,11 +134,6 @@ guiHelper = (tagname, tagvalue, section_count) ->
 		dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."x"..section_count, value: first_item }
 		column +=1
 		dlg[#dlg+1] = { x: column, y:row, class: "floatedit", name: tagname.."y"..section_count, value: second_item }
-		column +=1
-	elseif klass == "edit" or klass == "floatedit" or klass == "intedit"
-		dlg[#dlg+1] = { x: column, y:row, class: "label", label: tagname }
-		column +=1
-		dlg[#dlg+1] = { x: column, y:row, class: klass, name: tagname..section_count, value: tagvalue }
 		column +=1
 	elseif klass == "complex"
 		if column != 0
