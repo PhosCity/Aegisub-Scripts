@@ -115,7 +115,7 @@ For end time:
 
 _Lyger's module is a dependency. If you have downloaded lyger's script from dependency control, chances are you already have it. You can also get it from [here](https://github.com/TypesettingTools/lyger-Aegisub-Scripts/blob/master/modules/LibLyger.moon)_
 
-![image](./assets/remove_tags.png)
+![image](./assets/remove_tags1.png)
 
 This is undoubtedly a clone of unanimated's script called `Script Cleanup` but there are two major differences. The first being that as the name suggests, this script only has the portions of `Script Cleanup` that deals with removing tags. The second being that the GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove.
 
@@ -144,11 +144,17 @@ This button executes the things you select in the left column and is mostly used
 - All perspective tags (frz, frx, fry, fax, fay, org)
 - All inline tags except last (useful for undoing gradient)
 
+## Transform button
+
+![image](./assets/remove_tags2.png)
+
+This button is only available to you if there are transforms in your selection. The idea for this is to easily select a specific transform that you want to delete. Each row has transforms for a single line. If you have a line with dozens of transforms, the gui produced will be very wide so keep that in mind. Simply select the transforms you want to delete and click `Remove`
+
 ## Edit Tags
 
 **_Not Available in Dependency Control_**
 
-The main idea is that it presents the tags and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It seperates start tags, inline tags and transforms in different sections for easy editing.
+The main idea is that it presents the tags and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It separates start tags, inline tags and transforms in different sections for easy editing.
 
 Since the GUI is dynamically generated, it may sometime produce sub-optimal GUI but for 99% of lines, it should work without issue. Just don't go using this script in the line you generated using ktemplates or programming. You shouldn't be editing such lines manually anyway.
 
@@ -158,7 +164,7 @@ Take the following line with transforms, move and clips.
 {\an9\blur1\c&HEEE7DD&\fscx126\fscy126\clip(868,612,1736,942)\move(1716.96,667.57,2151.04,667.64,21,3942)\t(21,3942,\blur1\fscx126\fscy126\clip(868,596,988,942))\t(300,1500,1.2,\blur2)}Whenever people\Nget near me,
 ```
 
-When you run the script on this line, following gui is genreated:
+When you run the script on this line, following gui is generated:
 
 ![image](./assets/edittags1.png)
 
