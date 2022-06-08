@@ -1,9 +1,8 @@
 export script_name = "Remove Tags"
-
 export script_description = "Dynamically remove tags based on selection"
 export script_author = "PhosCity"
 export script_namespace = "phos.removetags"
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 
 DependencyControl = require "l0.DependencyControl"
 depCtrl = DependencyControl{
@@ -48,8 +47,9 @@ collect_tags = (subs, sel) ->
 		if tag_section > 1 top_row["inline_tags"] = true
 		if tag_section > 2 remove_groups["inline_except_last"] = true
 
-		if tag_table["t"] != nil then top_row["transform"] = true
-
+		if tag_table["t"] != nil
+			top_row["transform"] = true
+			table.insert buttons, 3, "Transform" unless table_contains buttons, "Transform"
 
 	if #tag_table == 0
 		aegisub.log "No tags found in the selected line."
@@ -76,7 +76,7 @@ create_gui = (tag_table, remove_groups) ->
 				when "rotation" then hint = table.concat(tags_rotation, ",")
 				when "scale" then hint = table.concat(tags_scale, ",")
 				when "perspective" then hint = table.concat(tags_perspective, ",")
-			dialog[#dialog+1]= {x:0, y: count, class: "checkbox", label: label, name: k, hint: hint}
+			dialog[#dialog+1]= {x: 0, y: count, class: "checkbox", label: label, name: k, hint: hint}
 			count += 1
 			table.insert buttons, 1, "Run Selected" unless table_contains buttons, "Run Selected"
 
@@ -95,7 +95,7 @@ create_gui = (tag_table, remove_groups) ->
 			when "inline_tags" then hint = "Remove from inline tags only" 
 			when "transform" then hint = "Remove from transform only"
 			when "invert" then hint = "Remove all except selected"
-		dialog[#dialog+1]= {x:count, y: 0, class: "checkbox", label: label, name: item, hint: hint}
+		dialog[#dialog+1]= {x: count, y: 0, class: "checkbox", label: label, name: item, hint: hint}
 		count += 1
 
 	-- Determine the number of columns in gui
@@ -166,6 +166,34 @@ run_selected = (subs, sel, res) ->
 		line.text = cleanup(line.text)
 		subs[i] = line
 
+remove_transform_section = (subs, sel) ->
+	tr_dlg, row = {}, 0
+	tr_dlg[#tr_dlg + 1] = {x: 0, y: row, width: 10, class: "label", label: "Each row shows all the transforms of a single line."}
+	row += 1
+	for i in *sel
+		line = subs[i]
+		line.text = line.text\gsub "(\\i?clip)%(([^)]+)%)", "%1|s|%2|e|"		-- Deactivate clip for clip transformation 
+		column = 0
+		if line.text\match "\\t%("
+			for tr in line.text\gmatch "\\t%([^)]+%)"
+				tr = tr\gsub("|s|", "(")\gsub("|e|", ")")				-- Revert the clip
+				tr_dlg[#tr_dlg + 1] = {x: column, y: row, class: "checkbox", label: tr, name: "tr"..i..column}
+				column += 1
+			row += 1
+	
+	btn, res = aegisub.dialog.display tr_dlg, {"Remove", "Cancel"}, {"ok": "Remove", "cancel": "Cancel"}
+	if btn
+		for i in *sel
+			line = subs[i]
+			text = line.text\gsub "(\\i?clip)%(([^)]+)%)", "%1|s|%2|e|"		-- Deactivate clip for clip transformation 
+			transform_count = 0
+			for tr in text\gmatch "\\t%([^)]+%)"
+				tr = tr\gsub("|s|", "(")\gsub("|e|", ")")			-- Revert the clip
+				if res["tr"..i..transform_count]
+					line.text = line.text\gsub LibLyger.esc(tr), ""
+				transform_count += 1
+			subs[i] = line
+
 main = (subs, sel) ->
 	buttons = {"Kill Tags", "Remove All", "Cancel"}
 	top_row = {start_tags: true, inline_tags: false, transform: false, invert: true}
@@ -178,6 +206,7 @@ main = (subs, sel) ->
 		when "Cancel" then aegisub.cancel!
 		when "Run Selected" then run_selected subs, sel, res
 		when "Remove All" then remove_all_tags subs, sel, res
+		when "Transform" then remove_transform_section subs, sel, res
 		when "Kill Tags"
 			tags_to_delete = [tag for tag in *tag_table when res[tag]]
 			remove_tags subs, sel, tags_to_delete, res
