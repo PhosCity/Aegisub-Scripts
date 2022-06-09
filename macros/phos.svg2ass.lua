@@ -174,6 +174,7 @@ local function string2line(str)
 	l2.margin_t = margv
 	l2.effect = eff
 	l2.text = txt
+	l2.extra = {}
 	return l2
 end
 
