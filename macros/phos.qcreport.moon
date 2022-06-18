@@ -2,7 +2,7 @@ export script_name = "#BETA# QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "0.0.3"
+export script_version = "0.0.4"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
@@ -40,13 +40,16 @@ config_setup = () ->
 
 
 clear_notes = (subs, sel) ->
+  to_delete = {}
   for i = 1, #subs do
     if subs[i].class == "dialogue"
       line = subs[i]
       continue unless line.text\match "{%*%[.*%*}"
       line.text = line.text\gsub "{%*%[.*%*}", ""
       line.effect = line.effect\gsub "%[QC-[^%]]+%]", ""
+      if line.text == "" then table.insert(to_delete, i)
       subs[i] = line
+  subs.delete(to_delete)
 
 
 create_gui = (opt) ->
