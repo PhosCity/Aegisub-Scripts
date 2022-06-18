@@ -2,17 +2,15 @@ export script_name = "#BETA# QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
 
-local depctrl
-local config
-haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
-if haveDepCtrl
-  depctrl = DependencyControl({})
-  config = depctrl\getConfigHandler(default_config, "config", false)
+DependencyControl = require "l0.DependencyControl"
+depctrl = DependencyControl({})
+config = depctrl\getConfigHandler(default_config, "config", false)
+
 
 config_setup = () ->
   config\load()
@@ -40,6 +38,7 @@ config_setup = () ->
       opt.section = default_config.section
       config\write()
 
+
 clear_notes = (subs, sel) ->
   for i = 1, #subs do
     if subs[i].class == "dialogue"
@@ -49,41 +48,92 @@ clear_notes = (subs, sel) ->
       line.effect = line.effect\gsub "%[QC-[^%]]+%]", ""
       subs[i] = line
 
+
 create_gui = (opt) ->
   dlg = {}
   for index, item in ipairs opt.section
     dlg[#dlg+1] = {x: index-1, y: 0, class: "checkbox", label: item, name: item}
 
   dlg[#dlg+1] = {x: 0, y: 1, width: 2, height: 1, class: "label", label: "Write you notes below:"}
+  dlg[#dlg+1] = {x: 18, y: 1, width: 2, height: 1, class: "checkbox", label: "Use video frame", name: "use_video", value: opt.use_video}
   dlg[#dlg+1] = {x: 0, y: 2, class: "textbox", name: "note", value: "", width: 21, height: 10}
 
   return dlg
 
-main = (subs, sel, act) ->
+
+-- This one uses video frame position to add notes
+-- If the current frame has a line, then then the note will be added to that line
+-- If the current frame has no line, then a new line with note will be inserted with current frame's time
+useVideo = (subs, header, note) ->
+  video_frame = aegisub.project_properties().video_position
+
+  unless video_frame
+    aegisub.log "Video is not loaded. Adding note to current selected line."
+    return nil
+  else
+    time_frame = aegisub.ms_from_frame(video_frame)
+
+    for i=1, #subs
+      continue unless subs[i].class == "dialogue"
+      line = subs[i]
+      if time_frame > line.start_time and time_frame < line.end_time
+        return i, {i}
+
+    for i=1, #subs
+      continue unless subs[i].class == "dialogue"
+      line = subs[i]
+      if line.start_time > time_frame
+        line.text = "{*#{note}*}"
+        line.start_time = time_frame
+        line.end_time = time_frame
+        line.effect = "[QC-#{header}]"
+        subs[-i] = line
+        return false, {i}
+
+
+writeQC = (subs, sel, act) ->
   config\load()
   opt = config.c
 
   dlg = create_gui opt
   btn, res = aegisub.dialog.display dlg, {"Add Note", "Cancel"}, {"ok": "Add Note", "cancel": "Cancel"}
+
+  opt.use_video = res["use_video"]
+  config\write()
+
   if btn
-    local header
+    return if res["note"] == ""
+
+    header = "Note"
     for section in *opt.section
       header = section if res[section]
-    header or= "Note"
-    unless res["note"] == ""
-      qc_note = res["note"]\gsub("\n", "\\N")\gsub("{", "[")\gsub("}", "]")
-      qc_note = "[#{header}] #{qc_note}"
-      line = subs[act]
-      line.text  ..= "{*#{qc_note}*}"
-      line.effect  ..= "[QC-#{header}]"
-      subs[act] = line
 
-time2string = (num) ->
+    qc_note = res["note"]\gsub("\n", "\\N")\gsub("{", "[")\gsub("}", "]")
+    qc_note = "[#{header}] #{qc_note}"
+
+    -- If video_frame is chosen
+    local new_index
+    local new_sel
+    if res["use_video"]
+      new_index, new_sel = useVideo(subs, header, qc_note)
+      return new_sel unless new_index
+
+    new_index or= act
+    line = subs[new_index]
+    line.text  ..= "{*#{qc_note}*}"
+    line.effect  ..= "[QC-#{header}]"
+    subs[new_index] = line
+
+    return new_sel
+
+
+ms2timecode = (num) ->
   hh = math.floor((num / (60 * 60 * 1000)) % 24)
   mm = math.floor((num / (60 * 1000)) % 60)
   ss = math.floor((num / 1000) % 60)
   ms = num % 1000
   return string.format("%01d:%02d:%02d.%01d", hh, mm, ss, ms)
+
 
 generate_QC = (subs, sel) ->
   report = {}
@@ -93,7 +143,7 @@ generate_QC = (subs, sel) ->
       for qc in line.text\gmatch "{%*([^%*]+)%*}"
         section_header = qc\match "^%[([^%]]+)%].*"
         note = qc\gsub("#{section_header}", "")\gsub("[%[%]]", "")\gsub("^%s+", "")\gsub("\\N", "\n")
-        note = time2string(line.start_time).." - "..note.."\n"
+        note = ms2timecode(line.start_time).." - "..note.."\n"
         report[section_header] or= {}
         table.insert(report[section_header], note)
 
@@ -103,10 +153,10 @@ generate_QC = (subs, sel) ->
       aegisub.log note
     aegisub.log "\n"
 
-if haveDepCtrl
-  depctrl\registerMacros({
-    { "Write QC", script_description, main },
-    { "Generate QC Report", script_description, generate_QC },
-    { "Config", "Configuration for script", config_setup },
-    { "Clear Notes", "Clear the notes", clear_notes },
-  })
+
+depctrl\registerMacros({
+  { "Write QC", script_description, writeQC },
+  { "Generate QC Report", script_description, generate_QC },
+  { "Config", "Configuration for script", config_setup },
+  { "Clear Notes", "Clear the notes", clear_notes },
+})
