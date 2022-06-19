@@ -2,10 +2,14 @@ export script_name = "#BETA# QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "0.0.4"
+export script_version = "0.0.5"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
+  itemTiming: { "Too much lead in.", "Too much lead out.", "Not enough lead in.", "Not enough lead out.", "Snap to keyframes.", "Link lines.", "Mouth flap." },
+  itemTypesetting: { "Too much blur.", "Not enough blur.", "Color mismatch.", "Mask fail.", "Incorrect tracking.", "Missing sign.", "Incorrect position.",
+  "Banding visible.", "Incorrect perspective.", "Font mismatch.", "Incorrect fade.", "Incorrect size." }
+  itemEditing: {}
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl({})
@@ -55,11 +59,13 @@ clear_notes = (subs, sel) ->
 create_gui = (opt) ->
   dlg = {}
   for index, item in ipairs opt.section
+    dropdownitems = [item for item in *opt["item"..item]]
     dlg[#dlg+1] = {x: index-1, y: 0, class: "checkbox", label: item, name: item}
+    dlg[#dlg+1] = {x: index-1, y: 1, class: "dropdown", items: dropdownitems, name: "item"..item, value: nil}
 
-  dlg[#dlg+1] = {x: 0, y: 1, width: 2, height: 1, class: "label", label: "Write you notes below:"}
-  dlg[#dlg+1] = {x: 18, y: 1, width: 2, height: 1, class: "checkbox", label: "Use video frame", name: "use_video", value: opt.use_video}
-  dlg[#dlg+1] = {x: 0, y: 2, class: "textbox", name: "note", value: "", width: 21, height: 10}
+  dlg[#dlg+1] = {x: 0, y: 2, width: 2, height: 1, class: "label", label: "Write you notes below:"}
+  dlg[#dlg+1] = {x: 16, y: 2, width: 2, height: 1, class: "checkbox", label: "Use video frame", name: "use_video", value: opt.use_video}
+  dlg[#dlg+1] = {x: 0, y: 3, class: "textbox", name: "note", value: "", width: 18, height: 10}
 
   return dlg
 
@@ -105,25 +111,30 @@ writeQC = (subs, sel, act) ->
   config\write()
 
   if btn
-    return if res["note"] == ""
-
     header = "Note"
+    template = ""
     for section in *opt.section
-      header = section if res[section]
+      if res[section]
+        header = section
+        template = res["item"..section]
 
-    qc_note = res["note"]\gsub("\n", "\\N")\gsub("{", "[")\gsub("}", "]")
-    qc_note = "[#{header}] #{qc_note}"
+    note = res["note"]
+    return if note == "" and template == ""
+    note = "#{template} #{note}"
+
+    note = note\gsub("\n", "\\N")\gsub("{", "[")\gsub("}", "]")
+    note = "[#{header}] #{note}"
 
     -- If video_frame is chosen
     local new_index
     local new_sel
     if res["use_video"]
-      new_index, new_sel = useVideo(subs, header, qc_note)
+      new_index, new_sel = useVideo(subs, header, note)
       return new_sel unless new_index
 
     new_index or= act
     line = subs[new_index]
-    line.text  ..= "{*#{qc_note}*}"
+    line.text  ..= "{*#{note}*}"
     line.effect  ..= "[QC-#{header}]"
     subs[new_index] = line
 
