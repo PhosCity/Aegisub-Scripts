@@ -1,8 +1,8 @@
-export script_name = "#BETA# QC Report"
+export script_name = "QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "0.0.6"
+export script_version = "1.0.0"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
@@ -43,8 +43,8 @@ config_setup = () ->
       for s in result["section"]\gmatch("[^\n]+")
         table.insert section_tbl, s
 
-        continue unless result["item"..s]
         opt["item"..s] = {}
+        continue unless result["item"..s]
         for item in result["item"..s]\gmatch("[^\n]+")
           table.insert opt["item"..s], item
 
