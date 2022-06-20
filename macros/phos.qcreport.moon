@@ -2,7 +2,7 @@ export script_name = "#BETA# QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "0.0.5"
+export script_version = "0.0.6"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
@@ -20,22 +20,34 @@ config_setup = () ->
   config\load()
   opt = config.c
 
-  value = ""
-  for item in *opt.section
-    value ..= "#{item}\n"
+  value = table.concat opt.section, "\n"
   
-  CONFIG_GUI = {
+  conf_dlg = {
 		{ x: 0, y: 0, width: 1, height: 1, class: "label", label: "Add your sections below:", },
-		{ x: 0, y: 1, width: 15, height: 10, class: "textbox", value: value, name: "section" },
+		{ x: 0, y: 1, width: 15, height: math.min(#opt.section+2, 5), class: "textbox", value: value, name: "section" },
 	}
+
+  for section in *opt.section
+    items = [i for i in *opt["item"..section]]
+    value = table.concat items, "\n"
+    row = conf_dlg[#conf_dlg].y + conf_dlg[#conf_dlg].height
+    conf_dlg[#conf_dlg+1] = { x: column, y: row, width: 1, height: 1, class: "label", label: "Pre-made reports for #{section}", }
+    conf_dlg[#conf_dlg+1] = { x: column, y: row+1, width: 15, height: math.min(#items+2, 5), class: "textbox", value: value, name: "item"..section }
+
   buttons = { "Save", "Reset", "Cancel" }
-  pressed, result = aegisub.dialog.display(CONFIG_GUI, buttons)
+  pressed, result = aegisub.dialog.display(conf_dlg, buttons)
   switch pressed
     when "Cancel" then aegisub.cancel!
     when "Save"
       section_tbl = {}
       for s in result["section"]\gmatch("[^\n]+")
         table.insert section_tbl, s
+
+        continue unless result["item"..s]
+        opt["item"..s] = {}
+        for item in result["item"..s]\gmatch("[^\n]+")
+          table.insert opt["item"..s], item
+
       opt.section = section_tbl
       config\write()
     when "Reset"
