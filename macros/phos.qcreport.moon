@@ -2,7 +2,7 @@ export script_name = "QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
@@ -31,8 +31,8 @@ config_setup = () ->
     items = [i for i in *opt["item"..section]]
     value = table.concat items, "\n"
     row = conf_dlg[#conf_dlg].y + conf_dlg[#conf_dlg].height
-    conf_dlg[#conf_dlg+1] = { x: column, y: row, width: 1, height: 1, class: "label", label: "Pre-made reports for #{section}", }
-    conf_dlg[#conf_dlg+1] = { x: column, y: row+1, width: 15, height: math.min(#items+2, 5), class: "textbox", value: value, name: "item"..section }
+    conf_dlg[#conf_dlg+1] = { x: 0, y: row, width: 1, height: 1, class: "label", label: "Pre-made reports for #{section}", }
+    conf_dlg[#conf_dlg+1] = { x: 0, y: row+1, width: 15, height: math.min(#items+2, 5), class: "textbox", value: value, name: "item"..section }
 
   buttons = { "Save", "Reset", "Cancel" }
   pressed, result = aegisub.dialog.display(conf_dlg, buttons)
