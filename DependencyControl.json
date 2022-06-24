@@ -1,7 +1,7 @@
 {
 	"dependencyControlFeedFormatVersion": "0.3.0",
-	"name": "PhosCity's Aegisub Scripts",
-	"description": "Main repository for all of PhosCity's automation macros.",
+	"name": "One Pace Aegisub Scripts",
+	"description": "Macros for Pace",
 	"maintainer": "PhosCity",
 	"knownFeeds": {
 		"a-mo": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json",
@@ -11,101 +11,21 @@
 	"url": "@{baseUrl}",
 	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/@{channel}/macros/@{namespace}",
 	"macros": {
-		"phos.wave": {
+		"phos.onepace": {
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
-			"name": "Wave",
-			"description": "Make the string wavy",
+			"name": "One Pace",
+			"description": "One Pace Stuff",
 			"channels": {
-				"main": {
-					"version": "1.0.2",
-					"released": "2022-04-24",
+				"pace": {
+					"version": "1.0.0",
+					"released": "2022-07-24",
 					"default": true,
 					"files": [
 						{
-							"name": ".lua",
+							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "15a87a9baa628e21ee8a8c99e2263f7c20741f14"
-						}
-					]
-				}
-			},
-			"changelog": {
-				"1.0.0": [
-					"Initial Release"
-				]
-			}
-		},
-		"phos.wobble": {
-			"url": "@{baseUrl}#@{namespace}",
-			"author": "PhosCity",
-			"name": "Wobble",
-			"description": "Converts a text to a shape and adds wobbling",
-			"channels": {
-				"main": {
-					"version": "1.4.0",
-					"released": "2022-04-29",
-					"default": true,
-					"files": [
-						{
-							"name": ".lua",
-							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "166dc7592d0f28b5e4d0c48679ecdf27e59e254d"
-						}
-					],
-					"requiredModules": [
-						{
-							"moduleName": "Yutils"
-						}
-					]
-				}
-			},
-			"changelog": {
-				"1.3.1": [
-					"Initial Release"
-				]
-			}
-		},
-		"phos.snap": {
-			"url": "@{baseUrl}#@{namespace}",
-			"author": "PhosCity",
-			"name": "Bidirectional Snapping",
-			"description": "Snap to close keyframes during timing",
-			"channels": {
-				"main": {
-					"version": "1.0.3",
-					"released": "2022-04-24",
-					"default": true,
-					"files": [
-						{
-							"name": ".lua",
-							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "2e433a462272074aa815a7e0fbc5139c632d8e6b"
-						}
-					]
-				}
-			},
-			"changelog": {
-				"1.0.0": [
-					"Initial Release"
-				]
-			}
-		},
-		"phos.svg2ass": {
-			"url": "@{baseUrl}#@{namespace}",
-			"author": "PhosCity",
-			"name": "svg2ass",
-			"description": "Script that uses svg2ass to convert svg files to ass lines",
-			"channels": {
-				"main": {
-					"version": "1.1.0",
-					"released": "2022-05-22",
-					"default": true,
-					"files": [
-						{
-							"name": ".lua",
-							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "2e4ca11961de99fc00cc2d68901f5764da46d868"
+							"sha1": "408dfe1b2eee41b28f2df5842cb116707c970d60"
 						}
 					]
 				}
@@ -116,5 +36,5 @@
 				]
 			}
 		}
-	}
+  }
 }
