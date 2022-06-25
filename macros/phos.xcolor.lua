@@ -2,7 +2,7 @@
 script_name = "Xcolor"
 script_author = "PhosCity"
 script_version = "1.0.0"
-script_description = "Eyedropper for Linux"
+script_description = "Eyedropper for Linux."
 script_namespace = "phos.xcolor"
 
 -- Dependencies
