@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -18,16 +18,6 @@ lineIsDialogue = (style) ->
   for item in *stl
     return false if style\match(item)
   return true
-
-
--- To escape a bunch of characters
-esc = (str) ->
-	return str\gsub "[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1"
-
-
--- Convert rgb to bgr
-rgb2bgr = (rgb_color) ->
-  return rgb_color\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
 
 
 -- Round a number to a decimal places. If noDecimalPlaces is true, it retuns without decimal
@@ -486,10 +476,10 @@ transform_color = (subs, sel) ->
   btn, res = aegisub.dialog.display({
     { x: 0, y: 0, class: "label", label: "Color:", },
     { x: 1, y: 0, class: "color", name: "color", width:2 },
-		{ x: 0, y: 1, class: "checkbox", name: "transform_start", label: "Start:", },
-		{ x: 1, y: 1, class: "floatedit", name: "start", min: 0, width: 2  },
-		{ x: 0, y: 2, class: "checkbox", name: "transform_end", label: "End:", },
-		{ x: 1, y: 2, class: "floatedit", name: "end", min: 0, width: 2},
+    { x: 0, y: 1, class: "checkbox", name: "transform_start", label: "Start:", },
+    { x: 1, y: 1, class: "floatedit", name: "start", min: 0, width: 2  },
+    { x: 0, y: 2, class: "checkbox", name: "transform_end", label: "End:", },
+    { x: 1, y: 2, class: "floatedit", name: "end", min: 0, width: 2},
   }, {"OK", "Cancel"}, {"ok": "OK", "Cancel": "Cancel"})
 
   if btn
@@ -501,7 +491,8 @@ transform_color = (subs, sel) ->
       continue unless lineIsDialogue(line.style)
       duration = line.end_time - line.start_time
       karaskel.preproc_line(subs, meta, styles, line)
-      chosen_colors = "\\c"..rgb2bgr(res.color).."\\3c"..rgb2bgr(res.color).."\\4c"..rgb2bgr(res.color)
+      color =  res.color\gsub("#(%x%x)(%x%x)(%x%x)", "&H%3%2%1&")
+      chosen_colors = "\\c"..color.."\\3c"..color.."\\4c"..color
       style1 = "\\c"..line.styleref.color1\gsub("&H%d%d", "&H")
       style3 = "\\3c"..line.styleref.color3\gsub("&H%d%d", "&H")
       style4 = "\\4c"..line.styleref.color4\gsub("&H%d%d", "&H")
