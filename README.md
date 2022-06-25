@@ -1,6 +1,6 @@
 **_NOTE TO BE MERGED WITH MAIN BRANCH_**
 
-This branch is only for macros written for a fansubbing group One Pace and some personal scripts. There may be very little here that may be useful to you.
+This branch is only for my personal scripts. There may be very little here that may be useful to you.
 
 1. [One Pace](#one-pace)
 1. [Xcolor](#xcolor)
@@ -9,7 +9,7 @@ This branch is only for macros written for a fansubbing group One Pace and some 
 
 ![image](./assets/pace-main.png)
 
-When you run the script, you always first select the lines you want to be affected by the line, tick the checkbox that you want to run and click `Apply`. You can tick multiple checkboxes at once.
+This script is only for fansubbing group One Pace. When you run the script, you always first select the lines you want to be affected by the line, tick the checkbox that you want to run and click `Apply`. You can tick multiple checkboxes at once.
 
 ## Preprocessing
 

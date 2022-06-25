@@ -17,7 +17,7 @@
       "name": "One Pace",
       "description": "One Pace Stuff",
       "channels": {
-        "pace": {
+        "personal": {
           "version": "1.0.0",
           "released": "2022-07-24",
           "default": true,
@@ -42,7 +42,7 @@
       "name": "Xcolor",
       "description": "Eyedropper for Linux",
       "channels": {
-        "pace": {
+        "personal": {
           "version": "1.0.0",
           "released": "2022-07-24",
           "default": true,

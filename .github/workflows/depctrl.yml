@@ -6,7 +6,7 @@ on:
       - 'macros/*.lua'
       - 'macros/*.moon'
     branches:
-      - pace
+      - personal
 
 jobs:
   depctrl:
@@ -58,7 +58,7 @@ jobs:
 
               # Change sha1, date and version if the file was modified in last commit
               if grep -q "${FULL_FILE}" <<< "$MODIFIED"; then
-                jq --tab ".macros.\"${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.main.version=${VERSION} | .macros.\"${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+                jq --tab ".macros.\"${NAMESPACE}\".channels.personal.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.personal.version=${VERSION} | .macros.\"${NAMESPACE}\".channels.personal.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
 
                 # If something goes wrong with jq operation, it outputs empty file. We don't want to commit it so a condition to check it.
                 if [[ -s "${output_file}" ]]; then
