@@ -18,14 +18,14 @@
       "description": "One Pace Stuff",
       "channels": {
         "personal": {
-          "version": "1.0.1",
+          "version": "1.0.2",
           "released": "2022-07-25",
           "default": true,
           "files": [
             {
               "name": ".moon",
               "url": "@{fileBaseUrl}@{fileName}",
-              "sha1": "3efe08233b95592f5a799ddaef53b8d875b0e4a8"
+              "sha1": "912d8296e204aa7e1d931fad546757cf498178d1"
             }
           ]
         }
@@ -43,14 +43,14 @@
       "description": "Eyedropper for Linux",
       "channels": {
         "personal": {
-          "version": "1.0.0",
+          "version": "1.0.1",
           "released": "2022-07-25",
           "default": true,
           "files": [
             {
               "name": ".lua",
               "url": "@{fileBaseUrl}@{fileName}",
-              "sha1": "4c871af24afa152a72e0db7c262df51debb18faa"
+              "sha1": "e8c82177dd48da1c81dadda2b48e3e73c4d724dc"
             }
           ]
         }

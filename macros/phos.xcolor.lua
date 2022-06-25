@@ -1,7 +1,7 @@
 --Script properties
 script_name = "Xcolor"
 script_author = "PhosCity"
-script_version = "1.0.0"
+script_version = "1.0.1"
 script_description = "Eyedropper for Linux."
 script_namespace = "phos.xcolor"
 
@@ -15,7 +15,7 @@ script_namespace = "phos.xcolor"
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
 	depRec = DependencyControl({
-		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/pace/DependencyControl.json",
+		feed = "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/personal/DependencyControl.json",
 	})
 end
 

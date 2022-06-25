@@ -2,13 +2,13 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
 if haveDepCtrl
   depctrl = DependencyControl({
-    feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/pace/DependencyControl.json",
+    feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/personal/DependencyControl.json",
   })
 require("karaskel")
 
