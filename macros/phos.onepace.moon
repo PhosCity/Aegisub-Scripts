@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.3"
+export script_version = "1.0.4"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -361,7 +361,7 @@ preprocessing = (subs, sel) ->
       },
     "207-": {
       main:      { fontname: "Impress BT Pace",       italic: false, color2: "&H00002EFF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Main-207-",       shadow: 3.8 },
-      flashback: { fontname: "Impress BT Pace",       italic: true,  color2: "&H00FFFFFF&", margin_t: 12,  color4: "&H78000000&", fontsize: 82, color3: "&H00525252&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 12,  color1: "&H00FFFFFF&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Flashbacks-207-", shadow: 3.8 },
+      flashback: { fontname: "Impress BT Pace",       italic: true,  color2: "&H00FFFFFF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00525252&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Flashbacks-207-", shadow: 3.8 },
       thought:   { fontname: "Impress BT Pace",       italic: false, color2: "&H00FFFFFF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00525252&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 4.4, underline: false, name: "Thoughts-207-",   shadow: 3.8 },
       secondary: { fontname: "Impress BT Pace",       italic: false, color2: "&H00FFFFFF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00D6D6D6&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Secondary-207-",  shadow: 3.8 },
       narrator:  { fontname: "Impress BT Pace",       italic: true,  color2: "&H000000FF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 8, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Narrator-207-",   shadow: 3.8 },
