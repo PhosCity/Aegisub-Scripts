@@ -48,7 +48,7 @@ jobs:
             NAMESPACE=$(echo "${FULL_FILE}" | sed "s|.moon||g;s|.lua||g")
 
             # Get version of the script (Provided that `script_version = "version"` is in the scripts - Spaces around '=' or lack of it is accounted for)
-            VERSION=$(grep -E "script_version\s?=\s?" "macros/${FULL_FILE}" | awk -F= '{print $2}' | sed "s/ //")
+            VERSION=$(grep -E 'script_version\s?=' "macros/${FULL_FILE}" | cut -d '"' -f2)
 
             # Check if the file is added to DependencyControl or not and if version could be found or not
             if grep -q "${NAMESPACE}" DependencyControl.json && [[ -n "${VERSION}" ]]; then
@@ -58,12 +58,12 @@ jobs:
 
               # Change sha1, date and version if the file was modified in last commit
               if grep -q "${FULL_FILE}" <<< "$MODIFIED"; then
-                jq --tab ".macros.\"${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.main.version=${VERSION} | .macros.\"${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+                jq --tab ".macros.\"${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.main.version=\"${VERSION}\" | .macros.\"${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
 
                 # If something goes wrong with jq operation, it outputs empty file. We don't want to commit it so a condition to check it.
                 if [[ -s "${output_file}" ]]; then
                   mv "${output_file}" DependencyControl.json
-                  echo "Successfully updated Dependency Control."
+                  echo "Successfully updated Dependency Control for file ${FULL_FILE}."
                 else
                   echo "Something went wrong while processing ${FULL_FILE}. The file is empty."
                 fi
