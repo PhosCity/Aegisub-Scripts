@@ -1,65 +1,65 @@
 {
-  "dependencyControlFeedFormatVersion": "0.3.0",
-  "name": "One Pace Aegisub Scripts",
-  "description": "Macros for Pace",
-  "maintainer": "PhosCity",
-  "knownFeeds": {
-    "a-mo": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json",
-    "ASSFoundation": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
-  },
-  "baseUrl": "https://github.com/PhosCity/Aegisub-Scripts",
-  "url": "@{baseUrl}",
-  "fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/@{channel}/macros/@{namespace}",
-  "macros": {
-    "phos.onepace": {
-      "url": "@{baseUrl}#@{namespace}",
-      "author": "PhosCity",
-      "name": "One Pace",
-      "description": "One Pace Stuff",
-      "channels": {
-        "personal": {
-          "version": "1.0.4",
-          "released": "2022-07-25",
-          "default": true,
-          "files": [
-            {
-              "name": ".moon",
-              "url": "@{fileBaseUrl}@{fileName}",
-              "sha1": "e402e51840b497b67cba268d6cd8035b0d8e2dca"
-            }
-          ]
-        }
-      },
-      "changelog": {
-        "1.0.0": [
-          "Initial Release"
-        ]
-      }
-    },
-    "phos.xcolor": {
-      "url": "@{baseUrl}#@{namespace}",
-      "author": "PhosCity",
-      "name": "Xcolor",
-      "description": "Eyedropper for Linux",
-      "channels": {
-        "personal": {
-          "version": "1.0.1",
-          "released": "2022-07-25",
-          "default": true,
-          "files": [
-            {
-              "name": ".lua",
-              "url": "@{fileBaseUrl}@{fileName}",
-              "sha1": "e8c82177dd48da1c81dadda2b48e3e73c4d724dc"
-            }
-          ]
-        }
-      },
-      "changelog": {
-        "1.0.0": [
-          "Initial Release"
-        ]
-      }
-    }
-  }
+	"dependencyControlFeedFormatVersion": "0.3.0",
+	"name": "One Pace Aegisub Scripts",
+	"description": "Macros for Pace",
+	"maintainer": "PhosCity",
+	"knownFeeds": {
+		"a-mo": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json",
+		"ASSFoundation": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+	},
+	"baseUrl": "https://github.com/PhosCity/Aegisub-Scripts",
+	"url": "@{baseUrl}",
+	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/@{channel}/macros/@{namespace}",
+	"macros": {
+		"phos.onepace": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "One Pace",
+			"description": "One Pace Stuff",
+			"channels": {
+				"personal": {
+					"version": "1.0.4",
+					"released": "2022-07-25",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "e402e51840b497b67cba268d6cd8035b0d8e2dca"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
+		},
+		"phos.xcolor": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Xcolor",
+			"description": "Eyedropper for Linux",
+			"channels": {
+				"personal": {
+					"version": "1.0.2",
+					"released": "2022-06-26",
+					"default": true,
+					"files": [
+						{
+							"name": ".lua",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "644c8386168c11fbe0d2b5e8a0743947ffb3fa00"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
+		}
+	}
 }
