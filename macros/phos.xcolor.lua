@@ -1,7 +1,7 @@
 --Script properties
 script_name = "Xcolor"
 script_author = "PhosCity"
-script_version = "1.0.1"
+script_version = "1.0.2"
 script_description = "Eyedropper for Linux."
 script_namespace = "phos.xcolor"
 

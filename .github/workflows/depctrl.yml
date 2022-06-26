@@ -1,0 +1,84 @@
+name: depctrl
+
+on:
+  push:
+    paths:
+      - 'macros/*.lua'
+      - 'macros/*.moon'
+    branches:
+      - personal
+
+jobs:
+  depctrl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get-changed-files
+        id: changed-files-comma
+        uses: tj-actions/changed-files@v20
+        with:
+          since_last_remote_commit: 'true'
+          separator: ','
+          files: |
+            macros/*.lua
+            macros/*.moon
+
+      - name: Update sha1 and version
+        run: |
+          output_file="/tmp/SHA.json"
+          while IFS= read -r file; do
+            # Uses sha1sum to find sha1. Outputs in `sha1 filename` format.
+            CHKSUM=$(sha1sum "${file}")
+
+            # Get current date in ISO 8601 format
+            DATE=$(date -I)
+
+            # Get actual sha1 of new file
+            SHA=$(echo "${CHKSUM}" | awk '{print $1}')
+
+            # Get the full filename of the Aegisub-scripts
+            FULL_FILE=$(echo "${CHKSUM}" | awk -F'/' '{print $NF}')
+
+            # Namespace is the filename stripped of their extension.
+            # This same should be the first field in DependencyControl.json inside macros field for the sake of automation.
+            # For example: My script is named phos.wave.lua. Therefore, the first level key is phos.wave
+            NAMESPACE=$(echo "${FULL_FILE}" | sed "s|.moon||g;s|.lua||g")
+
+            # Get version of the script (Provided that `script_version = "version"` is in the scripts - Spaces around '=' or lack of it is accounted for)
+            VERSION=$(grep -E 'script_version\s?=' "macros/${FULL_FILE}" | cut -d '"' -f2)
+
+            # Check if the file is added to DependencyControl or not and if version could be found or not
+            if grep -q "${NAMESPACE}" DependencyControl.json && [[ -n "${VERSION}" ]]; then
+
+              # Check if this file has been modified in last commit.
+              MODIFIED=$(echo ${{ steps.changed-files-comma.outputs.all_changed_files }})
+
+              # Change sha1, date and version if the file was modified in last commit
+              if grep -q "${FULL_FILE}" <<< "$MODIFIED"; then
+                jq --tab ".macros.\"${NAMESPACE}\".channels.personal.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.personal.version=\"${VERSION}\" | .macros.\"${NAMESPACE}\".channels.personal.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+
+                # If something goes wrong with jq operation, it outputs empty file. We don't want to commit it so a condition to check it.
+                if [[ -s "${output_file}" ]]; then
+                  mv "${output_file}" DependencyControl.json
+                  echo "Successfully updated Dependency Control for file ${FULL_FILE}."
+                else
+                  echo "Something went wrong while processing ${FULL_FILE}. The file is empty."
+                fi
+              fi
+            else
+              echo "Either the file ${FULL_FILE} is not added to Dependency Control or version could not be found in the script. Skipping changing hashes."
+            fi
+          done < <(find ./macros -name "*lua" -o -name "*.moon" -type f)
+      - name: Commit changes
+        env:
+          COMMIT_MSG: |
+            Automatic update of hashes and script version
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add DependencyControl.json
+          # Only commit and push if we have changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push)
