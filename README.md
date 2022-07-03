@@ -202,6 +202,8 @@ There is also a config where you can configure a lot of things about the script 
 
 **_Not Available in Dependency Control_**
 
+https://user-images.githubusercontent.com/65547311/177036211-89788b80-9b97-472d-9a17-c123189910c5.mp4
+
 This script is designed to write or modify karaoke template lines for [The0x539's KaraTemplater](https://github.com/The0x539/Aegisub-Scripts/blob/trunk/src/0x.KaraTemplater.moon)
 
 ### Buttons
