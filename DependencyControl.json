@@ -99,13 +99,13 @@
 			"channels": {
 				"main": {
 					"version": "1.1.0",
-					"released": "2022-05-22",
+					"released": "2022-07-10",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "2e4ca11961de99fc00cc2d68901f5764da46d868"
+							"sha1": "a672bd4ada047c15a6df2e0edb9ea14c897cab77"
 						}
 					]
 				}
