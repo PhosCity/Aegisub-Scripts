@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.1.0"
+script_version = "1.2.0"
 script_namespace = "phos.svg2ass"
 
 local pathsep = package.config:sub(1, 1)
@@ -154,9 +154,8 @@ end
 
 -- Convert a "Dialogue: 0,0:00..." string to a "line" table
 local function string2line(str)
-	local ltype, layer, s_time, e_time, style, actor, margl, margr, margv, eff, txt = str:match(
-		"(%a+): (%d+),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),(.*)"
-	)
+	local ltype, layer, s_time, e_time, style, actor, margl, margr, margv, eff, txt =
+		str:match("(%a+): (%d+),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),([^,]-),(.*)")
 	local l2 = {}
 	l2.class = "dialogue"
 	if ltype == "Comment" then
@@ -361,13 +360,8 @@ local function svg2ass(subs, sel, res, usetextbox)
 		check_svg2ass_exists(opt.svgpath)
 
 		-- Select svg file
-		local script_folder
-		if pathsep == "\\" then
-			script_folder = ""
-		else
-			script_folder = ADP("?script")
-		end
-		local fname = aegisub.dialog.open("Select svg file", "", script_folder, "*.svg", false, true)
+		local fname =
+			aegisub.dialog.open("Select svg file", "", ADP("?script") .. pathsep, "Svg files (.svg)|*.svg", false, true)
 
 		if not fname then
 			AK()
