@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.4.1"
+script_version = "1.4.2"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -30,7 +30,7 @@ local config_template = {
 		width = 1, height = 1,
 		hint = "Horizontal wobbling frequency in percent",
 		value = 0,
-		min = 0, max = 10, step = 0.00001,
+		min = 0, max = 100, step = 0.5,
 	},
 	{
 		class = "floatedit",
@@ -39,7 +39,7 @@ local config_template = {
 		width = 1, height = 1,
 		hint = "Vertical wobbling frequency in percent",
 		value = 0,
-		min = 0, max = 10, step = 0.00001,
+		min = 0, max = 100, step = 0.5,
 	},
 	{ class = "label", x = 0, y = 1, width = 1, height = 1, label = "Wobble strength: ", },
 	{
@@ -63,18 +63,26 @@ local config_template = {
 }
 -- stylua: ignore end
 
+-- When percentage_value is 1, it returns ~0.0001 and for 100, it returns ~2.5
+local function frequency_value(percentage_value)
+	if percentage_value < 50 then
+		return 0.0000825 * 1.212 ^ percentage_value
+	else
+		return (1.25 * percentage_value) / 50
+	end
+end
+
 local function wobble(fontname, fontsize, bold, italic, underline, strikeout, scale_x, scale_y, spacing, text, config)
+	local frequency_x = frequency_value(config.wobble_frequency_x)
+	local frequency_y = frequency_value(config.wobble_frequency_y)
 	-- Calculate shape from configuration settings
 	local text_shape = Yutils.decode
 		.create_font(fontname, bold, italic, underline, strikeout, fontsize, scale_x / 100, scale_y / 100, spacing)
 		.text_to_shape(text)
-	if
-		(config.wobble_frequency_x > 0 and config.wobble_strength_x > 0)
-		or (config.wobble_frequency_y > 0 and config.wobble_strength_y > 0)
-	then
+	if (frequency_x > 0 and config.wobble_strength_x > 0) or (frequency_y > 0 and config.wobble_strength_y > 0) then
 		text_shape = Yutils.shape.filter(Yutils.shape.split(Yutils.shape.flatten(text_shape), 1), function(x, y)
-			return x + math.sin(y * config.wobble_frequency_x * math.pi * 2) * config.wobble_strength_x,
-				y + math.sin(x * config.wobble_frequency_y * math.pi * 2) * config.wobble_strength_y
+			return x + math.sin(y * frequency_x * math.pi * 2) * config.wobble_strength_x,
+				y + math.sin(x * frequency_y * math.pi * 2) * config.wobble_strength_y
 		end)
 		return text_shape
 	end
