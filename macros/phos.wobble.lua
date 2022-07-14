@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.4.2"
+script_version = "1.4.3"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -29,8 +29,7 @@ local config_template = {
 		x = 1, y = 0,
 		width = 1, height = 1,
 		hint = "Horizontal wobbling frequency in percent",
-		value = 0,
-		min = 0, max = 100, step = 0.5,
+		value = 0, min = 0, max = 100, step = 0.5,
 	},
 	{
 		class = "floatedit",
@@ -38,8 +37,7 @@ local config_template = {
 		x = 2, y = 0,
 		width = 1, height = 1,
 		hint = "Vertical wobbling frequency in percent",
-		value = 0,
-		min = 0, max = 100, step = 0.5,
+		value = 0, min = 0, max = 100, step = 0.5,
 	},
 	{ class = "label", x = 0, y = 1, width = 1, height = 1, label = "Wobble strength: ", },
 	{
@@ -48,8 +46,7 @@ local config_template = {
 		x = 1, y = 1,
 		width = 1, height = 1,
 		hint = "Horizontal wobbling strength in pixels",
-		value = 0,
-		min = 0, max = 100, step = 0.01,
+		value = 0, min = 0, max = 100, step = 0.01,
 	},
 	{
 		class = "floatedit",
@@ -57,8 +54,7 @@ local config_template = {
 		x = 2, y = 1,
 		width = 1, height = 1,
 		hint = "Vertical wobbling strength in pixels",
-		value = 0,
-		min = 0, max = 100, step = 0.01,
+		value = 0, min = 0, max = 100, step = 0.01,
 	},
 }
 -- stylua: ignore end
@@ -75,11 +71,18 @@ end
 local function wobble(fontname, fontsize, bold, italic, underline, strikeout, scale_x, scale_y, spacing, text, config)
 	local frequency_x = frequency_value(config.wobble_frequency_x)
 	local frequency_y = frequency_value(config.wobble_frequency_y)
+	local stripped_text = text:gsub("{\\[^}]-}", "")
 	-- Calculate shape from configuration settings
-	local text_shape = Yutils.decode
-		.create_font(fontname, bold, italic, underline, strikeout, fontsize, scale_x / 100, scale_y / 100, spacing)
-		.text_to_shape(text)
-	if (frequency_x > 0 and config.wobble_strength_x > 0) or (frequency_y > 0 and config.wobble_strength_y > 0) then
+	local text_shape
+	if text:match("^{[^}]-\\p1") then
+		text_shape = stripped_text
+	else
+		text_shape = Yutils.decode
+			.create_font(fontname, bold, italic, underline, strikeout, fontsize, scale_x / 100, scale_y / 100, spacing)
+			.text_to_shape(stripped_text)
+	end
+
+	if (frequency_x >= 0 and config.wobble_strength_x >= 0) or (frequency_y >= 0 and config.wobble_strength_y >= 0) then
 		text_shape = Yutils.shape.filter(Yutils.shape.split(Yutils.shape.flatten(text_shape), 1), function(x, y)
 			return x + math.sin(y * frequency_x * math.pi * 2) * config.wobble_strength_x,
 				y + math.sin(x * frequency_y * math.pi * 2) * config.wobble_strength_y
@@ -107,7 +110,6 @@ local function main(subs, sel, config)
 			karaskel.preproc_line(subs, meta, styles, line)
 			-- get tag values
 			local tags = line.text:match("{\\[^}]-}")
-			local text = line.text:gsub("{\\[^}]-}", "")
 			local align = tags:match("\\an([1-9])") or line.styleref.align
 			local fontname = tags:match("\\fn([^}\\]+)") or line.styleref.fontname
 			local fontsize = tags:match("\\fs([%d]+)") or line.styleref.fontsize
@@ -136,7 +138,7 @@ local function main(subs, sel, config)
 				tonumber(scale_x),
 				tonumber(scale_y),
 				tonumber(spacing),
-				text,
+				line.text,
 				config
 			)
 
