@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.4.3"
+script_version = "1.4.4"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -107,6 +107,10 @@ local function main(subs, sel, config)
 	for _, i in ipairs(sel) do
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
+			if line.text == "" or line.text:gsub("{\\[^}]-}", "") == "" then
+				aegisub.log("No text detected.")
+				aegisub.cancel()
+			end
 			karaskel.preproc_line(subs, meta, styles, line)
 			-- get tag values
 			local tags = line.text:match("{\\[^}]-}")
