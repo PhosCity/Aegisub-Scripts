@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.4.0"
+script_version = "1.4.1"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -21,90 +21,53 @@ else
 end
 
 -- UI configuration template
+-- stylua: ignore start
 local config_template = {
-	{
-		class = "label",
-		x = 0,
-		y = 0,
-		width = 1,
-		height = 1,
-		label = "Wobble frequency: ",
-	},
-	{
-		class = "floatedit",
+	{ class = "label", x = 0, y = 0, width = 1, height = 1, label = "Wobble frequency: ", },
+	{ class = "floatedit",
 		name = "wobble_frequency_x",
-		x = 1,
-		y = 0,
-		width = 1,
-		height = 1,
+		x = 1, y = 0,
+		width = 1, height = 1,
 		hint = "Horizontal wobbling frequency in percent",
 		value = 0,
-		min = 0,
-		max = 10,
-		step = 0.00001,
+		min = 0, max = 10, step = 0.00001,
 	},
 	{
 		class = "floatedit",
 		name = "wobble_frequency_y",
-		x = 2,
-		y = 0,
-		width = 1,
-		height = 1,
+		x = 2, y = 0,
+		width = 1, height = 1,
 		hint = "Vertical wobbling frequency in percent",
 		value = 0,
-		min = 0,
-		max = 10,
-		step = 0.00001,
+		min = 0, max = 10, step = 0.00001,
 	},
-	{
-		class = "label",
-		x = 0,
-		y = 1,
-		width = 1,
-		height = 1,
-		label = "Wobble strength: ",
-	},
+	{ class = "label", x = 0, y = 1, width = 1, height = 1, label = "Wobble strength: ", },
 	{
 		class = "floatedit",
 		name = "wobble_strength_x",
-		x = 1,
-		y = 1,
-		width = 1,
-		height = 1,
+		x = 1, y = 1,
+		width = 1, height = 1,
 		hint = "Horizontal wobbling strength in pixels",
 		value = 0,
-		min = 0,
-		max = 100,
-		step = 0.01,
+		min = 0, max = 100, step = 0.01,
 	},
 	{
 		class = "floatedit",
 		name = "wobble_strength_y",
-		x = 2,
-		y = 1,
-		width = 1,
-		height = 1,
+		x = 2, y = 1,
+		width = 1, height = 1,
 		hint = "Vertical wobbling strength in pixels",
 		value = 0,
-		min = 0,
-		max = 100,
-		step = 0.01,
+		min = 0, max = 100, step = 0.01,
 	},
 }
+-- stylua: ignore end
 
 local function wobble(fontname, fontsize, bold, italic, underline, strikeout, scale_x, scale_y, spacing, text, config)
 	-- Calculate shape from configuration settings
-	local text_shape = Yutils.decode.create_font(
-		fontname,
-		bold,
-		italic,
-		underline,
-		strikeout,
-		fontsize,
-		scale_x / 100,
-		scale_y / 100,
-		spacing
-	).text_to_shape(text)
+	local text_shape = Yutils.decode
+		.create_font(fontname, bold, italic, underline, strikeout, fontsize, scale_x / 100, scale_y / 100, spacing)
+		.text_to_shape(text)
 	if
 		(config.wobble_frequency_x > 0 and config.wobble_strength_x > 0)
 		or (config.wobble_frequency_y > 0 and config.wobble_strength_y > 0)
@@ -117,81 +80,41 @@ local function wobble(fontname, fontsize, bold, italic, underline, strikeout, sc
 	end
 end
 
-local function make_shape(subs, sel, config)
-	local meta, styles = karaskel.collect_head(subs, false)
-	for _, j in ipairs(sel) do
-		if subs[j].class == "dialogue" then
-			local line = subs[j]
-			karaskel.preproc_line(subs, meta, styles, line)
-			-- get styledata
-			local fontname = line.styleref.fontname
-			local fontsize = line.styleref.fontsize
-			local bold = line.styleref.bold
-			local italic = line.styleref.italic
-			local underline = line.styleref.underline
-			local strikeout = line.styleref.strikeout
-			local scale_x = line.styleref.scale_x
-			local scale_y = line.styleref.scale_y
-			local spacing = line.styleref.spacing
-			local align = line.styleref.align
+local function ibus(value)
+	if not value then
+		return nil
+	elseif value == "1" then
+		return true
+	elseif value == "0" then
+		return false
+	end
+end
 
-			-- get line data
+local function main(subs, sel, config)
+	local meta, styles = karaskel.collect_head(subs, false)
+
+	for _, i in ipairs(sel) do
+		if subs[i].class == "dialogue" then
+			local line = subs[i]
+			karaskel.preproc_line(subs, meta, styles, line)
+			-- get tag values
+			local tags = line.text:match("{\\[^}]-}")
 			local text = line.text:gsub("{\\[^}]-}", "")
-			if line.text:match("\\an[1-9]") then
-				align = line.text:match("\\an([1-9])")
-			end
-			if line.text:match("\\fn([^}\\]+)") then
-				fontname = line.text:match("\\fn([^}\\]+)")
-			end
-			if line.text:match("\\fs([%d]+)") then
-				fontsize = line.text:match("\\fs([%d]+)")
-			end
-			if line.text:match("\\b[01][\\}]") then
-				local b = line.text:match("\\b([01])[\\}]")
-				if b == "1" then
-					bold = true
-				else
-					bold = false
-				end
-			end
-			if line.text:match("\\i[01][\\}]") then
-				local i = line.text:match("\\i([01])[\\}]")
-				if i == "1" then
-					italic = true
-				else
-					italic = false
-				end
-			end
-			if line.text:match("\\u[01][\\}]") then
-				local u = line.text:match("\\u([01])[\\}]")
-				if u == "1" then
-					underline = true
-				else
-					underline = false
-				end
-			end
-			if line.text:match("\\s[01][\\}]") then
-				local s = line.text:match("\\s([01])[\\}]")
-				if s == "1" then
-					strikeout = true
-				else
-					strikeout = false
-				end
-			end
-			if line.text:match("\\fscx([^}\\]+)") then
-				scale_x = line.text:match("\\fscx([^}\\]+)")
-			end
-			if line.text:match("\\fscy([^}\\]+)") then
-				scale_y = line.text:match("\\fscy([^}\\]+)")
-			end
-			if line.text:match("\\fsp([^}\\]+)") then
-				spacing = line.text:match("\\fsp([^}\\]+)")
-			end
+			local align = tags:match("\\an([1-9])") or line.styleref.align
+			local fontname = tags:match("\\fn([^}\\]+)") or line.styleref.fontname
+			local fontsize = tags:match("\\fs([%d]+)") or line.styleref.fontsize
+			local scale_x = tags:match("\\fscx([^}\\]+)") or line.styleref.scale_x
+			local scale_y = tags:match("\\fscy([^}\\]+)") or line.styleref.scale_y
+			local spacing = tags:match("\\fsp([^}\\]+)") or line.styleref.spacing
+			local italic = ibus(tags:match("\\i([01])[\\}]")) or line.styleref.italic
+			local bold = ibus(tags:match("\\b([01])[\\}]")) or line.styleref.bold
+			local underline = ibus(tags:match("\\u([01])[\\}]")) or line.styleref.underline
+			local strikeout = ibus(tags:match("\\s([01])[\\}]")) or line.styleref.strikeout
 
 			-- Check if the line has alignment of 7. Anything else and the position of output line may not be the same as the input line
 			if tonumber(align) ~= 7 then
 				aegisub.log(
-					"The resulting line may have different position because the alignment is not 7.\nThe script will proceed the operation but if position matters to you, please use '\\an7' in the line."
+					"The resulting line may have different position because the alignment is not 7.\nThe script will proceed the operation but if position matters to you, please use '\\an7' in the line.\n"
 				)
 			end
 
@@ -215,35 +138,30 @@ local function make_shape(subs, sel, config)
 				original_tags = original_tags
 					:gsub("\\fn[^}\\]+", "")
 					:gsub("\\fs[%d]+", "")
-					:gsub("\\b[01]", "")
 					:gsub("\\i[01]", "")
+					:gsub("\\b[01]", "")
 					:gsub("\\u[01]", "")
 					:gsub("\\s[01]", "")
 					:gsub("\\fscx[%d.]+", "")
 					:gsub("\\fscy[%d.]+", "")
 					:gsub("\\fsp[%d.]+", "")
-					:gsub("\\fsp[%d.]+", "")
 			end
 
-			local tags = original_tags .. "{\\fscx100\\fscy100\\p1}"
-			tags = tags:gsub("}{", "")
+			local new_tags = original_tags .. "{\\fscx100\\fscy100\\p1}"
+			new_tags = new_tags:gsub("}{", "")
 
-			line.text = tags .. text_shape
-			subs[j] = line
+			line.text = new_tags .. text_shape
+			subs[i] = line
 		end
 	end
 end
 
--- Macro execution
-local function load_macro(subs, sel)
-	-- Show UI
-	local ok, config = aegisub.dialog.display(config_template, { "Calculate", "Cancel" })
-
-	-- Save UI configuration to template
-	local config_template_n, config_template_entry = #config_template, nil
+-- Save UI configuration to template
+local function save_values(tbl, config)
+	local config_template_n, config_template_entry = #tbl, nil
 	for config_key, config_value in pairs(config) do
 		for i = 1, config_template_n do
-			config_template_entry = config_template[i]
+			config_template_entry = tbl[i]
 			if config_template_entry.name == config_key then
 				if config_template_entry.value then
 					config_template_entry.value = config_value
@@ -254,17 +172,20 @@ local function load_macro(subs, sel)
 			end
 		end
 	end
+end
 
+-- Macro execution
+local function load_macro(subs, sel)
+	local ok, config = aegisub.dialog.display(config_template, { "Calculate", "Cancel" })
 	if ok == "Cancel" then
 		aegisub.cancel()
-	end
-	if ok == "Calculate" then
-		make_shape(subs, sel, config)
+	elseif ok == "Calculate" then
+		save_values(config_template, config)
+		main(subs, sel, config)
 	end
 end
 
 -- Register macro to Aegisub
-
 if haveDepCtrl then
 	depRec:registerMacro(load_macro)
 else
