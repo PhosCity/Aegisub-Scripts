@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.5.4"
+script_version = "1.5.5"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -38,20 +38,20 @@ local animate_template = {
 	{ class = "label",     x = 0, y = 1, width = 1, height = 1, label = "Frequency x", },
 	{ class = "floatedit", x = 1, y = 1, width = 1, height = 1, hint  = "Horizontal wobbling frequency in percent", value = 0, min = 0, max = 100, step = 0.5, name = "freq_x_start" },
 	{ class = "floatedit", x = 2, y = 1, width = 1, height = 1, hint  = "Horizontal wobbling frequency in percent", value = 0, min = 0, max = 100, step = 0.5, name = "freq_x_end" },
-	{ class = "floatedit", x = 3, y = 1, width = 1, height = 1, hint  = "Accel for frequency x",                    value = 0, name = "freq_x_accel" },
+	{ class = "floatedit", x = 3, y = 1, width = 1, height = 1, hint  = "Accel for frequency x",                    value = 1, name = "freq_x_accel" },
 	{ class = "label",     x = 0, y = 2, width = 1, height = 1, label = "Frequency y", },
 	{ class = "floatedit", x = 1, y = 2, width = 1, height = 1, hint  = "Vertical wobbling frequency in percent",   value = 0, min = 0, max = 100, step = 0.5, name = "freq_y_start" },
 	{ class = "floatedit", x = 2, y = 2, width = 1, height = 1, hint  = "Vertical wobbling frequency in percent",   value = 0, min = 0, max = 100, step = 0.5, name = "freq_y_end" },
-	{ class = "floatedit", x = 3, y = 2, width = 1, height = 1, hint  = "Accel for frequency y",                    value = 0, name = "freq_y_accel" },
+	{ class = "floatedit", x = 3, y = 2, width = 1, height = 1, hint  = "Accel for frequency y",                    value = 1, name = "freq_y_accel" },
 
 	{ class = "label",     x = 0, y = 3, width = 1, height = 1, label = "Strength x", },
 	{ class = "floatedit", x = 1, y = 3, width = 1, height = 1, hint  = "Horizontal wobbling strength in pixels",   value = 0, min = 0, max = 100, step = 0.01, name = "strength_x_start" },
 	{ class = "floatedit", x = 2, y = 3, width = 1, height = 1, hint  = "Horizontal wobbling strength in pixels",   value = 0, min = 0, max = 100, step = 0.01, name = "strength_x_end" },
-	{ class = "floatedit", x = 3, y = 3, width = 1, height = 1, hint  = "Accel for strength x",                     value = 0, name = "strength_x_accel" },
+	{ class = "floatedit", x = 3, y = 3, width = 1, height = 1, hint  = "Accel for strength x",                     value = 1, name = "strength_x_accel" },
 	{ class = "label",     x = 0, y = 4, width = 1, height = 1, label = "Strength y", },
 	{ class = "floatedit", x = 1, y = 4, width = 1, height = 1, hint  = "Vertical wobbling strength in pixels",     value = 0, min = 0, max = 100, step = 0.01, name = "strength_y_start" },
 	{ class = "floatedit", x = 2, y = 4, width = 1, height = 1, hint  = "Vertical wobbling strength in pixels",     value = 0, min = 0, max = 100, step = 0.01, name = "strength_y_end" },
-	{ class = "floatedit", x = 3, y = 4, width = 1, height = 1, hint  = "Accel for strength y",                     value = 0, name = "strength_y_accel" },
+	{ class = "floatedit", x = 3, y = 4, width = 1, height = 1, hint  = "Accel for strength y",                     value = 1, name = "strength_y_accel" },
 }
 -- stylua: ignore end
 
@@ -73,6 +73,15 @@ local function interpolate(start_value, end_value, accel, sel_n, i)
 	else
 		return factor * (end_value - start_value) + start_value
 	end
+end
+
+local function progress(index, sel_n, title)
+	if aegisub.progress.is_cancelled() then
+		aegisub.cancel()
+	end
+	aegisub.progress.task("Processing line " .. index .. "/" .. sel_n)
+	aegisub.progress.set(100 * index / sel_n)
+	aegisub.progress.title(title)
 end
 
 local function wobble(fontname, fontsize, bold, italic, underline, strikeout, scale_x, scale_y, spacing, text, config)
@@ -168,21 +177,21 @@ local function make_shape(subs, line, config)
 end
 
 local function main(subs, sel, config)
-	for _, i in ipairs(sel) do
-		if subs[i].class == "dialogue" then
-			local line = subs[i]
-			if line.text == "" or line.text:gsub("{\\[^}]-}", "") == "" then
-				aegisub.log("No text detected.")
-				aegisub.cancel()
-			end
-			line = make_shape(subs, line, config)
-			subs[i] = line
+	for x, i in ipairs(sel) do
+		progress(x, #sel, "Wobbling...")
+		local line = subs[i]
+		if line.text == "" or line.text:gsub("{\\[^}]-}", "") == "" then
+			aegisub.log("No text detected.")
+			aegisub.cancel()
 		end
+		line = make_shape(subs, line, config)
+		subs[i] = line
 	end
 end
 
 local function animate(subs, sel, config)
-	for _, i in ipairs(sel) do
+	for x, i in ipairs(sel) do
+		progress(x, #sel, "This may take some time...")
 		local line = subs[i]
 		if
 			(config.freq_x_start >= 0 and config.strength_x_start >= 0)
