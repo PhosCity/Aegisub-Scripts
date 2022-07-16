@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "1.5.5"
+script_version = "2.0.0"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -53,6 +53,29 @@ local animate_template = {
 	{ class = "floatedit", x = 2, y = 4, width = 1, height = 1, hint  = "Vertical wobbling strength in pixels",     value = 0, min = 0, max = 100, step = 0.01, name = "strength_y_end" },
 	{ class = "floatedit", x = 3, y = 4, width = 1, height = 1, hint  = "Accel for strength y",                     value = 1, name = "strength_y_accel" },
 }
+
+local oscillate_template = {
+	{ class = "label",     x = 1, y = 0, width = 1, height = 1, label = "Middle Value", },
+	{ class = "label",     x = 2, y = 0, width = 1, height = 1, label = "+-", },
+	{ class = "label",     x = 3, y = 0, width = 1, height = 1, label = "Steps", },
+	{ class = "label",     x = 0, y = 1, width = 1, height = 1, label = "Frequency x", },
+	{ class = "floatedit", x = 1, y = 1, width = 1, height = 1, hint  = "Mid-horizontal wobbling frequency in percent",   value = 0, min = 0, max = 100, step = 0.5, name = "freq_x_mid" },
+	{ class = "floatedit", x = 2, y = 1, width = 1, height = 1, hint  = "Value +- Mid wobbling frequency in percent",     value = 0, min = 0, max = 100, step = 0.5, name = "freq_x_delta" },
+	{ class = "floatedit", x = 3, y = 1, width = 1, height = 1, hint  = "Steps for changing frequency x",                 value = 1, name = "freq_x_steps" },
+	{ class = "label",     x = 0, y = 2, width = 1, height = 1, label = "Frequency y", },
+	{ class = "floatedit", x = 1, y = 2, width = 1, height = 1, hint  = "Mid-vertical wobbling frequency in percent",     value = 0, min = 0, max = 100, step = 0.5, name = "freq_y_mid" },
+	{ class = "floatedit", x = 2, y = 2, width = 1, height = 1, hint  = "Value +- vertical wobbling frequency in percent",value = 0, min = 0, max = 100, step = 0.5, name = "freq_y_delta" },
+	{ class = "floatedit", x = 3, y = 2, width = 1, height = 1, hint  = "Steps for changing frequency y",                 value = 1, name = "freq_y_steps" },
+
+	{ class = "label",     x = 0, y = 3, width = 1, height = 1, label = "Strength x", },
+	{ class = "floatedit", x = 1, y = 3, width = 1, height = 1, hint  = "Mid-horizontal wobbling strength in percent",    value = 0, min = 0, max = 100, step = 0.5, name = "str_x_mid" },
+	{ class = "floatedit", x = 2, y = 3, width = 1, height = 1, hint  = "Value +- Mid wobbling strength in percent",      value = 0, min = 0, max = 100, step = 0.5, name = "str_x_delta" },
+	{ class = "floatedit", x = 3, y = 3, width = 1, height = 1, hint  = "Steps for changing strength x",                  value = 1, name = "str_x_steps" },
+	{ class = "label",     x = 0, y = 4, width = 1, height = 1, label = "Strength y", },
+	{ class = "floatedit", x = 1, y = 4, width = 1, height = 1, hint  = "Mid-vertical wobbling strength in percent",      value = 0, min = 0, max = 100, step = 0.5, name = "str_y_mid" },
+	{ class = "floatedit", x = 2, y = 4, width = 1, height = 1, hint  = "Value +- vertical wobbling strength in percent", value = 0, min = 0, max = 100, step = 0.5, name = "str_y_delta" },
+	{ class = "floatedit", x = 3, y = 4, width = 1, height = 1, hint  = "Steps for changing strength y",                  value = 1, name = "str_y_steps" },
+}
 -- stylua: ignore end
 
 -- When percentage_value is 1, it returns ~0.0001 and for 100, it returns ~2.5
@@ -75,6 +98,7 @@ local function interpolate(start_value, end_value, accel, sel_n, i)
 	end
 end
 
+-- Progress bar, title etc
 local function progress(index, sel_n, title)
 	if aegisub.progress.is_cancelled() then
 		aegisub.cancel()
@@ -84,6 +108,7 @@ local function progress(index, sel_n, title)
 	aegisub.progress.title(title)
 end
 
+-- Actual wobbling happens here
 local function wobble(fontname, fontsize, bold, italic, underline, strikeout, scale_x, scale_y, spacing, text, config)
 	local frequency_x = frequency_value(config.wobble_frequency_x)
 	local frequency_y = frequency_value(config.wobble_frequency_y)
@@ -98,15 +123,16 @@ local function wobble(fontname, fontsize, bold, italic, underline, strikeout, sc
 			.text_to_shape(stripped_text)
 	end
 
-	if (frequency_x >= 0 and config.wobble_strength_x >= 0) or (frequency_y >= 0 and config.wobble_strength_y >= 0) then
+	if (frequency_x > 0 and config.wobble_strength_x > 0) or (frequency_y > 0 and config.wobble_strength_y > 0) then
 		text_shape = Yutils.shape.filter(Yutils.shape.split(Yutils.shape.flatten(text_shape), 1), function(x, y)
 			return x + math.sin(y * frequency_x * math.pi * 2) * config.wobble_strength_x,
 				y + math.sin(x * frequency_y * math.pi * 2) * config.wobble_strength_y
 		end)
-		return text_shape
 	end
+	return text_shape
 end
 
+-- convert value to boolean for bold, italics, strikeout and underline tag
 local function ibus(value)
 	if not value then
 		return nil
@@ -117,6 +143,7 @@ local function ibus(value)
 	end
 end
 
+-- Collects data from the current line that'll be used for making shape
 local function make_shape(subs, line, config)
 	local meta, styles = karaskel.collect_head(subs, false)
 	karaskel.preproc_line(subs, meta, styles, line)
@@ -212,6 +239,42 @@ local function animate(subs, sel, config)
 	end
 end
 
+local function oscillate(subs, sel, config)
+	local type_tbl = { "freq_x", "freq_y", "str_x", "str_y" }
+	local value_tbl = type_tbl
+	for _, item in ipairs(type_tbl) do
+		local val = config[item .. "_mid"]
+		local max = val + config[item .. "_delta"]
+		local min = val - config[item .. "_delta"]
+		local steps = config[item .. "_steps"]
+		local state = "plus"
+		for i = 1, #sel do
+			if state == "plus" and val + steps > max then
+				state = "minus"
+			elseif state == "minus" and val - steps < min then
+				state = "plus"
+			end
+			if state == "plus" then
+				val = val + steps
+			else
+				val = val - steps
+			end
+			value_tbl[item] = value_tbl[item] or {}
+			value_tbl[item][i] = val
+		end
+	end
+	for z, i in ipairs(sel) do
+		progress(z, #sel, "This may take some time...")
+		local line = subs[i]
+		config.wobble_frequency_x = value_tbl["freq_x"][z]
+		config.wobble_frequency_y = value_tbl["freq_y"][z]
+		config.wobble_strength_x = value_tbl["str_x"][z]
+		config.wobble_strength_y = value_tbl["str_y"][z]
+		line = make_shape(subs, line, config)
+		subs[i] = line
+	end
+end
+
 -- Save UI configuration to template
 local function save_values(tbl, config)
 	local config_template_n, config_template_entry = #tbl, nil
@@ -232,20 +295,27 @@ end
 
 -- Macro execution
 local function load_macro(subs, sel)
-	local ok, config = aegisub.dialog.display(config_template, { "Calculate", "Animate", "Cancel" })
-	if ok == "Cancel" then
-		aegisub.cancel()
-	elseif ok == "Calculate" then
+	local ok2
+	local ok, config = aegisub.dialog.display(
+		config_template,
+		{ "Calculate", "Animate", "Oscillate", "Cancel" },
+		{ ["cancel"] = "Cancel" }
+	)
+	if ok == "Calculate" then
 		save_values(config_template, config)
 		main(subs, sel, config)
 	elseif ok == "Animate" then
-		local ok2
-		ok2, config = aegisub.dialog.display(animate_template, { "Animate", "Cancel" })
-		if ok2 == "Cancel" then
-			aegisub.cancel()
+		ok2, config = aegisub.dialog.display(animate_template, { "Animate", "Cancel" }, { ["cancel"] = "Cancel" })
+		if ok2 then
+			save_values(animate_template, config)
+			animate(subs, sel, config)
 		end
-		save_values(animate_template, config)
-		animate(subs, sel, config)
+	elseif ok == "Oscillate" then
+		ok2, config = aegisub.dialog.display(oscillate_template, { "Oscillate", "Cancel" }, { ["cancel"] = "Cancel" })
+		if ok2 then
+			save_values(oscillate_template, config)
+			oscillate(subs, sel, config)
+		end
 	end
 end
 
