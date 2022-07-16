@@ -58,6 +58,11 @@ If you want to animate the distortion, first split the line to frames. You can u
 
 <details>
   <summary>Click here to see example animations</summary>
+  
+https://user-images.githubusercontent.com/65547311/179356858-4179c754-93ad-4bdf-b4fe-befc0546d33e.mp4
+
+https://user-images.githubusercontent.com/65547311/179356862-a29a5b9d-9cb3-4cb9-b7c2-e6c5269063ef.mp4
+
 </details>
 
 ![image](./assets/wobble-oscillate.png)
@@ -66,6 +71,9 @@ Again, split the lines into frames first. Then, you need to put the middle value
 
 <details>
   <summary>Click here to see example oscillation</summary>
+  
+https://user-images.githubusercontent.com/65547311/179356869-f5294d5a-ea76-455f-9ec0-7749bbb223fd.mp4
+
 </details>
 
 ## svg2ass
