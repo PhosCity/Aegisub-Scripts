@@ -225,13 +225,13 @@ local function animate(subs, sel, config)
 			or (config.freq_y_start >= 0 and config.strength_y_start >= 0)
 		then
 			config.wobble_frequency_x =
-				interpolate(config.freq_x_start, config.freq_x_end, config.freq_x_accel, #sel, i)
+				interpolate(config.freq_x_start, config.freq_x_end, config.freq_x_accel, #sel, x)
 			config.wobble_frequency_y =
-				interpolate(config.freq_y_start, config.freq_y_end, config.freq_y_accel, #sel, i)
+				interpolate(config.freq_y_start, config.freq_y_end, config.freq_y_accel, #sel, x)
 			config.wobble_strength_x =
-				interpolate(config.strength_x_start, config.strength_x_end, config.strength_x_accel, #sel, i)
+				interpolate(config.strength_x_start, config.strength_x_end, config.strength_x_accel, #sel, x)
 			config.wobble_strength_y =
-				interpolate(config.strength_y_start, config.strength_y_end, config.strength_y_accel, #sel, i)
+				interpolate(config.strength_y_start, config.strength_y_end, config.strength_y_accel, #sel, x)
 
 			line = make_shape(subs, line, config)
 			subs[i] = line
