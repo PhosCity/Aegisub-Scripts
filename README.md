@@ -42,21 +42,37 @@ https://user-images.githubusercontent.com/65547311/164889225-2d8a6ccf-7798-4810-
 
 **_Available in Dependency Control_**
 
-Wobble is a remake of a very old script that distorts the text with the parameters you choose. The old script however was very difficult to use. It neither recognized the text already present in the line nor the tags used nor did it output the result in a usable format. So I decided to remake it.
+Wobble is a remake of a very old script that distorts the text with the parameters you choose. The old script however was very difficult to use. It neither recognized the text already present in the line nor the tags used nor did it output the result in a usable format. So I decided to remake it and add other features.
 
 ![wobble](./assets/wobble-gui.png)
 
-When you open the script, you will be presented with the gui as shown above. Imagine that when you use this script, it distorts the text along a wave horizontally or vertically or both. The parameters control the nature of the wave thus controls how the text is distorted. Frequency is the number of waves (crest and trough) you want in the text. Use very small value for useful output. Strength is the number of pixels that the text will be distorted to. With trial and error, you can create many interesting distortions.
+When you open the script, you will be presented with the GUI as shown above. Imagine that when you use this script, it distorts the text along a wave horizontally or vertically or both. The parameters control the nature of the wave thus controls how the text is distorted. Frequency is the number of waves (crest and trough) you want in the text in percentage. You'll most likely use 20-40% for optimum results. Strength is the number of pixels that the text will be distorted to. With trial and error, you can create many interesting distortions.
 
-As you can see below, the top is the original font and everything below it is distorted using this script. I use it when the sign is distorted or I need a irregular font that I cannot find.
+As you can see below, the top is the original font and everything below it is distorted using this script. I use it when the sign is distorted or I need an irregular font that I cannot find.
 
 ![wobble2](./assets/wobble-example.png)
+
+![image](./assets/wobble-animate.png)
+
+If you want to animate the distortion, first split the line to frames. You can use something like [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to do so. You can control the speed of animation by controlling the number of frames each line has. The more frames per line, the slower the animation. After splitting the line to frames, you need to put the starting value and ending value. I recommend you figure this out beforehand by using main GUI. After you put the starting and ending value for all the required elements, click on `Animate` and the script will handle the rest.
+
+<details>
+  <summary>Click here to see example animations</summary>
+</details>
+
+![image](./assets/wobble-oscillate.png)
+
+Again, split the lines into frames first. Then, you need to put the middle value. After that you need to put the factor by which the middle value will change. If your middle value if x and factor is y, the minimum value is x - y while the maximum value is x + y. The values will oscillate from minimum value to maximum value. The steps box is the rate by how much the value changes per line.
+
+<details>
+  <summary>Click here to see example oscillation</summary>
+</details>
 
 ## svg2ass
 
 **_Available in Dependency Control_**
 
-The script svg2ass is a wrapper for a program [svg2ass](https://github.com/irrwahn/svg2ass) which allows you to select a svg file from Aegisub itself and convert it to shape, clip or iclip. It works in both windows as well as unix operating system. I generally create svg files using GIMP(can perform complex selections and convert those selections to svg in a matter of seconds) or Inkscape and use svg2ass to convert them to subtitle lines. If you cannot/ do not want to compile svg2ass, then there is also a [website](https://qgustavor.github.io/svg2ass-gui/) where you can upload the svg file to obtain the output.
+The script svg2ass is a wrapper for a program [svg2ass](https://github.com/irrwahn/svg2ass) which allows you to select a svg file from Aegisub itself and convert it to shape, clip or iclip. It works in both windows as well as unix operating system. I generally create svg files using GIMP(can perform complex selections and convert those selections to svg in a matter of seconds) or Inkscape and use svg2ass to convert them to subtitle lines. If you cannot/ do not want to compile svg2ass, then there is also a [website](https://qgustavor.github.io/svg2ass-gui/) where you can upload the svg file to obtain the output.ku
 
 The first thing you should do is to set the config and provide the path where you have the svg2ass executable. At the same time, you can also provide custom tags you want to append to final result and the custom svg2ass parameters if you prefer.
 
@@ -202,7 +218,7 @@ There is also a config where you can configure a lot of things about the script 
 
 **_Not Available in Dependency Control_**
 
-https://user-images.githubusercontent.com/65547311/177036211-89788b80-9b97-472d-9a17-c123189910c5.mp4
+https://user-images.githubusercontent.com/65547311/177035842-e1a4b930-07b8-4ea0-82a2-16a3de8552e6.mp4
 
 This script is designed to write or modify karaoke template lines for [The0x539's KaraTemplater](https://github.com/The0x539/Aegisub-Scripts/blob/trunk/src/0x.KaraTemplater.moon)
 
