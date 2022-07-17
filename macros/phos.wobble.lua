@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "2.0.0"
+script_version = "2.0.1"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -148,7 +148,7 @@ local function make_shape(subs, line, config)
 	local meta, styles = karaskel.collect_head(subs, false)
 	karaskel.preproc_line(subs, meta, styles, line)
 	-- get tag values
-	local tags = line.text:match("{\\[^}]-}")
+	local tags = line.text:match("{\\[^}]-}") or ""
 	local align = tags:match("\\an([1-9])") or line.styleref.align
 	local fontname = tags:match("\\fn([^}\\]+)") or line.styleref.fontname
 	local fontsize = tags:match("\\fs([%d]+)") or line.styleref.fontsize
