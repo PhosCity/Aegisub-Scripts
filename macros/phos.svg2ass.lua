@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.2.1"
+script_version = "1.2.2"
 script_namespace = "phos.svg2ass"
 
 local pathsep = package.config:sub(1, 1)
@@ -315,7 +315,7 @@ local function pstover(subs, sel, result, line_count, res)
 
 			-- Convert shape to clip
 			if res.clip then
-				tags = tags:gsub("\\clip%(m [%d%a%s%-]+", ""):gsub("\\iclip%(m [%d%a%s%-]+", "")
+				tags = tags:gsub("\\i?clip%([^),]*%)", "")
 				local klip = shape_to_clip("{\\p1}" .. shape):gsub("[{}]", "")
 				tags = tags:gsub("}", klip .. "}")
 				line.text = tags .. text
@@ -323,7 +323,7 @@ local function pstover(subs, sel, result, line_count, res)
 
 			-- Convert shape to iclip
 			if res.iclip then
-				tags = tags:gsub("\\clip%(m [%d%a%s%-]+", ""):gsub("\\iclip%(m [%d%a%s%-]+", "")
+				tags = tags:gsub("\\i?clip%([^),]*%)", "")
 				local iklip = shape_to_iclip("{\\p1}" .. shape):gsub("[{}]", "")
 				tags = tags:gsub("}", iklip .. "}")
 				line.text = tags .. text
