@@ -2,7 +2,7 @@
 script_name = "svg2ass"
 script_description = "Script that uses svg2ass to convert svg files to ass lines"
 script_author = "PhosCity"
-script_version = "1.2.0"
+script_version = "1.2.1"
 script_namespace = "phos.svg2ass"
 
 local pathsep = package.config:sub(1, 1)
@@ -123,12 +123,12 @@ end
 
 -- Check if svg2ass exists in the path given in config
 local function check_svg2ass_exists(path)
+	local msg =
+		"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
 	if pathsep == "\\" then
 		local cex = io.open(path)
 		if cex == nil then
-			LOG(
-				"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
-			)
+			LOG(msg)
 			AK()
 		else
 			cex:close()
@@ -136,9 +136,7 @@ local function check_svg2ass_exists(path)
 	else
 		local exitcode = os.execute(path .. " -h")
 		if not exitcode then
-			LOG(
-				"svg2ass not found in the path provided in the config.\nMake sure that svg2ass is available in the path defined.\n"
-			)
+			LOG(msg)
 			AK()
 		end
 	end
@@ -295,24 +293,6 @@ local function pstover(subs, sel, result, line_count, res)
 		AK()
 	end
 
-	for _, i in ipairs(sel) do
-		if subs[i].class == "dialogue" then
-			local text = subs[i].text
-			if res.clip and not text:match("^{[^}]-\\clip") then
-				LOG("Your selection consists of lines without clip. Pasteover failed.")
-				AK()
-			end
-			if res.iclip and not text:match("^{[^}]-\\iclip") then
-				LOG("Your selection consists of lines without iclip. Pasteover failed.")
-				AK()
-			end
-			if res.drawing and not text:match("^{[^}]-\\p1") then
-				LOG("Your selection consists of lines that are not shape. Pasteover failed.")
-				AK()
-			end
-		end
-	end
-
 	local shape_tbl = {}
 	for j in result:gmatch("[^\n]+") do
 		local line = string2line(j)
@@ -324,19 +304,29 @@ local function pstover(subs, sel, result, line_count, res)
 		if subs[i].class == "dialogue" then
 			local line = subs[i]
 			local tags = line.text:match("{\\[^}]-}")
+			local text = line.text:gsub("{\\[^}]-}", "")
 			local shape = shape_tbl[k]
-			line.text = tags .. shape
+			if res.drawing then
+				if not tags:match("\\p1") then
+					tags = tags:gsub("}", "\\p1}")
+				end
+				line.text = tags .. shape
+			end
 
 			-- Convert shape to clip
 			if res.clip then
-				line.text = line.text:gsub("\\clip%(m [%d%a%s%-]+", "\\p1")
-				line.text = shape_to_clip(line.text)
+				tags = tags:gsub("\\clip%(m [%d%a%s%-]+", ""):gsub("\\iclip%(m [%d%a%s%-]+", "")
+				local klip = shape_to_clip("{\\p1}" .. shape):gsub("[{}]", "")
+				tags = tags:gsub("}", klip .. "}")
+				line.text = tags .. text
 			end
 
 			-- Convert shape to iclip
 			if res.iclip then
-				line.text = line.text:gsub("\\iclip%(m [%d%a%s%-]+", "\\p1")
-				line.text = shape_to_iclip(line.text)
+				tags = tags:gsub("\\clip%(m [%d%a%s%-]+", ""):gsub("\\iclip%(m [%d%a%s%-]+", "")
+				local iklip = shape_to_iclip("{\\p1}" .. shape):gsub("[{}]", "")
+				tags = tags:gsub("}", iklip .. "}")
+				line.text = tags .. text
 			end
 
 			subs[i] = line
