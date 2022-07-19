@@ -104,14 +104,14 @@
 			"description": "Script that uses svg2ass to convert svg files to ass lines",
 			"channels": {
 				"main": {
-					"version": "1.2.1",
+					"version": "1.2.2",
 					"released": "2022-07-19",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "f85a5e07e6792bc5e4022fd4a496586ed4744f73"
+							"sha1": "ae69981e96871ae221c95a71ec9edb4ba0792f9f"
 						}
 					]
 				}
