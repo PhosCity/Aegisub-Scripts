@@ -9,6 +9,7 @@
 1. [Edit Tags](#edit-tags)
 1. [QC Report](#qc-report)
 1. [KFX](#kfx)
+1. [Rotated Gradient](#rotated-gradient)
 
 ## Bidirectional Snapping
 
@@ -264,3 +265,22 @@ For any other line marker, a HYDRA type GUI will appear. Every box is a textbox 
 If you tick transform, this same GUI will be reloaded for you to write tags inside the transform section.
 
 In the bottom, there are boxes for the effect, actor and text. While these are for giving you information of current state of template line, you can edit it manually and it will be saved.
+
+## Rotated Gradient
+
+**_Not Available in Dependency Control_**
+
+![image](./assets/rotated-gradient.png)
+
+![image](./assets/rotated-gradient-gui.png)
+
+This script allows you to create a gradient at an angle using clips. Traditionally, to create a rotated gradient, you'd have to create a small strip of shapes. However this script allows you to use clips which has many advantages one of which is simply being able to edit text. It's not perfect but works in the cases I've tried.
+
+Instead of trying to explain with words, here's a video showcasing the usage of the script. The same can be applied for any angle or rotated text.
+
+<details>
+  <summary>Click here to see the example</summary>
+  
+</details>
+
+One word of caution: If your text has border and shadow, you must split the lines into layers with and without border (I hope you already do this if you call yourself a typesetter) and then depending on if you want to gradient fill or border and shadow, run the script in that layer. Otherwise, you may see strips in you line. This is not a limitation of this script. This is limitation of ASS rendering.
