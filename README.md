@@ -281,6 +281,8 @@ Instead of trying to explain with words, here's a video showcasing the usage of 
 <details>
   <summary>Click here to see the example</summary>
   
+https://user-images.githubusercontent.com/65547311/180961066-708b636b-60e3-450c-bb42-395cfcda7298.mp4
+
 </details>
 
 One word of caution: If your text has border and shadow, you must split the lines into layers with and without border (I hope you already do this if you call yourself a typesetter) and then depending on if you want to gradient fill or border and shadow, run the script in that layer. Otherwise, you may see strips in you line. This is not a limitation of this script. This is limitation of ASS rendering.
