@@ -2,7 +2,7 @@ export script_name = "Rotate Gradient"
 export script_description = "Create rotated gradient with clip."
 export script_author = "PhosCity"
 export script_namespace = "phos.RotateGradient"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 -- How to use: https://github.com/PhosCity/Aegisub-Scripts/#rotated-gradient
 DependencyControl = require "l0.DependencyControl"
@@ -20,7 +20,7 @@ depctrl = DependencyControl{
 Functional, SubInspector = depctrl\requireModules!
 import list, util from Functional
 
-debug = true
+debug = false
 
 -- tag list, grouped by dialog layout
 tags_grouped = {
