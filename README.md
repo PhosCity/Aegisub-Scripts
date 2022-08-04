@@ -10,6 +10,7 @@
 1. [QC Report](#qc-report)
 1. [KFX](#kfx)
 1. [Rotated Gradient](#rotated-gradient)
+1. [Extrapolate Tracking](#extrapolate-tracking)
 
 ## Bidirectional Snapping
 
@@ -286,3 +287,26 @@ https://user-images.githubusercontent.com/65547311/180961066-708b636b-60e3-450c-
 </details>
 
 One word of caution: If your text has border and shadow, you must split the lines into layers with and without border (I hope you already do this if you call yourself a typesetter) and then depending on if you want to gradient fill or border and shadow, run the script in that layer. Otherwise, you may see strips in you line. This is not a limitation of this script. This is limitation of ASS rendering.
+
+## Extrapolate Tracking
+
+**_Not Available in Dependency Control_**
+
+When you're motion-tracking a sign and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines. There is a similar function in 'Significance' script by unanimated but it only extrapolates scaling and position. This script goes a little beyond and extrapolates the following tags.
+
+![image](./assets/extrapolate.png)
+
+On top of that, it also supports extrapolating only tags selected by the user.
+
+**Steps:**
+
+- If you already have badly tracked lines in Aegisub, mark those lines with 'x' in Effect.
+- Instead if you only have correctly tracked lines in Aegisub, write 'x,n' in the first of last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
+
+- Select the lines you marked plus frames before or after it. How many frames you select depends on how "linear" the tracking is. With perfectly linear tracking, you can select all the tracked lines to get more accurate extrapolation. If there seems to be a little bit of an acceleration, use only about 5 reference frames.
+
+**Requirements:**
+
+- All selected lines must be 1 frame long.
+- Selection must be consecutive and sorted by time.
+- If lines are split in layers, run the script separately for each layer.
