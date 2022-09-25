@@ -2,7 +2,7 @@ export script_name = "Extrapolate Tracking"
 export script_description = "Extrapolate the tag values where mocha can't reach"
 export script_author = "PhosCity"
 export script_namespace = "phos.ExtrapolateTracking"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
@@ -35,6 +35,7 @@ round = (num, numDecimalPlaces) ->
 main = (subs, sel) ->
   -- Initiate some variables
   tagValue, unextrapolatableTags, commonDifference, add_lines = {}, {}, {}, false
+  noOfProcessedLines = #sel
   tagsList =  {
     "blur", "be", "bord", "xbord", "ybord",
     "shad", "xshad", "yshad",
@@ -60,6 +61,11 @@ You can also mark the first or last line with 'x,n' so that the script will add 
   if e1 =='x' and e2 =='x' or e1\match(marker) and e2\match(marker) or e1 == "x" and e2\match(marker) or e1\match(marker) and e2 == "x"
     logg "You can only either extrapolate the beginning or end at any given time."
 
+  if e1\match(marker) or e2\match(marker)
+    add_lines = true
+  else
+    for i in *sel
+      noOfProcessedLines -= 1 if subs[i].effect == "x"
   add_lines = true if e1\match(marker) or e2\match(marker)
   fadein = true if e1\match(marker) or e1 == "x"
   sel = list.reverse sel if fadein
@@ -122,15 +128,15 @@ You can also mark the first or last line with 'x,n' so that the script will add 
     if tag == "pos" or tag == "org"
       x_start, y_start = tagValue[tag]["start"]\match("%((.-),(.-)%)")
       x_end, y_end = tagValue[tag]["end"]\match("%((.-),(.-)%)")
-      x_common = (x_end - x_start) / (#sel - 1)
-      y_common = (y_end - y_start) / (#sel - 1)
+      x_common = (x_end - x_start) / (noOfProcessedLines - 1)
+      y_common = (y_end - y_start) / (noOfProcessedLines - 1)
       commonDifference[tag] = "(#{x_common},#{y_common})"
     elseif tag == "alpha" or tag == "1a" or tag == "3a" or tag == "4a"
       alpha_start = alpha_hex2number tagValue[tag]["start"]
       alpha_end = alpha_hex2number tagValue[tag]["end"]
-      commonDifference[tag] = (alpha_end - alpha_start) / (#sel - 1)
+      commonDifference[tag] = (alpha_end - alpha_start) / (noOfProcessedLines - 1)
     else
-      commonDifference[tag] = (tagValue[tag]["end"] - tagValue[tag]["start"]) / (#sel - 1)
+      commonDifference[tag] = (tagValue[tag]["end"] - tagValue[tag]["start"]) / (noOfProcessedLines - 1)
 
   -- Create a dialog with extrapolable tags.
   dlg = {{x: 0, y: 0, class: "checkbox", label: "All Tags", width: 1, height: 1, name: "all", value: true}}
