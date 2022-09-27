@@ -2,7 +2,7 @@ export script_name = "Edit tags"
 export script_description = "Edit tags of current lines"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "1.1.0"
+export script_version = "1.1.1"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
@@ -198,13 +198,13 @@ edittags = (subs, sel) ->
     { x: 1, y: 2, class: "color",      name: "3cvalue",                       value: tagValue["3c"]                             },
     { x: 0, y: 3, class: "checkbox",   name: "4c",        label: "Shado&w:",  value: table_contains(tagOrder, "4c")             },
     { x: 1, y: 3, class: "color",      name: "4cvalue",                       value: tagValue["4c"]                             },
-		{ x: 0, y: 4, class: "checkbox",   name: "b",         label: "Bold",      value: table_contains(tagOrder, "b")              },
+    { x: 0, y: 4, class: "checkbox",   name: "b",         label: "Bold",      value: table_contains(tagOrder, "b")              },
     { x: 1, y: 4, class: "floatedit",  name: "bvalue",                        value: tagValue["b"],                             },
-		{ x: 0, y: 5, class: "checkbox",   name: "i",         label: "Italic",    value: table_contains(tagOrder, "i")              },
+    { x: 0, y: 5, class: "checkbox",   name: "i",         label: "Italic",    value: table_contains(tagOrder, "i")              },
     { x: 1, y: 5, class: "dropdown",   name: "ivalue",                        value: tagValue["i"],           items: {"0", "1"} },
-		{ x: 0, y: 6, class: "checkbox",   name: "u",         label: "Underline", value: table_contains(tagOrder, "u")              },
+    { x: 0, y: 6, class: "checkbox",   name: "u",         label: "Underline", value: table_contains(tagOrder, "u")              },
     { x: 1, y: 6, class: "dropdown",   name: "uvalue",                        value: tagValue["u"],           items: {"0", "1"} },
-		{ x: 0, y: 7, class: "checkbox",   name: "s",         label: "Strike",    value: table_contains(tagOrder, "s")              },
+    { x: 0, y: 7, class: "checkbox",   name: "s",         label: "Strike",    value: table_contains(tagOrder, "s")              },
     { x: 1, y: 7, class: "dropdown",   name: "svalue",                        value: tagValue["s"],           items: {"0", "1"} },
 
     { x: 2, y: 0, class: "checkbox",   name: "bord",      label: "\\bord",    value: table_contains(tagOrder, "bord")           },
@@ -253,7 +253,7 @@ edittags = (subs, sel) ->
     { x: 9, y: 4, class: "dropdown",   name: "4avalue",                       value: tagValue["4a"],                   items: alfas(tagValue["4a"])         },
     { x: 8, y: 5, class: "checkbox",   name: "an",        label: "\\an",      value:table_contains(tagOrder, "an")                                          },
     { x: 9, y: 5, class: "dropdown",   name: "anvalue",                       value: tagValue["an"],                   items: [i for i=1, 9]                },
-		{ x: 8, y: 6, class: "checkbox",   name: "q",         label: "\\&q",      value: table_contains(tagOrder, "q")                                          },
+    { x: 8, y: 6, class: "checkbox",   name: "q",         label: "\\&q",      value: table_contains(tagOrder, "q")                                          },
     { x: 9, y: 6, class: "dropdown",   name: "qvalue",                        value: tagValue["q"],                    items: { "0", "1", "2", "3" }        },
     { x: 8, y: 7, class: "checkbox",   name: "p",         label: "\\p",       value: table_contains(tagOrder, "p")                                          },
     { x: 9, y: 7, class: "floatedit",  name: "pvalue",                        value: tagValue["p"],                                                         },
