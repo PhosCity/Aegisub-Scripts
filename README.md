@@ -184,13 +184,13 @@ This button is only available to you if there are transforms in your selection. 
 
 The main idea is that it presents the tags and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It separates start tags, inline tags and transforms in different sections for easy editing.
 
-When you run the script on this line, following gui is generated:
+When you run the script on a line, following gui is generated:
 
 ![image](./assets/edittags1.png)
 
-As you can see the gui looks very much like HYDRA. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the gui but you can also tick any tags of the gui to add that tag to the line. The order of your tags are respected.
+As you can see the gui looks very much like HYDRA. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means that if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the gui but you can also tick any tags of the gui to add that tag to the line. You can also untick any tag to remove them from the line. The order of your tags are respected.
 
-While I did not plan to add an option to modify tags in multiple lines, I added an option nonetheless. It's usefulness is highly doubtful. I took inspiration from unanimated's Modifire. In short, if you select multiple lines and run the script, following gui will be shown which shows tags in all the selected lines without duplication. It's essentially find and replace for tags i.e. if you change the value of the tag in the gui, all the instances of that said tag will be modified.
+While I did not plan to add an option to modify tags in multiple lines, for the sake of completion, I added one nonetheless. It's usefulness is highly doubtful. I took inspiration from unanimated's Modifire. In short, if you select multiple lines and run the script, following gui will be shown which shows tags in all the selected lines without duplication. It's essentially find and replace for tags i.e. if you change the value of the tag in the gui, all the instances of that said tag will be modified. However, the difference is that you can find and replace as many tags as you want all at once.
 
 ![image](./assets/edittags2.png)
 

@@ -2,7 +2,7 @@ export script_name = "Edit tags"
 export script_description = "Edit tags of current lines"
 export script_author = "PhosCity"
 export script_namespace = "phos.edittags"
-export script_version = "1.1.1"
+export script_version = "1.1.2"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
@@ -18,15 +18,14 @@ Functional, Yutils = depctrl\requireModules!
 import list, util, string from Functional
 
 progress = (index, sel_n, title) ->
-  if aegisub.progress.is_cancelled!
-    aegisub.cancel!
-	aegisub.progress.task("Processing line " .. index .. "/" .. sel_n)
-	aegisub.progress.set(100 * index / sel_n)
-	aegisub.progress.title(title)
+  aegisub.cancel! if aegisub.progress.is_cancelled!
+  aegisub.progress.task("Processing line " .. index .. "/" .. sel_n)
+  aegisub.progress.set(100 * index / sel_n)
+  aegisub.progress.title(title)
 
 
 esc = (str) ->
-  return str\gsub("[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1")
+  str\gsub("[%%%(%)%[%]%.%-%+%*%?%^%$]", "%%%1")
 
 
 logg = (msg, exit_with_msg = false) ->
