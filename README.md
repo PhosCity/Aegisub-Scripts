@@ -73,7 +73,7 @@ https://user-images.githubusercontent.com/65547311/179356862-a29a5b9d-9cb3-4cb9-
 
 ### Animate the wave
 
-Again, split the lines into frames first. Then this time put wave speed along with other parameters. The value for wave speed is 1-5 but 1 or 2 might be enough for most cases.
+Again, split the lines into frames first. Then this time put wave speed along with other parameters. The acceptable value for wave speed is 1-5 but 1 or 2 might be enough for most cases. (Thanks to Alendt for this)
 
 <details>
   <summary>Click here to see example wave animation</summary>
