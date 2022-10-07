@@ -43,14 +43,14 @@
 			"description": "Converts a text to a shape and adds wobbling",
 			"channels": {
 				"main": {
-					"version": "2.0.1",
-					"released": "2022-07-17",
+					"version": "2.0.2",
+					"released": "2022-10-07",
 					"default": true,
 					"files": [
 						{
 							"name": ".lua",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "70d593a245c7a7a254d57a99c73bcb78c5f95be8"
+							"sha1": "fca4b034b7c42573112a0098ff798cbf7dd1e21b"
 						}
 					],
 					"requiredModules": [
