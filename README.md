@@ -56,6 +56,8 @@ As you can see below, the top is the original font and everything below it is di
 
 ![image](./assets/wobble-animate.png)
 
+### Animate the distortion
+
 If you want to animate the distortion, first split the line to frames. You can use something like [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to do so. You can control the speed of animation by controlling the number of frames each line has. The more frames per line, the slower the animation. After splitting the line to frames, you need to put the starting value and ending value. I recommend you figure this out beforehand by using main GUI. After you put the starting and ending value for all the required elements, click on `Animate` and the script will handle the rest.
 
 <details>
@@ -67,14 +69,16 @@ https://user-images.githubusercontent.com/65547311/179356862-a29a5b9d-9cb3-4cb9-
 
 </details>
 
-![image](./assets/wobble-oscillate.png)
+![wobble-wave](https://user-images.githubusercontent.com/65547311/194462106-f89fa783-8e11-4498-b4d8-0e22b633ed52.png)
 
-Again, split the lines into frames first. Then, you need to put the middle value. After that you need to put the factor by which the middle value will change. If your middle value if x and factor is y, the minimum value is x - y while the maximum value is x + y. The values will oscillate from minimum value to maximum value. The steps box is the rate by how much the value changes per line.
+### Animate the wave
+
+Again, split the lines into frames first. Then this time put wave speed along with other parameters. The value for wave speed is 1-5 but 1 or 2 might be enough for most cases.
 
 <details>
-  <summary>Click here to see example oscillation</summary>
+  <summary>Click here to see example wave animation</summary>
   
-https://user-images.githubusercontent.com/65547311/179356869-f5294d5a-ea76-455f-9ec0-7749bbb223fd.mp4
+https://user-images.githubusercontent.com/65547311/194462155-1cc8c1c1-d4e2-41f5-84ed-1046d1da2f79.mp4
 
 </details>
 
