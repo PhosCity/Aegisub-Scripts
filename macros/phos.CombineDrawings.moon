@@ -1,7 +1,7 @@
 export script_name = "Combine Drawings"
 export script_description = [[Combine drawings that have same primary color in a selection.
  Maintains positioning and converts scale as well as alignment.]]
-export script_version = "0.1.0"
+export script_version = "0.1.1"
 export script_author = "PhosCity"
 export script_namespace = "l0.CombineDrawings"
 
@@ -56,6 +56,7 @@ combineDrawings = (sub, sel) ->
   count = 1
   for key, value in pairs colorTable
     aegisub.progress.task "Merging lines with color %d out of %d..."\format count, colLength
+    aegisub.progress.set 100*count/colLength
     count += 1
     lineCb = (lines, line, i) ->
       aegisub.cancel! if aegisub.progress.is_cancelled!
@@ -108,7 +109,6 @@ combineDrawings = (sub, sel) ->
           if haveTextSection then data\commit!
           else mergedLines[#mergedLines+1] = line
 
-        aegisub.progress.set 100*i/lineCnt
 
     -- process all selected lines
     lines\runCallback lineCb, true
