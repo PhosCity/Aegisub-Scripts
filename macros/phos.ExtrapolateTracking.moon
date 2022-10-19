@@ -66,7 +66,6 @@ You can also mark the first or last line with 'x,n' so that the script will add 
   else
     for i in *sel
       noOfProcessedLines -= 1 if subs[i].effect == "x"
-  add_lines = true if e1\match(marker) or e2\match(marker)
   fadein = true if e1\match(marker) or e1 == "x"
   sel = list.reverse sel if fadein
 
