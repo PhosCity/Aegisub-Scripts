@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.4"
+export script_version = "1.0.5"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -11,6 +11,7 @@ if haveDepCtrl
     feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/personal/DependencyControl.json",
   })
 require("karaskel")
+re = require("aegisub.re")
 
 -- Check if the line is dialogue or not
 lineIsDialogue = (style) ->
@@ -321,7 +322,7 @@ preprocessing = (subs, sel) ->
       { x: 0, y: 0, class: "label", label: "It appears that video is not loaded so choose the resolution:", width: 10 },
       { x: 0, y: 1, class: "checkbox", label: "1920x1080", name: "207+"},
       { x: 0, y: 2, class: "checkbox", label: "1440x1080", name: "207-"},
-    }, {"OK", "Cancel"}, {"ok": "OK", "Cancel": "Cancel"})
+    }, {"OK", "Cancel"}, {"ok": "OK", "cancel": "Cancel"})
 
     if btn
       if res["207+"]
@@ -517,6 +518,19 @@ transform_color = (subs, sel) ->
         line.text = "{#{chosen_colors}\\t(#{start_left},#{res.start},1,#{style_colors})}#{line.text}"
 
       subs[i] = line
+
+
+japanese = (subs, sel, action) ->
+  for i in *sel
+    line = subs[i]
+    if action == "cleanup"
+      line.text = line.text\gsub("%([^\\}]-%)", "")\gsub("^%s", "")\gsub("^\\N", "")\gsub("・", "")
+      line.text = re.sub(line.text, "（[^）]+）", "")
+    elseif action == "remove_before"
+      line.text = line.text\gsub("^.+\\N", "")
+    elseif action == "remove_after"
+      line.text = line.text\gsub("\\N.+$", "")
+    subs[i] = line
       
 onepace = (subs, sel) ->
   dlg = {
@@ -533,6 +547,10 @@ onepace = (subs, sel) ->
     { x: 0, y: 4, class: "checkbox", name: "attack", label: "Attack", hint: "Apply fade to attacks", },
     { x: 1, y: 4, class: "checkbox", name: "fixerrors", label: "Fix common errors", hint: "Perform final checks in the script", },
     { x: 2, y: 4, class: "checkbox", name: "musicnote", label: "Music Note", hint: "Add music note to characters singing songs", },
+    { x: 0, y: 5, class: "label", label: "Japanese Subs:" },
+    { x: 0, y: 6, class: "checkbox", name: "jpn_cleanup", label: "Cleanup", hint: "Removes extraneous stuff in japanese subs", },
+    { x: 1, y: 6, class: "checkbox", name: "jpn_remove_before", label: "Remove before linebreaker", hint: "Remove text before line breaker", },
+    { x: 2, y: 6, class: "checkbox", name: "jpn_remove_after", label: "Remove after linebreaker", hint: "Remove text after line breaker", },
   }
   buttons = { "Apply", "Apply All", "Cancel" }
   btn, res = aegisub.dialog.display(dlg, buttons)
@@ -553,6 +571,9 @@ onepace = (subs, sel) ->
       fixErrors subs, sel if res.fixerrors
       music_note subs, sel if res.musicnote
       transform_color subs, sel if res.fadetocolor
+      japanese subs, sel, "cleanup" if res.jpn_cleanup
+      japanese subs, sel, "remove_before" if res.jpn_remove_before
+      japanese subs, sel, "remove_after" if res.jpn_remove_after
 
 if haveDepCtrl
   depctrl\registerMacro(onepace)
