@@ -2,7 +2,7 @@
 script_name = "Wobble text"
 script_description = "Converts a text to a shape and adds wobbling."
 script_author = "PhosCity"
-script_version = "2.0.2"
+script_version = "2.0.3"
 script_namespace = "phos.wobble"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -279,8 +279,8 @@ local function load_macro(subs, sel)
 		save_values(config_template, config)
 		main(subs, sel, config)
 	elseif ok == "Animate" then
-		config.waving_speed = 0
 		ok2, config = aegisub.dialog.display(animate_template, { "Animate", "Cancel" }, { ["cancel"] = "Cancel" })
+		config.waving_speed = 0
 		if ok2 then
 			save_values(animate_template, config)
 			animate(subs, sel, config)
