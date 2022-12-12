@@ -121,6 +121,31 @@
 					"Initial Release"
 				]
 			}
+		},
+		"phos.changeAlignment": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Change Alignment",
+			"description": "Change alignment of line without changing it's appearance.",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2022-07-19",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "ae69981e96871ae221c95a71ec9edb4ba0792f9f"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
 		}
 	}
 }
