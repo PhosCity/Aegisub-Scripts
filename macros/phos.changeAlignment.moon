@@ -1,6 +1,6 @@
 export script_name = "Change Alignment"
 export script_description = "Change alignment of line without changing it's appearance."
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.changeAlignment"
 
