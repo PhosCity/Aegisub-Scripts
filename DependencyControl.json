@@ -129,14 +129,14 @@
 			"description": "Change alignment of line without changing it's appearance.",
 			"channels": {
 				"main": {
-					"version": "1.0.0",
+					"version": "1.0.2",
 					"released": "2022-12-12",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "f938262c54f248a26237dfdc3f8ee5b58801fdc7"
+							"sha1": "de4cf16aa9ee53bc799aabc4b6edefb021e751d4"
 						}
 					],
 					"requiredModules": [
