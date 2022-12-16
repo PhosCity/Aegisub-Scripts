@@ -11,6 +11,7 @@
 1. [KFX](#kfx)
 1. [Rotated Gradient](#rotated-gradient)
 1. [Extrapolate Tracking](#extrapolate-tracking)
+1. [Add Grain](#add-grain)
 
 ## Bidirectional Snapping
 
@@ -304,3 +305,22 @@ On top of that, it also supports extrapolating only tags selected by the user.
 - All selected lines must be 1 frame long.
 - Selection must be consecutive and sorted by time.
 - If lines are split in layers, run the script separately for each layer.
+
+## Add Grain
+
+**_Not Available in Dependency Control_**
+
+This is the script that allows you to add static and dynamic grain to your sign. This script is based on [this guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>).
+
+**Static Grain:**
+
+- First cover your sign with "!". It's easier to do if you use `\an7`. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need.
+![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
+
+- Run the script. There are only two options. One is to add simple grain. Another one is to add a bit denser grain as explained in the guide.
+
+**Dynamic Grain:**
+
+- Add "!" as usual.
+- Use your favorite line2fbf script to convert line2fbf. In some cases you can go further and check if the anime is animated on twos or threes and use [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to split line in `n` frames accordingly.
+- Run the script and you have a dynamic grain.
