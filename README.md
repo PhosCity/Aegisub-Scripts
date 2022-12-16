@@ -314,7 +314,7 @@ This is the script that allows you to add static and dynamic grain to your sign.
 
 **Static Grain:**
 
-- First cover your sign with "!". It's easier to do if you use `\an7`. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need. The script will convert "!" to randommized character.
+- First cover your sign with "!". It's easier to do if you use `\an7` and break the line using "\N" when it goes over the sign. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need. The script will convert "!" to randomized character.
 ![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
 
 - Run the script. There are only two options. One is to add simple grain. Another one is to add a bit denser grain as explained in the guide.
