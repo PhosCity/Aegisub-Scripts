@@ -162,6 +162,57 @@
 					"Initial Release"
 				]
 			}
+		},
+		"phos.AddGrain": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Add Grain",
+			"description": "Add static and dynamic grain",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2022-12-12",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "de4cf16aa9ee53bc799aabc4b6edefb021e751d4"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "a-mo.LineCollection",
+							"name": "Aegisub-Motion (LineCollection)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.3.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "a-mo.Line",
+							"name": "Aegisub-Motion (Line)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.5.3",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.ASSFoundation",
+							"name": "ASSFoundation",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.5.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "Yutils"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				]
+			}
 		}
 	}
 }

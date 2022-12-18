@@ -1,12 +1,12 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "0.0.1"
+export script_version = "1.0.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
-  -- feed: "",
+  feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
   {
     {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
@@ -45,6 +45,7 @@ main = (mode) ->
     lines = LineCollection sub, sel
     return if #lines.lines == 0
 
+    linesAdded = 1
     lines\runCallback (lines, line, i) ->
       data = ASS\parse line
 
@@ -69,19 +70,14 @@ main = (mode) ->
       -- Pure black layer
       newLine = Line line, lines
       newdata = data\copy!
-      newdata\callback ((section) ->
-        section\replace ".", (character) ->
-          if character != "\\" and character != "N"     -- Trying to not convert "\N" to random character
-            randomize!
-          else
-            character
-      ), ASS.Section.Text
+      newdata\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
       newdata\replaceTags {ASS\createTag 'color1', 0, 0, 0}
       if mode == "dense"
         newdata\replaceTags {ASS\createTag 'color3', 0, 0, 0}
         newdata\replaceTags {ASS\createTag 'color4', 0, 0, 0}
       newdata\commit!
-      lines\addLine newLine, nil, true, line.number + 1
+      lines\addLine newLine, nil, true, line.number + linesAdded
+      linesAdded += 1
     lines\replaceLines!
     lines\insertLines!
 
