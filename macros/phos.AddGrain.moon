@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -29,9 +29,8 @@ grainIsInstalled = ->
 
 
 randomize = ->
-  character = string.char math.random 65, 90
-  character = character\lower! if math.random! < math.random!
-  character
+  tbl = [ x for x = 65, 122 when x < 91 or x > 96 ]     -- A-Za-z
+  string.char tbl[math.random(1, #tbl)]
 
 
 main = (mode) ->
