@@ -2,7 +2,7 @@
 script_name = "Wave"
 script_description = "Make the string wavy"
 script_author = "PhosCity"
-script_version = "1.0.2"
+script_version = "1.0.3"
 script_namespace = "phos.wave"
 
 local haveDepCtrl, DependencyControl, depRec = pcall(require, "l0.DependencyControl")
@@ -107,11 +107,11 @@ local function load_macro(subs, sel)
 	--GUI
 	local GUI = {
 		{ x = 0, y = 0, class = "label", label = "fscx strength: ", hint = "fscx strength" },
-		{ x = 1, y = 0, class = "intedit", name = "fscx", value = "2", hint = "fscx strength" },
+		{ x = 1, y = 0, class = "floatedit", name = "fscx", value = "2", hint = "fscx strength" },
 		{ x = 0, y = 1, class = "label", label = "fscy strength: ", hint = "fscy strength" },
-		{ x = 1, y = 1, class = "intedit", name = "fscy", value = "2", hint = "fscy strength" },
+		{ x = 1, y = 1, class = "floatedit", name = "fscy", value = "2", hint = "fscy strength" },
 		{ x = 0, y = 2, class = "label", label = "fsp strength: ", hint = "fsp strength" },
-		{ x = 1, y = 2, class = "intedit", name = "fsp", value = "2", hint = "fsp strength" },
+		{ x = 1, y = 2, class = "floatedit", name = "fsp", value = "2", hint = "fsp strength" },
 		{
 			x = 0,
 			y = 3,
