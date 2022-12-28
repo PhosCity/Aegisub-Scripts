@@ -308,7 +308,7 @@ On top of that, it also supports extrapolating only tags selected by the user.
 
 ## Add Grain
 
-**_Not Available in Dependency Control_**
+**_Available in Dependency Control_**
 
 This is the script that allows you to add static and dynamic grain to your sign. This script is based on [this guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>).
 
