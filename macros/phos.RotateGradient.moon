@@ -4,54 +4,43 @@ export script_author = "PhosCity"
 export script_namespace = "phos.RotateGradient"
 export script_version = "1.0.1"
 
--- How to use: https://github.com/PhosCity/Aegisub-Scripts/#rotated-gradient
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
   feed: "",
   {
+    {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
+      feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
+    {"a-mo.Line", version: "1.5.3", url: "https://github.com/TypesettingTools/Aegisub-Motion",
+      feed: "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
+    {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
+      feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
     {"l0.Functional", version: "0.3.0", url: "https://github.com/TypesettingTools/Functional",
      feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
-    {"SubInspector.Inspector", version: "0.6.0", url: "https://github.com/TypesettingTools/SubInspector",
-    feed: "https://raw.githubusercontent.com/TypesettingTools/SubInspector/master/DependencyControl.json",
-    optional: true},
-    "karaskel",
   }
 }
-Functional, SubInspector = depctrl\requireModules!
-import list, util from Functional
+LineCollection, Line, ASS, Functional = depctrl\requireModules!
+{ :list, :util } = Functional
+logger = depctrl\getLogger!
 
-debug = false
-
--- tag list, grouped by dialog layout
 tags_grouped = {
-    {"c", "3c", "4c"},
+    {"1c", "3c", "4c"},
     {"alpha", "1a", "2a", "3a", "4a"},
     {"bord", "xbord", "ybord"},
     {"shad", "xshad", "yshad"},
     {"blur", "be"},
 }
 tags_flat = list.join unpack tags_grouped
+-- Generate a key, value pair of tag's override name and assf tag names
+tagMap = {item, (ASS\getTagNames "\\#{item}")[1] for item in *tags_flat}
 
--- If the line does not have a tag in line, it either takes the style value or the default value as assigned below
-default_tag_value = {
-	c: "style", "3c": "style", "4c": "style",
-  alpha: "&H00&", "1a": "style", "2a": "style", "3a": "style", "4a": "style",
-	bord: "style", shad: "style",
-  xbord: 0, ybord:  0, xshad: 0, yshad: 0,
-	blur: 0, be: 0,
-  }
 
--- Dialog Creator (Nicked from Gradient Everything)
-create_dialog = () ->
+create_dialog = ->
   dlg = {
-    -- define pixels per strip
     { x: 0, y: 0, width: 2, height: 1, class: "label", label:"Pixels per strip: "},
     { x: 2, y: 0, width: 2, height: 1, class: "intedit", name: "strip", min: 1, value: 1, step: 1 },
-    -- Acceleration
     { x: 0, y: 6, width: 2, height: 1, class: "label", label: "Acceleration: " },
     { x: 2, y: 6, width: 2, height: 1, class:"floatedit", name: "accel", value: 1, hint: "1 means no acceleration, >1 starts slow and ends fast, <1 starts fast and ends slow" },
   }
-  -- generate tag checkboxes
   for y, group in ipairs tags_grouped
     dlg[#dlg+1] = { name: tag, class: "checkbox", x: x-1, y: y, width: 1, height: 1, label: "\\#{tag}", value: false } for x, tag in ipairs group
 
@@ -59,32 +48,52 @@ create_dialog = () ->
   return res if btn else aegisub.cancel!
 
 
--- Round a number to specified number of decimal places
-round = (num, numDecimalPlaces) ->
-  mult = 10^(numDecimalPlaces or 0)
-  rnd = math.floor(num * mult + 0.5) / mult
-  return rnd
+-- Gets clip, tag values, bounding box etc that are required for further processing
+prepare_line = (sub, sel, res) ->
+  lines = LineCollection sub, sel
+  aegisub.cancel! if #lines.lines < 2
+  hasClip, clip, tagState, text, bound = false, {}, {}
+  lines\runCallback ((lines, line, i) ->
+    aegisub.cancel! if aegisub.progress.is_cancelled!
+    data = ASS\parse line
+    -- Collect text of the line
+    currText = ""
+    data\callback ((section) -> currText ..= section\getString!), ASS.Section.Text
 
+    -- Collect bounding box of the line
+    currBound = data\getLineBounds!
+    
+    -- Check if bounding box and text of selected lines differ. They should not.
+    if i == 1
+      text, bound = currText, currBound
+    else
+      logger\assert text == currText, "You must select the lines that have same text."
+      -- logger\assert bound.w == currBound.w and bound.h == currBound.h, "The selected lines have differing width and height."
 
--- Show debug messages
-debug_msg = (msg) ->
-  aegisub.log msg.."\n"	if debug
+    -- Collect the tag that must be gradiented
+    effTags = (data\getEffectiveTags -1, true, true, false).tags
+    for tag in *tags_flat
+      tagState[i] or= {}
+      tagState[i][tag] = effTags[tagMap[tag]] if res[tag]
 
-
--- The script runs only if 2 lines are selected
--- TODO: Maybe in the future, the script will support multi-stop gradient and this becomes unnecessary
-validate = (sub, sel) -> #sel==2
-
-
--- Check if a table contains an item
-table_contains = (tbl, x) ->
-	for item in *tbl
-		return true if item == x
-	return false
+    -- Collect vectorial clip from the line
+    clipTable = data\getTags "clip_vect"
+    if #clipTable != 0 and not hasClip
+      hasClip = true
+      for index, cnt in ipairs clipTable[1].contours[1].commands          -- Is this the best way to loop through co-ordinate?
+        break if index == 4
+        if cnt.name == "m" or "l"     -- No bezier allowed
+          x, y = cnt\get!
+          table.insert clip, x
+          table.insert clip, y
+  ), true
+  logger\assert hasClip, "No clip found in the selected lines."
+  return clip, tagState, bound
 
 
 -- For 3 points, determine the point of intersection of line passing through first 2 points and a line perpendicular to it passing through 3rd point
-intersect_perpendicular = (x1, y1, x2, y2, x3, y3) ->
+intersect_perpendicular = (clip) ->
+  x1, y1, x2, y2, x3, y3 = unpack clip
   k = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) / ((x2 - x1)^2 + (y2 - y1)^2)
   x = x1 + k * (x2 - x1)
   y = y1 + k * (y2 - y1)
@@ -93,7 +102,6 @@ intersect_perpendicular = (x1, y1, x2, y2, x3, y3) ->
 
 -- Divides a line between 2 points in equal interval (user defined pixels in this case)
 divide = (x1, y1, x2, y2, pixel)->
-  pixel = 1 unless pixel
   distance = math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
   no_of_section = math.ceil(distance / pixel)
   points = {}
@@ -107,194 +115,98 @@ divide = (x1, y1, x2, y2, pixel)->
   return points
 
 
--- For the particular tag, get the value of that tag either from the style, inline tags or default value
-tag_lookup = (subs, line, tag) ->
-  meta, styles = karaskel.collect_head(subs, false)
-  karaskel.preproc_line(subs, meta, styles, line)
-  tag_value = line.text\match "\\#{tag}([^\\}]+)"
-  tag_value = line.text\match "\\c(&H%x+&)" if tag == "c"     -- \\c interferes with \\clip
-  if not tag_value
-    if default_tag_value[tag] == "style"
-      tag_value = switch tag
-        when "c" then util.color_from_style(line.styleref.color1)
-        when "3c" then util.color_from_style(line.styleref.color3)
-        when "4c" then util.color_from_style(line.styleref.color4)
-        when "1a" then util.alpha_from_style(line.styleref.color1)
-        when "3a" then util.alpha_from_style(line.styleref.color3)
-        when "4a" then util.alpha_from_style(line.styleref.color4)
-        when "bord" then line.styleref.outline
-        when "shad" then line.styleref.shadow
-    else
-      tag_value = default_tag_value[tag]
-  return tag_value
-
-
--- Gets clip, tag values etc that are required for further processing
-prepare_line = (subs, sel, res) ->
-  text, tag_state = nil, {}
-  for index, item in ipairs sel
-    line = subs[item]
-    stripped_text = line.text\gsub "{\\[^}]+}", ""
-    if index == 1
-      text = stripped_text
-      for tag in *tags_flat
-        if res[tag]
-          tag_state["start"] or= {}
-          tag_state["start"][tag] = tag_lookup(subs, line, tag)
-    elseif index == 2
-      if text != stripped_text
-        aegisub.log "You have selected lines that does not have same text. Exiting."
-        aegisub.cancel!
-      for tag in *tags_flat
-        if res[tag]
-          tag_state["end"] or= {}
-          tag_state["end"][tag] = tag_lookup(subs, line, tag)
-      if line.text\match "\\clip%(m [%d%.%-]+ [%d%.%-]+ l [%d%.%-]+ [%d%.%-]+ [%d%.%-]+ [%d%.%-]+%)"
-        x1, y1, x2, y2, x3, y3 = line.text\match "\\clip%(m ([%d%.%-]+) ([%d%.%-]+) l ([%d%.%-]+) ([%d%.%-]+) ([%d%.%-]+) ([%d%.%-]+)%)"
-        return x1, y1, x2, y2, x3, y3, tag_state
-
-  aegisub.log "No clip found in the seleceted lines. Exiting"
-  aegisub.cancel!
-
-
--- This is used at first to determine the boudning box of the original text
--- and then later to find invisible lines due to adding rotated clips.
--- It amounts to most of the slowness of the script and probably is not how you should use SubInspector
-bounding_box = (subs, line) ->
-  lines = {}
-  lines[1] = line
-  assi, _ = SubInspector subs
-  bounds, times = assi\getBounds lines
-  bounding, invisible = {}, true
-  for i = 1, #times
-    b = bounds[i]
-    if b != false
-      bounding["left"] = b.x - 3
-      bounding["right"] = b.w + b.x + 3
-      bounding["top"] = b.y - 3
-      bounding["bottom"] = b.y + b.h + 3
-      invisible = false
-  return bounding, invisible
-
-
--- Determines the left and right point of a clip for each division of line
-clipCreator = (points, bounds, slope) ->
-  x_left = bounds["left"]
-  x_right = bounds["right"]
+-- Determine the clip for each interval
+--  (x1, y1)  ---------------------- (x2,y2)
+--           |                     |
+--  (x1, y4) ----------------------  (x2,y3)
+clipCreator = (points, bounds, slope, gradientDirection) ->
+  x1, x2 =  bounds[1].x, bounds[2].x
+  m = ASS.Draw.Move
+  l = ASS.Draw.Line
   clip = {}
-  for i = 0, #points
-    intercept = points[i]["y"] - slope * points[i]["x"]
-    y_left = slope * x_left + intercept
-    y_right = slope * x_right + intercept
-    clip[i] = clip[i] or {}
-    clip[i]["x_left"] = round(x_left, 3)
-    clip[i]["x_right"] = round(x_right, 3)
-    clip[i]["y_left"] = round(y_left, 3)
-    clip[i]["y_right"] = round(y_right, 3)
+  for i = 1, #points
+    prevIntercept = points[i-1]["y"] - slope * points[i-1]["x"]
+    y1 = slope * x1 + prevIntercept
+    y2 = slope * x2 + prevIntercept
+    currIntercept = points[i]["y"] - slope * points[i]["x"]
+    y4 = slope * x1 + currIntercept
+    y3 = slope * x2 + currIntercept
+
+    -- Create overlap in the clip
+    if gradientDirection == "up"
+      y3 -= 0.75
+      y4 -= 0.75
+    elseif gradientDirection == "down"
+      y1 -= 0.75
+      y2 -= 0.75
+
+    clip[i] = ASS\createTag "clip_vect", {m(x1, y1), l(x2, y2), l(x2, y3), l(x1, y4)}
   return clip
 
 
--- Actual gradienting happens here. It removes all the lines where clip outside the line causes it to be invisible and then gradients the tags
-tagGradient = (subs, new_sel, tagState, res) ->
-  invisible_line_to_delete = {}
-  for index, item in ipairs new_sel
-    _, invisible = bounding_box(subs, subs[item])
-    if invisible
-      table.insert(invisible_line_to_delete, item)
-  count = 0
-  for i in *new_sel
-    continue if table_contains(invisible_line_to_delete, i)
-    line = subs[i]
-    count += 1
-    factor = (count - 1) ^ res.accel / (#new_sel - #invisible_line_to_delete - 1) ^ res.accel
-    start_tag = line.text\match "^{\\[^}]+}"
-    text = line.text\gsub "^{\\[^}]+}", ""
-    for tag in *tags_flat
-      if res[tag]
-        start_tag = start_tag\gsub("\\#{tag}[^\\}]+", "") unless tag == "c"
-        start_tag = start_tag\gsub("\\c&H%x+&", "") if tag == "c"
-        local new_value
-        if tag == "c" or tag =="3c" or tag =="4c"
-          new_value = util.interpolate_color(factor, tagState["start"][tag], tagState["end"][tag])
-        elseif tag == "alpha" or tag == "1a" or tag == "3a" or tag =="4a"
-          new_value = util.interpolate_alpha(factor, tagState["start"][tag], tagState["end"][tag])
-        else
-          new_value = util.interpolate(factor, tagState["start"][tag], tagState["end"][tag])
-          new_value = round(new_value, 3)
-        start_tag = start_tag\gsub("}", "\\#{tag}#{new_value}}")
-    line.text = start_tag..text
-    subs[i] = line
-  subs.delete(invisible_line_to_delete)
+-- If any clip falls outside the text or shape, it'll skew the gradient. So remove them.
+removeInvisibleClip = (lines, klip) ->
+  newClip = {}
+  for i = 1, #klip
+    newLine = Line lines[1], lines
+    data = ASS\parse newLine
+    data\replaceTags klip[i]
+    bound = data\getLineBounds!
+    if bound.h != 0
+      data\commit!
+      table.insert newClip, klip[i]
+  return newClip
 
 
--- Adds the rotated clips to the line
-addClip = (subs, sel, og_line, klip, gradientDirection, points) ->
-  new_sel = {}
-  for i = 1, #points
-    -- Determine four corners of the clip
-    top_left_x = klip[i-1]["x_left"]
-    top_left_y = klip[i-1]["y_left"]
-    top_right_x = klip[i-1]["x_right"]
-    top_right_y = klip[i-1]["y_right"]
-    bottom_left_x = klip[i]["x_left"]
-    bottom_left_y = klip[i]["y_left"]
-    bottom_right_x = klip[i]["x_right"]
-    bottom_right_y = klip[i]["y_right"]
-
-    -- Create overlap in the clip
-    if gradientDirection == "up"          -- 3rd point up
-      bottom_left_y -= 0.75
-      bottom_right_y -= 0.75
-    elseif gradientDirection == "down"    --3rd point down
-      top_left_y -= 0.75
-      top_right_y -= 0.75
-
-    -- Add clip to the line
-    line = og_line
-    clip = "\\clip(m #{top_left_x} #{top_left_y} l #{top_right_x} #{top_right_y} #{bottom_right_x} #{bottom_right_y} #{bottom_left_x} #{bottom_left_y})"
-    tags = line.text\match "^{\\[^}]+}"
-    text = line.text\gsub "^{\\[^}]+}", ""
-    tags = "{}" unless tags
-    tags = tags\gsub("\\i?clip%([^)]*%)", "")\gsub("}", "#{clip}}")
-    line.text = tags..text
-    line.comment = false
-    new_index = sel[#sel]+i
-    subs.insert(new_index, line)
-    table.insert(new_sel, new_index)
-  return new_sel
-
-
--- Main function
-main = (subs, sel) ->
+main = (sub, sel) ->
   res = create_dialog!
-  bounding, _ = bounding_box(subs, subs[sel[1]])
-  x1, y1, x2, y2, x3, y3, tagState = prepare_line(subs, sel, res)
-  debug_msg("x1 : "..x1)
-  debug_msg("y1 : "..y1)
-  debug_msg("x2 : "..x2)
-  debug_msg("y2 : "..y2)
-  debug_msg("x3 : "..x3)
-  debug_msg("y3 : "..y3)
-
-  x, y = intersect_perpendicular(x1, y1, x2, y2, x3, y3)
-  local gradientDirection
-  if tonumber(y) < tonumber(y3)
-    gradientDirection = "down"
-  else
-    gradientDirection = "up"
-  debug_msg("Gradeint Direction: "..gradientDirection)
+  clip, tagState, bounds = prepare_line sub, sel, res
+  x, y = intersect_perpendicular(clip)
+  x1, y1, x2, y2, x3, y3 = unpack clip
+  gradientDirection = "down"
+  gradientDirection = "up" if tonumber(y) > tonumber(y3)
   points = divide(x, y, x3, y3 , res.strip)
-
   slope = (y2-y1)/(x2-x1)
-  klip = clipCreator(points, bounding, slope)
-  og_line= {}
-  for index, i in ipairs sel
-    line = subs[i]
-    og_line = line if index == 1
-    line.comment = true
-    subs[i] = line
+  klip = clipCreator(points, bounds, slope, gradientDirection)
 
-  new_sel = addClip(subs, sel, og_line, klip, gradientDirection, points)
-  tagGradient(subs, new_sel, tagState, res)
+  lines = LineCollection sub, sel
+  klip = removeInvisibleClip lines, klip
 
-depctrl\registerMacro(main, validate)
+  frames_per, prev_end_frame = {}, 0
+  avg_frame_cnt = #klip/(#lines.lines-1)
+  for i = 1, #lines.lines-1
+    curr_end_frame = math.ceil i*avg_frame_cnt
+    frames_per[i] = curr_end_frame - prev_end_frame
+    prev_end_frame = curr_end_frame
+  toDelete={}
+  count = 1
+  lines\runCallback ((lines, line, i) ->
+    aegisub.cancel! if aegisub.progress.is_cancelled!
+    if i != 1
+      first_line = tagState[i-1]
+      last_line = tagState[i]
+      for j = 1, frames_per[i-1]
+        factor = frames_per[i-1] < 2 and 1 or (j-1)^res.accel/(frames_per[i-1]-1)^res.accel
+        newLine = Line line, lines
+        newData = ASS\parse newLine
+        newData\replaceTags klip[count]
+        count += 1
+        for tag in *tags_flat
+          if res[tag]
+            local finalValue
+            if tag == "1c" or tag == "3c" or tag =="4c"          -- TODO: If line0 has accepted my PR, color lerping can be reduced to a one liner
+              finalValue = first_line[tag]\copy!
+              b1, g1, r1 = first_line[tag]\getTagParams!
+              b2, g2, r2 = last_line[tag]\getTagParams!
+              finalValue.r.value, finalValue.g.value, finalValue.b.value  = util.extract_color(util.interpolate_color factor, util.ass_color(r1, g1, b1), util.ass_color(r2, g2, b2))
+            else
+              finalValue = first_line[tag]\lerp last_line[tag], factor
+            newData\replaceTags finalValue
+        newData\commit!
+        lines\addLine newLine
+    toDelete[#toDelete+1] = line
+  ), true
+  lines\insertLines!
+  lines\deleteLines toDelete
+
+depctrl\registerMacro main
