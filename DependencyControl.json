@@ -213,6 +213,64 @@
 					"Initial Release"
 				]
 			}
+		},
+		"phos.RotateGradient": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Rotate Gradient",
+			"description": "Create rotated gradient with clip.",
+			"channels": {
+				"main": {
+					"version": "1.0.1",
+					"released": "2022-12-18",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "7b9c5667d4d46d4f8d29fc4870f41483402b3bd3"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "a-mo.LineCollection",
+							"name": "Aegisub-Motion (LineCollection)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.3.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "a-mo.Line",
+							"name": "Aegisub-Motion (Line)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.5.3",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.ASSFoundation",
+							"name": "ASSFoundation",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.5.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.Functional",
+							"name": "(Almost) Functional Suite",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.6.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Initial Release"
+				],
+				"2.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	}
 }

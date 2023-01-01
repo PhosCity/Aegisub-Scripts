@@ -2,11 +2,11 @@ export script_name = "Rotate Gradient"
 export script_description = "Create rotated gradient with clip."
 export script_author = "PhosCity"
 export script_namespace = "phos.RotateGradient"
-export script_version = "1.0.1"
+export script_version = "2.0.0"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
-  feed: "",
+  feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
   {
     {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
@@ -14,7 +14,7 @@ depctrl = DependencyControl{
       feed: "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
     {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
-    {"l0.Functional", version: "0.3.0", url: "https://github.com/TypesettingTools/Functional",
+    {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
      feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
   }
 }
@@ -185,6 +185,7 @@ main = (sub, sel) ->
   lines = LineCollection sub, sel
   klip = removeInvisibleClip lines, klip
 
+  -- Stores how many frames between each key line
   frames_per, prev_end_frame = {}, 0
   avg_frame_cnt = #klip/(#lines.lines-1)
   for i = 1, #lines.lines-1
@@ -199,6 +200,7 @@ main = (sub, sel) ->
     if i != 1
       first_line = tagState[i-1]
       last_line = tagState[i]
+      -- For the number of lines indicated by the frames_per table, create a gradient
       for j = 1, frames_per[i-1]
         factor = frames_per[i-1] < 2 and 1 or (j-1)^res.accel/(frames_per[i-1]-1)^res.accel
         newLine = Line line, lines
@@ -206,13 +208,12 @@ main = (sub, sel) ->
         newData\replaceTags klip[count]
         count += 1
         for tag in *tags_flat
-          continue unless res[tag]
-          newData\replaceTags interpolate first_line, last_line, tag, factor
+          newData\replaceTags interpolate(first_line, last_line, tag, factor) if res[tag]
         newData\commit!
         lines\addLine newLine
   ), true
   lines\insertLines!
   lines\deleteLines toDelete
-  return [sel[1] + index - 1 for index, _ in ipairs klip]       -- Return selection of all newly added lines
+  return [sel[1]+i for i = 0, #klip-1]       -- Return selection of all newly added lines
 
 depctrl\registerMacro main
