@@ -259,7 +259,7 @@
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
-						},
+						}
 					]
 				}
 			},

@@ -73,7 +73,7 @@ prepare_line = (sub, sel, res) ->
       for index, cnt in ipairs clipTable[1].contours[1].commands          -- Is this the best way to loop through co-ordinate?
         data\removeTags "clip_vect"                                       -- Clip affects the bounding box of the line.
         break if index == 4
-        if cnt.name == "m" or "l"     -- No bezier allowed
+        if cnt.name == "m" or "l"                                         -- No bezier allowed
           x, y = cnt\get!
           table.insert clip, x
           table.insert clip, y
