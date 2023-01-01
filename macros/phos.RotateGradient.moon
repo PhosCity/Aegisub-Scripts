@@ -60,16 +60,6 @@ prepare_line = (sub, sel, res) ->
     currText = ""
     data\callback ((section) -> currText ..= section\getString!), ASS.Section.Text
 
-    -- Collect bounding box of the line
-    currBound = data\getLineBounds!
-    
-    -- Check if bounding box and text of selected lines differ. They should not.
-    if i == 1
-      text, bound = currText, currBound
-    else
-      logger\assert text == currText, "You must select the lines that have same text."
-      -- logger\assert bound.w == currBound.w and bound.h == currBound.h, "The selected lines have differing width and height."
-
     -- Collect the tag that must be gradiented
     effTags = (data\getEffectiveTags -1, true, true, false).tags
     for tag in *tags_flat
@@ -81,11 +71,22 @@ prepare_line = (sub, sel, res) ->
     if #clipTable != 0 and not hasClip
       hasClip = true
       for index, cnt in ipairs clipTable[1].contours[1].commands          -- Is this the best way to loop through co-ordinate?
+        data\removeTags "clip_vect"                                       -- Clip affects the bounding box of the line.
         break if index == 4
         if cnt.name == "m" or "l"     -- No bezier allowed
           x, y = cnt\get!
           table.insert clip, x
           table.insert clip, y
+
+    -- Collect bounding box of the line
+    currBound = data\getLineBounds!
+    
+    -- Check if text of selected lines differ. They should not. Also update bounding box with the bigger bound. (Tags like blur increase bounding box of lines)
+    if i == 1
+      text, bound = currText, currBound
+    else
+      logger\assert text == currText, "You must select the lines that have same text."
+      bound = currBound if bound.w < currBound.w or bound.h < currBound.h
   ), true
   logger\assert hasClip, "No clip found in the selected lines."
   return clip, tagState, bound
@@ -152,10 +153,22 @@ removeInvisibleClip = (lines, klip) ->
     data = ASS\parse newLine
     data\replaceTags klip[i]
     bound = data\getLineBounds!
-    if bound.h != 0
-      data\commit!
-      table.insert newClip, klip[i]
+    table.insert newClip, klip[i] if bound.h != 0
   return newClip
+
+
+-- Interpolate tags between two lines by a factor
+interpolate = (first_line, last_line, tag, factor) ->
+  local finalValue
+  switch tag
+    when "1c", "3c", "4c"
+      finalValue = first_line[tag]\copy!
+      b1, g1, r1 = first_line[tag]\getTagParams!
+      b2, g2, r2 = last_line[tag]\getTagParams!
+      finalValue.r.value, finalValue.g.value, finalValue.b.value  = util.extract_color(util.interpolate_color factor, util.ass_color(r1, g1, b1), util.ass_color(r2, g2, b2))
+    else
+      finalValue = first_line[tag]\lerp last_line[tag], factor
+  return finalValue
 
 
 main = (sub, sel) ->
@@ -178,10 +191,11 @@ main = (sub, sel) ->
     curr_end_frame = math.ceil i*avg_frame_cnt
     frames_per[i] = curr_end_frame - prev_end_frame
     prev_end_frame = curr_end_frame
-  toDelete={}
-  count = 1
+
+  toDelete, count = {}, 1
   lines\runCallback ((lines, line, i) ->
     aegisub.cancel! if aegisub.progress.is_cancelled!
+    toDelete[#toDelete+1] = line
     if i != 1
       first_line = tagState[i-1]
       last_line = tagState[i]
@@ -192,21 +206,13 @@ main = (sub, sel) ->
         newData\replaceTags klip[count]
         count += 1
         for tag in *tags_flat
-          if res[tag]
-            local finalValue
-            if tag == "1c" or tag == "3c" or tag =="4c"          -- TODO: If line0 has accepted my PR, color lerping can be reduced to a one liner
-              finalValue = first_line[tag]\copy!
-              b1, g1, r1 = first_line[tag]\getTagParams!
-              b2, g2, r2 = last_line[tag]\getTagParams!
-              finalValue.r.value, finalValue.g.value, finalValue.b.value  = util.extract_color(util.interpolate_color factor, util.ass_color(r1, g1, b1), util.ass_color(r2, g2, b2))
-            else
-              finalValue = first_line[tag]\lerp last_line[tag], factor
-            newData\replaceTags finalValue
+          continue unless res[tag]
+          newData\replaceTags interpolate first_line, last_line, tag, factor
         newData\commit!
         lines\addLine newLine
-    toDelete[#toDelete+1] = line
   ), true
   lines\insertLines!
   lines\deleteLines toDelete
+  return [sel[1] + index - 1 for index, _ in ipairs klip]       -- Return selection of all newly added lines
 
 depctrl\registerMacro main
