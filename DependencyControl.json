@@ -221,14 +221,14 @@
 			"description": "Create rotated gradient with clip.",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2022-12-18",
+					"version": "2.0.0",
+					"released": "2023-01-01",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "7b9c5667d4d46d4f8d29fc4870f41483402b3bd3"
+							"sha1": "5cadfbfb21a27154840559e4cb5b3daf51311798"
 						}
 					],
 					"requiredModules": [
