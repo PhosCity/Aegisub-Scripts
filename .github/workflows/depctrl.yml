@@ -18,13 +18,10 @@ jobs:
 
       - name: Get-changed-files
         id: changed-files-comma
-        uses: tj-actions/changed-files@v20
+        uses: tj-actions/changed-files@v35
         with:
           since_last_remote_commit: 'true'
           separator: ','
-          files: |
-            macros/*.lua
-            macros/*.moon
 
       - name: Update sha1 and version
         run: |
