@@ -271,6 +271,31 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.TimingAssistant": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Timing Assistant",
+			"description": "A second brain for timers.",
+			"channels": {
+				"main": {
+					"version": "2.0.0",
+					"released": "2023-01-01",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "5cadfbfb21a27154840559e4cb5b3daf51311798"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	}
 }
