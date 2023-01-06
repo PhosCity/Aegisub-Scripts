@@ -1,6 +1,6 @@
 export script_name = "Timing Assistant"
 export script_description = "A second brain for timers."
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.TimingAssistant"
 
@@ -9,7 +9,6 @@ depctrl = DependencyControl{
   feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
 }
 logger = depctrl\getLogger!
-config = depctrl\getConfigHandler defaultConfig
 
 getTime, getFrame = aegisub.ms_from_frame, aegisub.frame_from_ms
 defaultConfig =
@@ -23,6 +22,7 @@ defaultConfig =
   automove: false
 
 
+config = depctrl\getConfigHandler defaultConfig
 configSetup = ->
   y, dlg = 1,  {
 		{x: 0, y: 0,  width: 1, height: 1, class: "label",    label: "Start:"}
