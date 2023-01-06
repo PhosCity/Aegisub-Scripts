@@ -99,13 +99,9 @@ To use this script, simply click on `Import` button and select the svg file. The
 
 ## Timing Assistant
 
-**_Not Available in Dependency Control_**
+**_Available in Dependency Control_**
 
-I made this script knowing full well that no experienced timer would use this but I had to because I loved TPP's convenience but hated that it was too unintelligent to require a separate pass to fix all the errors it generated.
-
-Rationale:
-
-When I time, I always make a series of decision for every line. Do I need to add lead in, lead out, snap to keyframes or link the lines? So I wanted to create a script that allows me to do it in a press of a hotkey. Someone just rolled their eyes and said, "Phos, you just made an inferior TPP". It might be inferior but it is definitely not a TPP. The workflow of using this script is the same as timing without TPP but only difference is that the aforementioned decisions is made for you by the script.
+When I time, I always make a series of decision for every line. Do I need to add lead in, lead out, snap to keyframes or link the lines? So I wanted to create a script that allows me to do it in a press of a hotkey. You might be thinking, "Phos, you just made a TPP". I can assure you it's not. The workflow of using this script is the same as timing without TPP, but only difference is that the aforementioned decisions is made for you by the script.
 
 How to use:
 
@@ -115,13 +111,11 @@ The first thing to do after you install the script is to set up the config. By d
 
 Now you are ready for timing. Here, you'll first do the exact timing on the line and then press the hotkey. The script will make the decision for you whether it should add lead in, snap to keyframe, link the lines together or add lead out. You then move to the next line and repeat. _Exact time, hotkey. Exact time, hotkey. That's it._
 
-I have come to like this method because it has the convenience of decision making of TPP but at the same time, if I do not agree with the script, I am free to fix it and move to next line.
+I have come to like this method because it has the convenience of decision-making of TPP but at the same time, if I do not agree with the script, I am free to fix it and move to next line.
 
 **Note**: If the end time of your line exceeds the audio of next line, don't fix it. Go to the next line, exact time it and then press the hotkey. The script will fix it. It works in this manner because it can only make proper decision of line linking of current line in context of start time of next line.
 
-**Note2:** This is just the first release of the script and I understand that it'll not be perfect right now but as I keep timing with it and come across edge cases where it fails, I'll be sure to improve it where I can.
-
-If you want to to check exactly what steps the script takes for decision making, expand the following and let me know if I got something wrong.
+If you want to check exactly what steps the script takes for decision-making, expand the following and let me know if I got something wrong.
 
 <details>
   <summary>Click here to expand</summary>
@@ -130,13 +124,13 @@ For start time:
 
 1. If start time is already snapped to keyframe, it does not make any changes to the start time.
 1. Checks if there is a keyframe within the time specified in the config and snaps to it.
-1. If it was not snapped, it checks the end time of previous line and if it is within the linking time specified in config, it adds lead in to current line and extends the end time of the previous line.
+1. If it was not snapped, it checks the end time of previous line. If it is within the linking time specified in config and not snapped to keyframe, it adds lead in to current line and extends the end time of the previous line.
 1. If it was neither snapped nor linked, it simply adds lead in.
 
 For end time:
 
 1. If end time is already snapped to keyframe, it does not make any changes to the end time.
-1. Here's a special step that is only applicable when your keyframe snapping value is greater than 850 ms. Snapping to keyframes more than 850 ms away is not always the correct thing to do, hence this special step. If the script finds that there is a keyframe 850+ ms away from exact end and you've allowed to snap to that distance in config, then it first checks cps of the line (without leadout). If cps is greater than 15, then it snaps to keyframe. If the cps is less than 15, then it either tries to add lead out to the line or extend the end time such that it is 500 ms away from keyframe whichever is lesser.
+1. Here's a special step that is only applicable when your keyframe snapping value is greater than 850 ms. Snapping to keyframes more than 850 ms away is not always the correct thing to do, hence this special step. If the script finds that there is a keyframe 850+ ms away from exact end, and you've allowed to snap to that distance in config, then it first checks cps of the line (without leadout). If cps is greater than 15, then it snaps to keyframe. If the cps is less than 15, then it either tries to add lead out to the line or extend the end time such that it is 500 ms away from keyframe whichever is lesser.
 1. If above special case is not true(which is most of the case), it simply checks if there is a keyframe within time specifed in the config and snaps to it.
 1. If it did not snap, it simply adds lead out to the line.
 
@@ -285,7 +279,7 @@ One word of caution: If your text has border and shadow, you must split the line
 
 ## Extrapolate Tracking
 
-**_Not Available in Dependency Control_**
+**_Available in Dependency Control_**
 
 When you're motion-tracking a sign and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines. There is a similar function in 'Significance' script by unanimated but it only extrapolates scaling and position. This script goes a little beyond and extrapolates the following tags.
 
@@ -315,7 +309,7 @@ This is the script that allows you to add static and dynamic grain to your sign.
 **Static Grain:**
 
 - First cover your sign with "!". It's easier to do if you use `\an7` and break the line using "\N" when it goes over the sign. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need. The script will convert "!" to randomized character.
-![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
+  ![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
 
 - Run the script. There are only two options. One is to add simple grain. Another one is to add a bit denser grain as explained in the guide.
 
