@@ -1,6 +1,6 @@
 export script_name = "Change Alignment"
 export script_description = "Change alignment of line without changing it's appearance."
-export script_version = "1.0.2"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.changeAlignment"
 
@@ -39,7 +39,7 @@ changeAlignment = (sub, sel) ->
   lines\runCallback ((lines, line, i) ->
     aegisub.cancel! if aegisub.progress.is_cancelled!
     data = ASS\parse line
-    pos, align = data\getPosition!
+    pos, align, org = data\getPosition!
     unless target\equal align
       drawingSectionCount = data\getSectionCount ASS.Section.Drawing
       if drawingSectionCount > 0                                            -- Drawings
@@ -53,7 +53,14 @@ changeAlignment = (sub, sel) ->
         metrics = data\getTextMetrics true
         width, height = metrics.width, metrics.height
         pos\add target\getPositionOffset width, height, align
-        data\replaceTags {target, pos}
+
+        -- https://github.com/TypesettingTools/line0-Aegisub-Scripts/blob/b6deb78511a0a96fd6fd074d2337cc8a687c9655/l0.Nudge.moon#L222
+        effTags = data\getEffectiveTags -1, true, true, false
+        trans, tags = effTags\checkTransformed!, effTags.tags
+        if tags.angle\modEq(0, 360) and tags.angle_x\modEq(0, 360) and tags.angle_y\modEq(0, 360) and not (trans.angle or trans.angle_x or trans.angle_y)
+          data\replaceTags {target, pos}
+        else
+          data\replaceTags {target, pos, org}
       data\commit!
   ), true
 
