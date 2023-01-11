@@ -307,14 +307,14 @@
 			"description": "Dynamically remove tags based on selection",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2023-01-06",
+					"version": "1.0.0",
+					"released": "2023-01-11",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "79d9d478501c5e3c17be380da0cf052e49186f22"
+							"sha1": "9134e7e4967373bacf84aab6ee0b39aeec02e69e"
 						}
 					]
 				}
