@@ -6,3 +6,4 @@
 !macros/*.moon
 !DependencyControl.json
 !/assets/*
+!test/*.ass
