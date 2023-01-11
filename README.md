@@ -138,31 +138,29 @@ For end time:
 
 ## Remove Tags
 
-**_Not Available in Dependency Control_**
+**_Available in Dependency Control_**
 
-_Lyger's module is a dependency. If you have downloaded lyger's script from dependency control, chances are you already have it. You can also get it from [here](https://github.com/TypesettingTools/lyger-Aegisub-Scripts/blob/master/modules/LibLyger.moon)_
+![remove_tags](https://user-images.githubusercontent.com/65547311/211794907-5974c7cf-a824-4dd4-a96c-56a268ac7cc9.png)
 
-![image](./assets/remove_tags1.png)
-
-This is undoubtedly a clone of unanimated's script called `Script Cleanup` but there are two major differences. The first being that as the name suggests, this script only has the portions of `Script Cleanup` that deals with removing tags. The second being that the GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove.
+This script deals with all things related to removing tags from the line. One of the main motivation for writing this script when a script like unanimated's `Script Cleanup` exists is because I would spend a lot of time searching the exact tag I wanted to remove from the 40 options of the GUI. When I have only 10 tags, I wanted to choose the tags I want to remove from those 10 tags only. So, GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove. The gui from the image above is not what you'll see when you run it.
 
 ### `Remove All` button
 
 - If you simply click the `Remove All` button, it removes all the tags form the selected lines.
-- If you check `Start tags` in the top row and then press `Remove All` button, it removes all start tags from selected lines.
-- Similarly, checking `Inline tags` in top row removes all inline tags.
+- If you check `Start Tags` in the top row and then press `Remove All` button, it removes all start tags from selected lines.
+- Similarly, checking `Inline Tags` in top row removes all inline tags.
 
-### `Kill Tags` button
+### `Remove Tags` button
 
-- All the tags that you individually selected would be removed.
+- All the tags that you individually tick would be removed.
 - If `Start tags` is checked, the selected tags will only be removed from start tags.
 - If `Inline tags` is checked, the selected tags will only be removed from inline tags.
 - If `Transform` is checked, the selected tags will only be removed from transforms.
 - If `Inverse` is checked, all the tags except the selected ones will be deleted.
 
-### `Run Selected` button
+### `Remove Group` button
 
-This button executes the things you select in the left column and is mostly used to delete groups of tags at once. Staying true to it's mission, the script also dynamically creates this section. Which means that if your selection does not contain any color tags, the option to remove color tags won't be available. The groups available are:
+This button executes the things you select in the left column and is mostly used to delete groups of tags at once. Staying true to it's mission, the script also dynamically creates this section. Which means that if your selection does not contain any color tags for example, the option to remove color tags won't be available. You can also tick `Start Tag` or `Inline Tag` the top row and only remove the tag group from start tag block or inline tag block only. The groups available are:
 
 - All color tags (c, 1c, 2c, 3c, 4c)
 - All alpha tags (alpha, 1a, 2a, 3a, 4a)
@@ -171,11 +169,7 @@ This button executes the things you select in the left column and is mostly used
 - All perspective tags (frz, frx, fry, fax, fay, org)
 - All inline tags except last (useful for undoing gradient)
 
-## Transform button
-
-![image](./assets/remove_tags2.png)
-
-This button is only available to you if there are transforms in your selection. The idea for this is to easily select a specific transform that you want to delete. Each row has transforms for a single line. If you have a line with dozens of transforms, the gui produced will be very wide so keep that in mind. Simply select the transforms you want to delete and click `Remove`
+TODO (Maybe): An option to select and remove each individual transform tags.
 
 ## Edit Tags
 
@@ -258,7 +252,7 @@ In the bottom, there are boxes for the effect, actor and text. While these are f
 
 ## Rotated Gradient
 
-**_Not Available in Dependency Control_**
+**_Available in Dependency Control_**
 
 ![image](./assets/rotated-gradient.png)
 
