@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.1.0"
+export script_version = "1.1.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -114,7 +114,7 @@ main = (useGui, mode) ->
         data\insertTags {ASS\createTag 'alpha1', 254}
         data\insertTags {ASS\createTag 'alpha3', 255}
       data\cleanTags!
-      lines\addLine ASS\createLine { line }
+      lines\addLine ASS\createLine { line }, nil, true, line.number + i
 
       -- Pure black layer
       data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
@@ -128,9 +128,10 @@ main = (useGui, mode) ->
       aegisub.cancel! if aegisub.progress.is_cancelled!
       aegisub.progress.task "Completed #{i} of #{intensity} iteration..."
       aegisub.progress.set 100*i/intensity
-      lines\runCallback cb
+      lines\runCallback cb, true
     lines\insertLines!
     lines\replaceLines!
+    return lines\getSelection!
 
   
 -- Register macros
