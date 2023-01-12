@@ -19,7 +19,17 @@ depctrl = DependencyControl{
 }
 LineCollection, ASS, Functional, Yutils = depctrl\requireModules!
 logger = depctrl\getLogger!
-{:list} = Functional
+{:list, :util} = Functional
+
+dialog = {
+  {x: 0, y: 0, class: "label", label: "Grain Intensity", hint: "Higher the number, greater the intensity"}
+  {x: 1, y: 0, class: "intedit", min: 1, value: 1, name: "intensity"}
+  {x: 0, y: 1, class: "label", label: "Color of grain:"}
+  {x: 0, y: 2, class: "label", label: "Layer 1"}
+  {x: 1, y: 2, class: "color", value: "&HFFFFFF&", name: "color1"}
+  {x: 0, y: 3, class: "label", label: "Layer 2"}
+  {x: 1, y: 3, class: "color", value:  "&H000000&", name: "color2"}
+} 
 
 --- Checks if the grain font is installed and informs the user
 isGrainInstalled = ->
@@ -40,18 +50,52 @@ randomize = ->
   ascii = list.join [x for x = 48, 57], [x for x = 65, 90], [x for x = 97, 122], {33, 34, 39, 44, 46, 58, 59, 63}
   string.char ascii[math.random(1, #ascii)]
 
+createGui = ->
+  btn, res = aegisub.dialog.display dialog, {"OK", "Cancel"}, {"ok": "OK", "cancel": "Cancel"}
+  aegisub.cancel! unless btn
+
+  -- Save GUI configuration
+  local configEntry
+  for key, value in pairs res
+    for i = 1, #dialog
+      configEntry = dialog[i]
+      continue unless configEntry.name == key
+      if configEntry.value
+        configEntry.value = value
+      elseif configEntry.text
+        configEntry.text = value
+      break
+  return res
+
 --- Main processing function
 ---@param mode string "dense" or "normal"
 ---@param sub table subtitle object
 ---@param sel table selected lines
-main = (mode) ->
+main = (useGui, mode) ->
   (sub, sel) ->
     isGrainInstalled!
 
+    createColor = (colorString, colorType) ->
+      local r, g, b
+      if type(colorString) == "string"
+        r, g, b = util.extract_color(colorString)
+      elseif type(colorString) == "table"
+        b, g, r = unpack colorString
+      return {ASS\createTag colorType, b, g, r}
+
+    local res, intensity, firstColor, secondColor
+    if useGui
+      res = createGui!
+      intensity = res.intensity
+      firstColor = createColor res.color1, "color1"
+      secondColor = createColor res.color2, "color1"
+    intensity = intensity or 1
+    firstColor = firstColor or createColor {255, 255, 255}, "color1"
+    secondColor = secondColor or createColor {0, 0, 0}, "color1"
+
     lines = LineCollection sub, sel
     return if #lines.lines == 0
-
-    lines\runCallback (lines, line, i) ->
+    cb = (lines, line, i) ->
       data = ASS\parse line
 
       -- Pure white layer
@@ -60,31 +104,38 @@ main = (mode) ->
       data\insertTags {ASS\createTag 'fontname', "Grain"}
       data\insertTags {ASS\createTag 'outline', 0}
       data\insertTags {ASS\createTag 'shadow', 0}
-      data\insertTags {ASS\createTag 'color1', 255, 255, 255} 
       data\insertTags {ASS\createTag 'bold', 0} 
+      data\insertTags firstColor
       if mode == "dense"
         data\removeTags {"color3", "color4", "alpha1", "alpha3"}
-        data\insertTags {ASS\createTag 'color3', 255, 255, 255}
-        data\insertTags {ASS\createTag 'color4', 255, 255, 255}
+        data\insertTags createColor {255, 255, 255}, "color3"
+        data\insertTags createColor {255, 255, 255}, "color3"
+        data\replaceTags {ASS\createTag 'shadow', 0.01}
         data\insertTags {ASS\createTag 'alpha1', 254}
         data\insertTags {ASS\createTag 'alpha3', 255}
-        data\replaceTags {ASS\createTag 'shadow', 0.01}
       data\cleanTags!
       lines\addLine ASS\createLine { line }
 
       -- Pure black layer
       data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
-      data\replaceTags {ASS\createTag 'color1', 0, 0, 0}
+      data\replaceTags secondColor
       if mode == "dense"
-        data\replaceTags {ASS\createTag 'color3', 0, 0, 0}
-        data\replaceTags {ASS\createTag 'color4', 0, 0, 0}
+        data\replaceTags createColor {0, 0, 0}, "color3"
+        data\replaceTags createColor {0, 0, 0}, "color3"
       data\commit!
-    lines\replaceLines!
+
+    for i = 1, intensity
+      aegisub.cancel! if aegisub.progress.is_cancelled!
+      aegisub.progress.task "Completed #{i} of #{intensity} iteration..."
+      aegisub.progress.set 100*i/intensity
+      lines\runCallback cb
     lines\insertLines!
+    lines\replaceLines!
 
   
 -- Register macros
 depctrl\registerMacros({
-  { "Add grain", "Add grain", main "normal" },
-  { "Add dense grain", "Add dense grain", main "dense" },
+  { "Add grain", "Add grain", main false, "normal" },
+  { "Add dense grain", "Add dense grain", main false, "dense" },
+  { "GUI", "Gui for Add Grain script", main true },
 })

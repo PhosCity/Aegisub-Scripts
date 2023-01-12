@@ -216,7 +216,8 @@
 					"Initial Release"
 				],
 				"1.1.0": [
-					"Add more characters for more randomization."
+					"Add more characters for more randomization.",
+					"Add gui with abitlity to change grain density and grain color"
 				]
 			}
 		},
