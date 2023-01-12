@@ -192,13 +192,6 @@
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
 						},
 						{
-							"moduleName": "a-mo.Line",
-							"name": "Aegisub-Motion (Line)",
-							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
-							"version": "1.5.3",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
-						},
-						{
 							"moduleName": "l0.ASSFoundation",
 							"name": "ASSFoundation",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",

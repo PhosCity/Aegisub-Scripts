@@ -10,8 +10,6 @@ depctrl = DependencyControl{
   {
     {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
-    {"a-mo.Line", version: "1.5.3", url: "https://github.com/TypesettingTools/Aegisub-Motion",
-      feed: "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
     {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
     {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
@@ -19,10 +17,11 @@ depctrl = DependencyControl{
     "Yutils"
   }
 }
-LineCollection, Line, ASS, Functional, Yutils = depctrl\requireModules!
+LineCollection, ASS, Functional, Yutils = depctrl\requireModules!
 logger = depctrl\getLogger!
 {:list} = Functional
 
+--- Checks if the grain font is installed and informs the user
 isGrainInstalled = ->
   isInstalled = false
   message = "It seems you have not installed grain font.
@@ -35,10 +34,16 @@ https://cdn.discordapp.com/attachments/425357202963038208/708726507173838958/gra
   logger\log message unless isInstalled
 
 
+--- Randomize a character by returning any character among 0-9a-zA-z!"',.:;?
+---@return string or integer
 randomize = ->
-  ascii = list.join [x for x = 48, 57], [x for x = 65, 90], [x for x = 97, 122], {33, 34, 39, 44, 46, 58, 59, 63}   -- 0-9a-zA-z!"',.:;?
+  ascii = list.join [x for x = 48, 57], [x for x = 65, 90], [x for x = 97, 122], {33, 34, 39, 44, 46, 58, 59, 63}
   string.char ascii[math.random(1, #ascii)]
 
+--- Main processing function
+---@param mode string "dense" or "normal"
+---@param sub table subtitle object
+---@param sel table selected lines
 main = (mode) ->
   (sub, sel) ->
     isGrainInstalled!
@@ -46,7 +51,6 @@ main = (mode) ->
     lines = LineCollection sub, sel
     return if #lines.lines == 0
 
-    linesAdded = 1
     lines\runCallback (lines, line, i) ->
       data = ASS\parse line
 
@@ -66,23 +70,20 @@ main = (mode) ->
         data\insertTags {ASS\createTag 'alpha3', 255}
         data\replaceTags {ASS\createTag 'shadow', 0.01}
       data\cleanTags!
-      data\commit!
+      lines\addLine ASS\createLine { line }
 
       -- Pure black layer
-      newLine = Line line, lines
-      newdata = data\copy!
-      newdata\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
-      newdata\replaceTags {ASS\createTag 'color1', 0, 0, 0}
+      data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
+      data\replaceTags {ASS\createTag 'color1', 0, 0, 0}
       if mode == "dense"
-        newdata\replaceTags {ASS\createTag 'color3', 0, 0, 0}
-        newdata\replaceTags {ASS\createTag 'color4', 0, 0, 0}
-      newdata\commit!
-      lines\addLine newLine, nil, true, line.number + linesAdded
-      linesAdded += 1
+        data\replaceTags {ASS\createTag 'color3', 0, 0, 0}
+        data\replaceTags {ASS\createTag 'color4', 0, 0, 0}
+      data\commit!
     lines\replaceLines!
     lines\insertLines!
 
   
+-- Register macros
 depctrl\registerMacros({
   { "Add grain", "Add grain", main "normal" },
   { "Add dense grain", "Add dense grain", main "dense" },
