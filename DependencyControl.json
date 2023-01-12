@@ -206,6 +206,13 @@
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
 						},
 						{
+							"moduleName": "l0.Functional",
+							"name": "(Almost) Functional Suite",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.6.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
 							"moduleName": "Yutils"
 						}
 					]
@@ -214,6 +221,9 @@
 			"changelog": {
 				"1.0.0": [
 					"Initial Release"
+				],
+				"1.1.0": [
+					"Add more characters for more randomization."
 				]
 			}
 		},

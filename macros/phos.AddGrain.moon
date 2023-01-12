@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.0.1"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -14,32 +14,34 @@ depctrl = DependencyControl{
       feed: "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
     {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+    {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
+      feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
     "Yutils"
   }
 }
-LineCollection, Line, ASS, Yutils = depctrl\requireModules!
+LineCollection, Line, ASS, Functional, Yutils = depctrl\requireModules!
 logger = depctrl\getLogger!
+{:list} = Functional
 
-
-grainIsInstalled = ->
+isGrainInstalled = ->
   isInstalled = false
+  message = "It seems you have not installed grain font.
+The script will proceed but will not look as intented unless you install the font.
+You can install it from following link:
+https://cdn.discordapp.com/attachments/425357202963038208/708726507173838958/grain.ttf"
+
   for font in *Yutils.decode.list_fonts!
     isInstalled = true if font.name == "Grain" and font.longname == "Grain Regular"
-  isInstalled
+  logger\log message unless isInstalled
 
 
 randomize = ->
-  tbl = [ x for x = 65, 122 when x < 91 or x > 96 ]     -- A-Za-z
-  string.char tbl[math.random(1, #tbl)]
-
+  ascii = list.join [x for x = 48, 57], [x for x = 65, 90], [x for x = 97, 122], {33, 34, 39, 44, 46, 58, 59, 63}   -- 0-9a-zA-z!"',.:;?
+  string.char ascii[math.random(1, #ascii)]
 
 main = (mode) ->
   (sub, sel) ->
-    unless grainIsInstalled!
-      logger\log "It seems you have not installed grain font."
-      logger\log "The script will proceed but will not look as intented unless you install the font."
-      logger\log "You can install it from following link:"
-      logger\log "https://cdn.discordapp.com/attachments/425357202963038208/708726507173838958/grain.ttf"
+    isGrainInstalled!
 
     lines = LineCollection sub, sel
     return if #lines.lines == 0
