@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.1.1"
+export script_version = "1.1.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -75,6 +75,10 @@ main = (useGui, mode) ->
   (sub, sel) ->
     isGrainInstalled!
 
+    --- Create an ASSFoundation color tag object
+    ---@param colorString string or table ass color string or a table with {b, g, r} values
+    ---@param colorType string color tagname as understood by ASSFoundation
+    ---@return table ASSFoundation color tag object
     createColor = (colorString, colorType) ->
       local r, g, b
       if type(colorString) == "string"
@@ -83,7 +87,8 @@ main = (useGui, mode) ->
         b, g, r = unpack colorString
       return {ASS\createTag colorType, b, g, r}
 
-    local res, intensity, firstColor, secondColor
+    toDelete, toAdd = {}, {}
+    local intensity, firstColor, secondColor
     if useGui
       res = createGui!
       intensity = res.intensity
@@ -97,6 +102,7 @@ main = (useGui, mode) ->
     return if #lines.lines == 0
     cb = (lines, line, i) ->
       data = ASS\parse line
+      table.insert toDelete, line
 
       -- Pure white layer
       data\callback ((section) -> section\replace "!!", randomize), ASS.Section.Text
@@ -114,7 +120,7 @@ main = (useGui, mode) ->
         data\insertTags {ASS\createTag 'alpha1', 254}
         data\insertTags {ASS\createTag 'alpha3', 255}
       data\cleanTags!
-      lines\addLine ASS\createLine { line }, nil, true, line.number + i
+      table.insert toAdd, ASS\createLine { line, effect: "white" }
 
       -- Pure black layer
       data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
@@ -122,16 +128,21 @@ main = (useGui, mode) ->
       if mode == "dense"
         data\replaceTags createColor {0, 0, 0}, "color3"
         data\replaceTags createColor {0, 0, 0}, "color3"
-      data\commit!
+      table.insert toAdd, ASS\createLine { line, effect: "black" }
 
+    -- Start iteration
     for i = 1, intensity
       aegisub.cancel! if aegisub.progress.is_cancelled!
       aegisub.progress.task "Completed #{i} of #{intensity} iteration..."
       aegisub.progress.set 100*i/intensity
       lines\runCallback cb, true
+
+    -- Add lines
+    for ln in *toAdd
+      lines\addLine ln
+
     lines\insertLines!
-    lines\replaceLines!
-    return lines\getSelection!
+    lines\deleteLines toDelete
 
   
 -- Register macros
