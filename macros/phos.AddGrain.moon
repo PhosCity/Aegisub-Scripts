@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.1.2"
+export script_version = "1.1.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -120,7 +120,7 @@ main = (useGui, mode) ->
         data\insertTags {ASS\createTag 'alpha1', 254}
         data\insertTags {ASS\createTag 'alpha3', 255}
       data\cleanTags!
-      table.insert toAdd, ASS\createLine { line, effect: "white" }
+      table.insert toAdd, ASS\createLine { line }
 
       -- Pure black layer
       data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
@@ -128,7 +128,7 @@ main = (useGui, mode) ->
       if mode == "dense"
         data\replaceTags createColor {0, 0, 0}, "color3"
         data\replaceTags createColor {0, 0, 0}, "color3"
-      table.insert toAdd, ASS\createLine { line, effect: "black" }
+      table.insert toAdd, ASS\createLine { line }
 
     -- Start iteration
     for i = 1, intensity
