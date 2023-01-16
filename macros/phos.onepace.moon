@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.5"
+export script_version = "1.0.6"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -557,14 +557,14 @@ onepace = (subs, sel) ->
   switch btn
     when "Cancel" then aegisub.cancel!
     when "Apply All"            -- Fix Error is part of preprocessing function and Honorific is part of fix error function so both of them are executed as well. 
-      preprocessing subs, sel
       lineUnbreaker subs, sel
       split subs, sel
+      preprocessing subs, sel
       replace subs, sel
     when "Apply"
-      preprocessing subs, sel if res.preprocessing
       lineUnbreaker subs, sel if res.linebreaker
       split subs, sel if res.split
+      preprocessing subs, sel if res.preprocessing
       honorifics subs, sel if res.honorific
       replace subs, sel if res.replace
       attack subs, sel if res.attack
