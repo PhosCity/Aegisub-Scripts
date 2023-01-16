@@ -2,7 +2,7 @@ export script_name = "Rotate Gradient"
 export script_description = "Create rotated gradient with clip."
 export script_author = "PhosCity"
 export script_namespace = "phos.RotateGradient"
-export script_version = "2.0.0"
+export script_version = "2.0.1"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
@@ -20,7 +20,6 @@ depctrl = DependencyControl{
 }
 LineCollection, Line, ASS, Functional = depctrl\requireModules!
 { :list, :util } = Functional
-logger = depctrl\getLogger!
 
 tags_grouped = {
     {"1c", "3c", "4c"},
@@ -33,6 +32,13 @@ tags_flat = list.join unpack tags_grouped
 -- Generate a key, value pair of tag's override name and assf tag names
 tagMap = {item, (ASS\getTagNames "\\#{item}")[1] for item in *tags_flat}
 
+--TODO: This was taken and slightly modified from logger module of depctrl. For some reason windowError doesn't work when required from that module. Check why.
+windowAssertError = ( condition, errorMessage ) ->
+  if not condition
+    aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
+    aegisub.cancel!
+  else
+    return condition
 
 create_dialog = ->
   dlg = {
@@ -58,7 +64,8 @@ prepare_line = (sub, sel, res) ->
     data = ASS\parse line
     -- Collect text of the line
     currText = ""
-    data\callback ((section) -> currText ..= section\getString!), ASS.Section.Text
+    data\callback (section) ->
+      currText ..= section\getString! if section.class == ASS.Section.Text or section.class == ASS.Section.Drawing
 
     -- Collect the tag that must be gradiented
     effTags = (data\getEffectiveTags -1, true, true, false).tags
@@ -73,10 +80,9 @@ prepare_line = (sub, sel, res) ->
       for index, cnt in ipairs clipTable[1].contours[1].commands          -- Is this the best way to loop through co-ordinate?
         data\removeTags "clip_vect"                                       -- Clip affects the bounding box of the line.
         break if index == 4
-        if cnt.name == "m" or "l"                                         -- No bezier allowed
-          x, y = cnt\get!
-          table.insert clip, x
-          table.insert clip, y
+        x, y = cnt\get!
+        table.insert clip, x
+        table.insert clip, y
 
     -- Collect bounding box of the line
     currBound = data\getLineBounds!
@@ -85,10 +91,11 @@ prepare_line = (sub, sel, res) ->
     if i == 1
       text, bound = currText, currBound
     else
-      logger\assert text == currText, "You must select the lines that have same text."
+      windowAssertError text == currText, "You must select the lines that have same text or drawing."
       bound = currBound if bound.w < currBound.w or bound.h < currBound.h
   ), true
-  logger\assert hasClip, "No clip found in the selected lines."
+  windowAssertError hasClip, "No clip found in the selected lines."
+  windowAssertError #clip == 6, "The vectorial clip must have at least 3 points."
   return clip, tagState, bound
 
 
