@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -89,26 +89,8 @@ createNamedFold = (sub, sel, act) ->
       sub.insert sel[#sel] + 2, line
 
 
-createGUI = ->
-  dialog = {
-    {x: 0, y: 0, width: 1, height: 1, class: "checkbox", name: "selectCurrentFold",  value: false, label: "Select current fold"},
-    {x: 1, y: 0, width: 1, height: 1, class: "checkbox", name: "commentCurrentFold", value: false, label: "Toggle comment on current fold"},
-    {x: 0, y: 1, width: 1, height: 1, class: "checkbox", name: "createNamedFold",    value: false, label: "Create a new named fold"},
-  }
-  btn, res = aegisub.dialog.display(dialog, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"})
-  aegisub.cancel! unless btn
-  return res
-
-
-main = (sub, sel, act) ->
-  res = createGUI!
-  if res.selectCurrentFold
-    newSelection = selectFoldAroundActiveLine sub, sel, act
-    return newSelection
-  elseif res.commentCurrentFold
-    commentCurrentFold sub, sel, act
-  elseif res.createNamedFold
-    createNamedFold sub, sel, act
-
-
-depctrl\registerMacro main
+depctrl\registerMacros({
+  {"Select Current Fold", "Select the fold around the active line", selectFoldAroundActiveLine},
+  {"Comment Current Fold", "Comment the fold around the active line", commentCurrentFold},
+  {"Create Named Fold", "Create a fold around selected lines with a name as comment", createNamedFold}
+})
