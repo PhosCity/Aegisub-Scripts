@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -54,46 +54,46 @@ commentCurrentFold = (sub, sel, act) ->
     sub[i] = line
 
 
--- createNamedFold = (sub, sel, act) ->
---   highestID, linesAdded = 0, 0
---   for i = 1, #sub
---     continue unless sub[i].class == "dialogue"
---     line = sub[i]
---     foldData = parseLineFold line
---     continue unless foldData 
---     highestID = math.max highestID, foldData.id 
---   id = highestID + 1
---
---   btn, res = aegisub.dialog.display(
---     {
---       {x: 0, y: 0, width: 1, height: 1, class: "label", label: "Enter name of the fold"},
---       {x: 1, y: 0, width: 1, height: 1, class: "edit", name: "name", value: ""},
---     },
---     {"Apply", "Cancel"},
---     {"ok": "Apply", "cancel": "Cancel"}
---   )
---   aegisub.cancel! unless btn
---
---   for i in *{sel[1], sel[#sel]}
---     line = sub[i]
---     line.actor = ""
---     line.effect = ""
---     line.comment = true
---     if i == sel[1]
---       line.text = (res.name)\gsub(".", string.upper).."  START  "
---       line.extra["_aegi_folddata"] = "0;1;#{id}"
---       sub.insert sel[1], line
---     elseif i == sel[#sel]
---       line.text = (res.name)\gsub(".", string.upper).."  END  "
---       line.extra["_aegi_folddata"] = "1;1;#{id}"
---       sub.insert sel[#sel] + 2, line
+createNamedFold = (sub, sel, act) ->
+  highestID, linesAdded = 0, 0
+  for i = 1, #sub
+    continue unless sub[i].class == "dialogue"
+    line = sub[i]
+    foldData = parseLineFold line
+    continue unless foldData
+    highestID = math.max highestID, foldData.id
+  id = highestID + 1
+
+  btn, res = aegisub.dialog.display(
+    {
+      {x: 0, y: 0, width: 1, height: 1, class: "label", label: "Enter name of the fold"},
+      {x: 1, y: 0, width: 1, height: 1, class: "edit", name: "name", value: ""},
+    },
+    {"Apply", "Cancel"},
+    {"ok": "Apply", "cancel": "Cancel"}
+  )
+  aegisub.cancel! unless btn
+
+  for i in *{sel[1], sel[#sel]}
+    line = sub[i]
+    line.actor = ""
+    line.effect = ""
+    line.comment = true
+    if i == sel[1]
+      line.text = (res.name)\gsub(".", string.upper).."  START  "
+      line.extra["_aegi_folddata"] = "0;1;#{id}"
+      sub.insert sel[1], line
+    elseif i == sel[#sel]
+      line.text = (res.name)\gsub(".", string.upper).."  END  "
+      line.extra["_aegi_folddata"] = "1;1;#{id}"
+      sub.insert sel[#sel] + 2, line
 
 
 createGUI = ->
   dialog = {
     {x: 0, y: 0, width: 1, height: 1, class: "checkbox", name: "selectCurrentFold",  value: false, label: "Select current fold"},
     {x: 1, y: 0, width: 1, height: 1, class: "checkbox", name: "commentCurrentFold", value: false, label: "Toggle comment on current fold"},
-    -- {x: 0, y: 1, width: 1, height: 1, class: "checkbox", name: "createNamedFold",    value: false, label: "Create a new named fold"},
+    {x: 0, y: 1, width: 1, height: 1, class: "checkbox", name: "createNamedFold",    value: false, label: "Create a new named fold"},
   }
   btn, res = aegisub.dialog.display(dialog, {"Apply", "Cancel"}, {"ok": "Apply", "cancel": "Cancel"})
   aegisub.cancel! unless btn
@@ -107,8 +107,8 @@ main = (sub, sel, act) ->
     return newSelection
   elseif res.commentCurrentFold
     commentCurrentFold sub, sel, act
-  -- elseif res.createNamedFold
-  --   createNamedFold sub, sel, act
+  elseif res.createNamedFold
+    createNamedFold sub, sel, act
 
 
 depctrl\registerMacro main
