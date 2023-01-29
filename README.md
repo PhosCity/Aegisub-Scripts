@@ -6,7 +6,7 @@
   - [Edit Tags](#edit-tags)
   - [Extrapolate Tracking](#extrapolate-tracking)
   - [Fold Operations](#fold-operations)
-  - [Fit Text in Clip](fit-text-in-clip)
+  - [Fit Text in Clip](#fit-text-in-clip)
   - [Remove tags](#remove-tags)
   - [Rotated Gradient](#rotated-gradient)
   - [svg2ass](#svg2ass)
