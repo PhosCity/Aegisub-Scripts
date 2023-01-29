@@ -1,39 +1,186 @@
 # PhosCity's Aegisub Scripts Collection
 
-1. [Bidirectional Snapping](#bidirectional-snapping)
-1. [Wave](#wave)
-1. [Wobble](#wobble)
-1. [svg2ass](#svg2ass)
-1. [Timing Assistant](#timing-assistant)
-1. [Remove tags](#remove-tags)
-1. [Edit Tags](#edit-tags)
-1. [QC Report](#qc-report)
-1. [KFX](#kfx)
-1. [Rotated Gradient](#rotated-gradient)
-1. [Extrapolate Tracking](#extrapolate-tracking)
-1. [Add Grain](#add-grain)
+- [Typesetting](#typesetting)
+  - [Add Grain](#add-grain)
+  - [Change Alignment](#change-alignment)
+  - [Edit Tags](#edit-tags)
+  - [Extrapolate Tracking](#extrapolate-tracking)
+  - [Fold Operations](#fold-operations)
+  - [Remove tags](#remove-tags)
+  - [Rotated Gradient](#rotated-gradient)
+  - [svg2ass](#svg2ass)
+  - [Vector Gradient](#vector-gradient)
+  - [Wave](#wave)
+  - [Wobble](#wobble)
+- [Timing](#timing)
+  - [Timing Assistant](#timing-assistant)
+  - [Bidirectional Snapping](#bidirectional-snapping)
+- [Karaoke](#karaoke)
+  - [KFX](#kfx)
+- [Quality Checking](#quality-checking)
+  - [QC Report](#qc-report)
 
-## Bidirectional Snapping
+## Typesetting
+
+### Add Grain
 
 **_Available in Dependency Control_**
 
-If you're a timer like me who does not use TPP and times primarily using hotkeys, then you'll be disappointed to know that Aegisub does not have hotkeys specifically for timing. While there are other scripts that allows you snap to keyframes, they are either a simple snap to adjacent keyframes or a TPP style snapping scripts. This one is geared towards timing.
+This is the script that allows you to add static and dynamic grain to your sign. This script is based on [this guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>).
 
-While timing you might have come across the case multiple times where you go to the next line only to realize that the end time of the line overshoots the keyframe you want to snap to. Then you have no choice but to snap backwards using mouse. Here's where this script comes handy. This script is made to be hotkeyed, so first hotkey the end snapping and the start snapping function in the audio section. When you press the hotkey to snap end once, it snaps to the keyframe ahead. If you press the same hotkey again, it snaps to the keyframe behind. Then every press of the hotkey will continue snapping to previous keyframe. This way, you can snap to the keyframe ahead or behind using the same hotkey. For the start time, the opposite happens. One press snaps behind and then double press snaps forward.
+**Static Grain:**
 
-I use Bidirectional Snapping in combination with [this script](https://github.com/The0x539/Aegisub-Scripts/blob/trunk/src/0x.JoinPrevious.lua) which is also hotkeyed and allows me to link the previous line to current line without moving to previous line.
+- First cover your sign with "!". It's easier to do if you use `\an7` and break the line using "\N" when it goes over the sign. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need. The script will convert "!" to randomized character.
+  ![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
 
-An attempt has been made below to showcase it's usage but you should use it yourself to see how it works. Here, `w` has been hotkeyed to end-snapping and `q` has been hotkeyed to beginning-snapping.
+- Run the script. There are only two options. One is to add simple grain. Another one is to add a bit denser grain as explained in the guide.
 
-https://user-images.githubusercontent.com/65547311/168461607-d575b757-4504-4a31-8c9b-f52d01fe566f.mp4
+**Dynamic Grain:**
 
-## Wave
+- Add "!" as usual.
+- Use your favorite line2fbf script to convert line2fbf. In some cases you can go further and check if the anime is animated on twos or threes and use [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to split line in `n` frames accordingly.
+- Run the script and you have a dynamic grain.
+
+### Change Alignment
+
+**_Available in Dependency Control_**
+
+This script allows you to change the alignment of the selected lines while maintaining appearance. It supports shapes as well as texts and handles perspective tags relatively well.
+
+### Edit Tags
+
+**_Not Available in Dependency Control_**
+
+The main idea is that it presents the tags, and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It separates start tags, inline tags and transforms in different sections for easy editing.
+
+When you run the script on a line, following gui is generated:
+
+![image](./assets/edittags1.png)
+
+As you can see the GUI looks very much like HYDRA. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means that if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the GUI, but you can also tick any tags of the GUI to add that tag to the line. You can also untick any tag to remove them from the line. The order of your tags are respected.
+
+While I did not plan to add an option to modify tags in multiple lines, for the sake of completion, I added one nonetheless. Its usefulness is highly doubtful. I took inspiration from unanimated's Modifire. In short, if you select multiple lines and run the script, following GUI will be shown which shows tags in all the selected lines without duplication. It's essentially find and replace for tags i.e. if you change the value of the tag in the GUI, all the instances of that said tag will be modified. However, the difference is that you can find and replace as many tags as you want all at once.
+
+![image](./assets/edittags2.png)
+
+### Extrapolate Tracking
+
+**_Not Available in Dependency Control_**
+
+When you're motion-tracking a sign, and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines. There is a similar function in 'Significance' script by unanimated, but it only extrapolates scaling and position. This script goes a little beyond and extrapolates the following tags.
+
+![image](./assets/extrapolate.png)
+
+On top of that, it also supports extrapolating only tags selected by the user.
+
+**Steps:**
+
+- If you already have badly tracked lines in Aegisub, mark those lines with 'x' in Effect.
+- Instead, if you only have correctly tracked lines in Aegisub, write 'x,n' in the first of last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
+
+- Select the lines you marked plus frames before or after it. How many frames you select depends on how "linear" the tracking is. With perfectly linear tracking, you can select all the tracked lines to get more accurate extrapolation. If there seems to be a small accel, use only about 5 reference frames.
+
+**Requirements:**
+
+- All selected lines must be 1 frame long.
+- Selection must be consecutive and sorted by time.
+- If lines are split in layers, run the script separately for each layer.
+
+### Fold Operations
+
+**_Not Available in Dependency Control_**
+
+If you use [arch1t3cht's Aegisub](https://github.com/arch1t3cht/Aegisub), then it comes with a feature to visually group and collapse lines in the subtitle grid called folds. This script allows you to operate on such lines. Currently, the only operations available are to select all the lines of the fold around active line, comment the lines of the current fold and add folds around the selected lines by enclosing them in a comment. But there'll be more fold operations in the future.
+
+### Remove Tags
+
+**_Available in Dependency Control_**
+
+![remove_tags](https://user-images.githubusercontent.com/65547311/211794907-5974c7cf-a824-4dd4-a96c-56a268ac7cc9.png)
+
+This script deals with all things related to removing tags from the line. One of the main motivation for writing this script when a script like unanimated's `Script Cleanup` exists is because I would spend a lot of time searching the exact tag I wanted to remove from the 40 options of the GUI. When I have only 10 tags, I wanted to choose the tags I want to remove from those 10 tags only. So, GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove. The GUI from the image above is not what you'll see when you run it.
+
+#### `Remove All` button
+
+- If you simply click the `Remove All` button, it removes all the tags form the selected lines.
+- If you check `Start Tags` in the top row and then press `Remove All` button, it removes all start tags from selected lines.
+- Similarly, checking `Inline Tags` in top row removes all inline tags.
+
+#### `Remove Tags` button
+
+- All the tags that you individually tick would be removed.
+- If `Start tags` is checked, the selected tags will only be removed from start tags.
+- If `Inline tags` is checked, the selected tags will only be removed from inline tags.
+- If `Transform` is checked, the selected tags will only be removed from transforms.
+- If `Inverse` is checked, all the tags except the selected ones will be deleted.
+
+#### `Remove Group` button
+
+This button executes the things you select in the left column and is mostly used to delete groups of tags at once. Staying true to it's mission, the script also dynamically creates this section. Which means that if your selection does not contain any color tags for example, the option to remove color tags won't be available. You can also tick `Start Tag` or `Inline Tag` the top row and only remove the tag group from start tag block or inline tag block only. The groups available are:
+
+- All color tags (c, 1c, 2c, 3c, 4c)
+- All alpha tags (alpha, 1a, 2a, 3a, 4a)
+- All rotation tags (frz, frx, fry)
+- All scale tags (fs, fscx, fscy)
+- All perspective tags (frz, frx, fry, fax, fay, org)
+- All inline tags except last (useful for undoing gradient)
+
+TODO (Maybe): An option to select and remove each individual transform tags.
+
+### Rotated Gradient
+
+**_Available in Dependency Control_**
+
+![image](./assets/rotated-gradient.png)
+
+![image](./assets/rotated-gradient-gui.png)
+
+This script allows you to create a gradient at an angle using clips. Traditionally, to create a rotated gradient, you'd have to create a small strip of shapes. However, this script allows you to use clips which has many advantages one of which is simply being able to edit text. It's not perfect but works in the cases I've tried.
+
+Instead of trying to explain with words, here's a video showcasing the usage of the script. The same can be applied for any angle or rotated text.
+
+<details>
+  <summary>Click here to see the example</summary>
+  
+https://user-images.githubusercontent.com/65547311/180961066-708b636b-60e3-450c-bb42-395cfcda7298.mp4
+
+</details>
+
+One word of caution: If your text has border and shadow, you must split the lines into layers with and without border (I hope you already do this if you call yourself a typesetter) and then depending on if you want to gradient fill or border and shadow, run the script in that layer. Otherwise, you may see strips in you line. This is not a limitation of this script. This is limitation of ASS rendering.
+
+### svg2ass
+
+**_Available in Dependency Control_**
+
+The script svg2ass is a wrapper for a program [svg2ass](https://github.com/irrwahn/svg2ass) which allows you to select an SVG file from Aegisub itself and convert it to shape, clip or iclip. It works in both windows and Unix operating system. I generally create SVG files using GIMP(can perform complex selections and convert those selections to SVG in a matter of seconds) or Inkscape and use svg2ass to convert them to subtitle lines. If you cannot/ do not want to compile svg2ass, then there is also a [website](https://qgustavor.github.io/svg2ass-gui/) where you can upload the SVG file to obtain the output.
+
+The first thing you should do is to set the config and provide the path where you have the svg2ass executable. At the same time, you can also provide custom tags you want to append to final result and the custom svg2ass parameters if you prefer.
+
+![svg2ass_config](./assets/svg2ass_config.png)
+
+To use this script, simply click on `Import` button and select the SVG file. The resulting lines will have the same start time, end time and style as the selected line. If you checked clip or iclip in the GUI, the resulting shape will be converted to clip or iclip respectively. Alternatively if you don't have the svg2ass executable, you can get the output of svg2ass from the website and paste the result in the textbox and click on the `Textbox` button. The resulting lines will the same as `Import`
+
+![svg2ass](./assets/svg2ass.png)
+
+### Vector Gradient
+
+**_Not Available in Dependency Control_**
+
+The original idea for using vector shapes to create gradient was shared by [Noroino Hanakao](https://github.com/noroinohanako) . This script only automates this process. The main idea is that this script creates shapes that when blurred gives you a gradient. You should create a vectorial clip and run the script which creates the shapes.
+
+| Name  | Number of clip points | Gradient type |
+| ----- | --------------------- | ------------- |
+| Wedge | 3                     | Linear        |
+| Ring  | 2                     | Radial        |
+| Star  | 2                     | Radial        |
+
+### Wave
 
 **_Available in Dependency Control_**
 
 ![wave](./assets/wave.png)
 
-Wave is a script that allows you to mimic the wavy signs through some fscx, fscy and fsp trickery. When you open the scripts, there are few parameters you can change and you'll have to go through some trial and error to determine what values give you the result you want.
+Wave is a script that allows you to mimic the wavy signs through some fscx, fscy and fsp trickery. When you open the scripts, there are few parameters you can change, and you'll have to go through some trial and error to determine what values give you the result you want.
 
 Credits for the original code excerpt before my modification goes to [The0x539](https://github.com/The0x539)
 
@@ -41,7 +188,7 @@ Below are few examples of what kind of waves you can achieve but depending on th
 
 https://user-images.githubusercontent.com/65547311/164889225-2d8a6ccf-7798-4810-a3cf-3f87568abef0.mp4
 
-## Wobble
+### Wobble
 
 **_Available in Dependency Control_**
 
@@ -57,7 +204,7 @@ As you can see below, the top is the original font and everything below it is di
 
 ![image](./assets/wobble-animate.png)
 
-### Animate the distortion
+#### Animate the distortion
 
 If you want to animate the distortion, first split the line to frames. You can use something like [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to do so. You can control the speed of animation by controlling the number of frames each line has. The more frames per line, the slower the animation. After splitting the line to frames, you need to put the starting value and ending value. I recommend you figure this out beforehand by using main GUI. After you put the starting and ending value for all the required elements, click on `Animate` and the script will handle the rest.
 
@@ -72,7 +219,7 @@ https://user-images.githubusercontent.com/65547311/179356862-a29a5b9d-9cb3-4cb9-
 
 ![wobble-wave](https://user-images.githubusercontent.com/65547311/194462106-f89fa783-8e11-4498-b4d8-0e22b633ed52.png)
 
-### Animate the wave
+#### Animate the wave
 
 Again, split the lines into frames first. Then this time put wave speed along with other parameters. The acceptable value for wave speed is 1-5 but 1 or 2 might be enough for most cases. (Thanks to Alendt for this)
 
@@ -83,21 +230,9 @@ https://user-images.githubusercontent.com/65547311/194462155-1cc8c1c1-d4e2-41f5-
 
 </details>
 
-## svg2ass
+## Timing
 
-**_Available in Dependency Control_**
-
-The script svg2ass is a wrapper for a program [svg2ass](https://github.com/irrwahn/svg2ass) which allows you to select a svg file from Aegisub itself and convert it to shape, clip or iclip. It works in both windows as well as unix operating system. I generally create svg files using GIMP(can perform complex selections and convert those selections to svg in a matter of seconds) or Inkscape and use svg2ass to convert them to subtitle lines. If you cannot/ do not want to compile svg2ass, then there is also a [website](https://qgustavor.github.io/svg2ass-gui/) where you can upload the svg file to obtain the output.ku
-
-The first thing you should do is to set the config and provide the path where you have the svg2ass executable. At the same time, you can also provide custom tags you want to append to final result and the custom svg2ass parameters if you prefer.
-
-![svg2ass_config](./assets/svg2ass_config.png)
-
-To use this script, simply click on `Import` button and select the svg file. The resulting lines will have the same start time, end time and style as the selected line. If you checked clip or iclip in the gui, the resulting shape will be converted to clip or iclip respectively. Alternatively if you don't have the svg2ass executable, you can get the output of svg2ass from the website and paste the result in the textbox and click on the `Textbox` button. The resulting lines will the same as `Import`
-
-![svg2ass](./assets/svg2ass.png)
-
-## Timing Assistant
+### Timing Assistant
 
 **_Available in Dependency Control_**
 
@@ -136,78 +271,23 @@ For end time:
 
 </details>
 
-## Remove Tags
+### Bidirectional Snapping
 
 **_Available in Dependency Control_**
 
-![remove_tags](https://user-images.githubusercontent.com/65547311/211794907-5974c7cf-a824-4dd4-a96c-56a268ac7cc9.png)
+If you're a timer like me who does not use TPP and times primarily using hotkeys, then you'll be disappointed to know that Aegisub does not have hotkeys specifically for timing. While there are other scripts that allow you snap to keyframes, they are either a simple snap to adjacent keyframes or a TPP style snapping scripts. This one is geared towards timing.
 
-This script deals with all things related to removing tags from the line. One of the main motivation for writing this script when a script like unanimated's `Script Cleanup` exists is because I would spend a lot of time searching the exact tag I wanted to remove from the 40 options of the GUI. When I have only 10 tags, I wanted to choose the tags I want to remove from those 10 tags only. So, GUI of this script is dynamically generated i.e. only tags that are available in the selected lines are available for you to remove. The gui from the image above is not what you'll see when you run it.
+While timing, you might have come across the case multiple times when you go to the next line only to realize that the end time of the line overshoots the keyframe you want to snap to. Then you have no choice but to snap backwards using mouse. Here's where this script comes handy. This script is made to be hotkeyed, so first hotkey the end snapping and the start snapping function in the audio section. When you press the hotkey to snap end once, it snaps to the keyframe ahead. If you press the same hotkey again, it snaps to the keyframe behind. Then every press of the hotkey will continue snapping to previous keyframe. This way, you can snap to the keyframe ahead or behind using the same hotkey. For the start time, the opposite happens. One press snaps behind, and then double press snaps forward.
 
-### `Remove All` button
+I use Bidirectional Snapping in combination with [this script](https://github.com/The0x539/Aegisub-Scripts/blob/trunk/src/0x.JoinPrevious.lua) which is also hotkeyed and allows me to link the previous line to current line without moving to previous line.
 
-- If you simply click the `Remove All` button, it removes all the tags form the selected lines.
-- If you check `Start Tags` in the top row and then press `Remove All` button, it removes all start tags from selected lines.
-- Similarly, checking `Inline Tags` in top row removes all inline tags.
+An attempt has been made below to showcase its usage, but you should use it yourself to see how it works. Here, `w` has been hotkeyed to end-snapping and `q` has been hotkeyed to beginning-snapping.
 
-### `Remove Tags` button
+https://user-images.githubusercontent.com/65547311/168461607-d575b757-4504-4a31-8c9b-f52d01fe566f.mp4
 
-- All the tags that you individually tick would be removed.
-- If `Start tags` is checked, the selected tags will only be removed from start tags.
-- If `Inline tags` is checked, the selected tags will only be removed from inline tags.
-- If `Transform` is checked, the selected tags will only be removed from transforms.
-- If `Inverse` is checked, all the tags except the selected ones will be deleted.
+## Karaoke
 
-### `Remove Group` button
-
-This button executes the things you select in the left column and is mostly used to delete groups of tags at once. Staying true to it's mission, the script also dynamically creates this section. Which means that if your selection does not contain any color tags for example, the option to remove color tags won't be available. You can also tick `Start Tag` or `Inline Tag` the top row and only remove the tag group from start tag block or inline tag block only. The groups available are:
-
-- All color tags (c, 1c, 2c, 3c, 4c)
-- All alpha tags (alpha, 1a, 2a, 3a, 4a)
-- All rotation tags (frz, frx, fry)
-- All scale tags (fs, fscx, fscy)
-- All perspective tags (frz, frx, fry, fax, fay, org)
-- All inline tags except last (useful for undoing gradient)
-
-TODO (Maybe): An option to select and remove each individual transform tags.
-
-## Edit Tags
-
-**_Not Available in Dependency Control_**
-
-The main idea is that it presents the tags and it's value of the current line in a HYDRA like GUI so that I can easily edit the values of that tag. It is mostly useful for complex lines that has a lot of tags. It separates start tags, inline tags and transforms in different sections for easy editing.
-
-When you run the script on a line, following gui is generated:
-
-![image](./assets/edittags1.png)
-
-As you can see the gui looks very much like HYDRA. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means that if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the gui but you can also tick any tags of the gui to add that tag to the line. You can also untick any tag to remove them from the line. The order of your tags are respected.
-
-While I did not plan to add an option to modify tags in multiple lines, for the sake of completion, I added one nonetheless. It's usefulness is highly doubtful. I took inspiration from unanimated's Modifire. In short, if you select multiple lines and run the script, following gui will be shown which shows tags in all the selected lines without duplication. It's essentially find and replace for tags i.e. if you change the value of the tag in the gui, all the instances of that said tag will be modified. However, the difference is that you can find and replace as many tags as you want all at once.
-
-![image](./assets/edittags2.png)
-
-## QC Report
-
-**_Not Available in Dependency Control_**
-
-![image](./assets/qcreport-main.png)
-
-This script is designed to write and generate QC reports from Aegisub. If you wish to write QC reports using a media player, there is a program called [mpvQC](https://github.com/mpvqc/mpvQC) which is designed to do just that.
-
-The top row of the gui consists of configurable sections like timing, typesetting etc that you can tick to specify the type of note. If nothing is ticked, it's treated as a general note. Below that is a drop-down which has pre-made reports for each sections for making even faster notes.
-
-Below that is a textbox where you are free to write you report. The way you format your report in the textbox is preserved. If you selected any pre-made reports, it is appended to the beginning of the text in the text-box. You can leave this box empty and only select the pre-made report.
-
-Finally, there is a checkbox called `Use video frame`. Normally, the report is added to current line but if you tick this, the report is added on the basis of the current video frame. If the current video frame has a subtitle, then the report is added to that line. If there isn't, then an empty line with report is inserted whose time is same as the video frame.
-
-After you write all your notes, you can generate a report and a properly formatted note will with time will be generated that you can copy and share. The generated report is fully compatible with arch1t3cht's [Note Browser](https://github.com/arch1t3cht/Aegisub-Scripts#note-browser) script. After you generate the report and you no longer need them in your subtitle, you can clean them up too.
-
-![image](./assets/qcreport-generate.png)
-
-There is also a config where you can configure a lot of things about the script so be sure to check that out.
-
-## KFX
+### KFX
 
 **_Not Available in Dependency Control_**
 
@@ -215,7 +295,7 @@ https://user-images.githubusercontent.com/65547311/177035842-e1a4b930-07b8-4ea0-
 
 This script is designed to write or modify karaoke template lines for [The0x539's KaraTemplater](https://github.com/The0x539/Aegisub-Scripts/blob/trunk/src/0x.KaraTemplater.moon)
 
-### Buttons
+#### Buttons
 
 ![image](./assets/kfx-button.png)
 
@@ -224,23 +304,23 @@ This script is designed to write or modify karaoke template lines for [The0x539'
 - Replace: Replace the current selected line
 - Modify: Modify the template in the current selected line
 
-### First Window - Line Marker
+#### First Window - Line Marker
 
 ![image](./assets/kfx-linemarker.png)
 
 The first window allows you to select line markers. You won't be able to proceed unless you select a line marker.
 
-### Second Window - Modifiers
+#### Second Window - Modifiers
 
 ![image](./assets/kfx-modifier.png)
 
-The second window allows you to choose modifiers. This is not compulsory and you can proceed without choosing anything. For modifiers that need extra arguments, you can type them in the textbox. The options are dynamic i.e. only the modifiers available for the chosen line markers are available for choosing.
+The second window allows you to choose modifiers. This is not compulsory, and you can proceed without choosing anything. For modifiers that need extra arguments, you can type them in the textbox. The options are dynamic i.e. only the modifiers available for the chosen line markers are available for choosing.
 
-### Third Window - Effect
+#### Third Window - Effect
 
 ![image](./assets/kfx-code.png)
 
-The third window allows you to write the actual effects. If you chose `code` line marker, a text box will appear where you can write your code. Variables can be written one variable per line. Function can be written as you write in your IDE. Indentation is purely visual and not necessary but you can indent with tabs or spaces if you wish.
+The third window allows you to write the actual effects. If you chose `code` line marker, a text box will appear where you can write your code. Variables can be written one variable per line. Function can be written as you write in your IDE. Indentation is purely visual and not necessary, but you can indent with tabs or spaces if you wish.
 
 ![image](./assets/kfx-effect.png)
 
@@ -248,67 +328,26 @@ For any other line marker, a HYDRA type GUI will appear. Every box is a textbox 
 
 If you tick transform, this same GUI will be reloaded for you to write tags inside the transform section.
 
-In the bottom, there are boxes for the effect, actor and text. While these are for giving you information of current state of template line, you can edit it manually and it will be saved.
+In the bottom, there are boxes for the effect, actor and text. While these are for giving you information of current state of template line, you can edit it manually, and it will be saved.
 
-## Rotated Gradient
+## Quality Checking
 
-**_Available in Dependency Control_**
+### QC Report
 
-![image](./assets/rotated-gradient.png)
+**_Not Available in Dependency Control_**
 
-![image](./assets/rotated-gradient-gui.png)
+![image](./assets/qcreport-main.png)
 
-This script allows you to create a gradient at an angle using clips. Traditionally, to create a rotated gradient, you'd have to create a small strip of shapes. However this script allows you to use clips which has many advantages one of which is simply being able to edit text. It's not perfect but works in the cases I've tried.
+This script is designed to write and generate QC reports from Aegisub. If you wish to write QC reports using a media player, there is a program called [mpvQC](https://github.com/mpvqc/mpvQC) which is designed to do just that.
 
-Instead of trying to explain with words, here's a video showcasing the usage of the script. The same can be applied for any angle or rotated text.
+The top row of the GUI consists of configurable sections like timing, typesetting etc. that you can tick to specify the type of note. If nothing is ticked, it's treated as a general note. Below that is a drop-down which has pre-made reports for each sections for making even faster notes.
 
-<details>
-  <summary>Click here to see the example</summary>
-  
-https://user-images.githubusercontent.com/65547311/180961066-708b636b-60e3-450c-bb42-395cfcda7298.mp4
+Below that is a textbox where you are free to write you report. The way you format your report in the textbox is preserved. If you selected any pre-made reports, it is appended to the beginning of the text in the text-box. You can leave this box empty and only select the pre-made report.
 
-</details>
+Finally, there is a checkbox called `Use video frame`. Normally, the report is added to current line but if you tick this, the report is added on the basis of the current video frame. If the current video frame has a subtitle, then the report is added to that line. If there isn't, then an empty line with report is inserted whose time is same as the video frame.
 
-One word of caution: If your text has border and shadow, you must split the lines into layers with and without border (I hope you already do this if you call yourself a typesetter) and then depending on if you want to gradient fill or border and shadow, run the script in that layer. Otherwise, you may see strips in you line. This is not a limitation of this script. This is limitation of ASS rendering.
+After you write all your notes, you can generate a report and a properly formatted note will with time will be generated that you can copy and share. The generated report is fully compatible with arch1t3cht's [Note Browser](https://github.com/arch1t3cht/Aegisub-Scripts#note-browser) script. After you generate the report, and you no longer need them in your subtitle, you can clean them up too.
 
-## Extrapolate Tracking
+![image](./assets/qcreport-generate.png)
 
-**_Available in Dependency Control_**
-
-When you're motion-tracking a sign and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines. There is a similar function in 'Significance' script by unanimated but it only extrapolates scaling and position. This script goes a little beyond and extrapolates the following tags.
-
-![image](./assets/extrapolate.png)
-
-On top of that, it also supports extrapolating only tags selected by the user.
-
-**Steps:**
-
-- If you already have badly tracked lines in Aegisub, mark those lines with 'x' in Effect.
-- Instead if you only have correctly tracked lines in Aegisub, write 'x,n' in the first of last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
-
-- Select the lines you marked plus frames before or after it. How many frames you select depends on how "linear" the tracking is. With perfectly linear tracking, you can select all the tracked lines to get more accurate extrapolation. If there seems to be a little bit of an acceleration, use only about 5 reference frames.
-
-**Requirements:**
-
-- All selected lines must be 1 frame long.
-- Selection must be consecutive and sorted by time.
-- If lines are split in layers, run the script separately for each layer.
-
-## Add Grain
-
-**_Available in Dependency Control_**
-
-This is the script that allows you to add static and dynamic grain to your sign. This script is based on [this guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>).
-
-**Static Grain:**
-
-- First cover your sign with "!". It's easier to do if you use `\an7` and break the line using "\N" when it goes over the sign. You don't have to choose Grain font. You don't have to remove border or shadow. Just add "!". You may want to change scale and add clip to the line as per sign's need. The script will convert "!" to randomized character.
-  ![addgrain](https://user-images.githubusercontent.com/65547311/208031273-0014ab3f-dc8d-4e15-96e1-24cd59cbc6c0.png)
-
-- Run the script. There are only two options. One is to add simple grain. Another one is to add a bit denser grain as explained in the guide.
-
-**Dynamic Grain:**
-
-- Add "!" as usual.
-- Use your favorite line2fbf script to convert line2fbf. In some cases you can go further and check if the anime is animated on twos or threes and use [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to split line in `n` frames accordingly.
-- Run the script and you have a dynamic grain.
+There is also a config where you can configure a lot of things about the script so be sure to check that out.
