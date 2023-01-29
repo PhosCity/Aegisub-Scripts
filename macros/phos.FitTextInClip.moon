@@ -1,6 +1,6 @@
 export script_name = "Fit Text in Clip"
 export script_description = "Fit the text inside the rectangular clip"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.FitTextInClip"
 
@@ -88,6 +88,15 @@ main = (sub, sel) ->
         .bold\getTagParams! > 0, .italic\getTagParams! > 0, .underline\getTagParams! > 0,
         .strikeout\getTagParams! > 0, .fontsize\getTagParams!, .scale_x\getTagParams! / 100,
         .scale_y\getTagParams! / 100, .spacing\getTagParams!
+
+    -- Change alignment to 7
+    if effTags.align\getTagParams! != 7
+      pos, align = data\getPosition!
+      metrics = data\getTextMetrics true
+      target = ASS\createTag("align", 7)
+      width, height = metrics.width, metrics.height
+      pos\add target\getPositionOffset width, height, align
+      data\replaceTags {target, pos}
 
     data\callback ((section) ->
       text = section\replace("\\N", " ")\replace("%s+", " ")\getString!
