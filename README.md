@@ -6,6 +6,7 @@
   - [Edit Tags](#edit-tags)
   - [Extrapolate Tracking](#extrapolate-tracking)
   - [Fold Operations](#fold-operations)
+  - [Fix Text in Clip](fix-text-in-clip)
   - [Remove tags](#remove-tags)
   - [Rotated Gradient](#rotated-gradient)
   - [svg2ass](#svg2ass)
@@ -91,6 +92,14 @@ On top of that, it also supports extrapolating only tags selected by the user.
 **_Not Available in Dependency Control_**
 
 If you use [arch1t3cht's Aegisub](https://github.com/arch1t3cht/Aegisub), then it comes with a feature to visually group and collapse lines in the subtitle grid called folds. This script allows you to operate on such lines. Currently, the only operations available are to select all the lines of the fold around active line, comment the lines of the current fold and add folds around the selected lines by enclosing them in a comment. But there'll be more fold operations in the future.
+
+### Fix Text in Clip
+
+**_Not Available in Dependency Control_**
+
+This script will fit the text in the current line inside the rectangular clip and try to make it justified.
+
+This script uses [Yutils](https://github.com/TypesettingTools/Yutils) to determine the width of the text. Therefore, the efficacy of this script entirely depends on whether Yutils can accurately determine the width of the text or not. If things goes south, the likely cause is either Yutils or the font that you're using has kerning beyond repair. Even when all things go right, sometimes you may have to manually edit some lines to make it look as intended.
 
 ### Remove Tags
 
