@@ -57,7 +57,7 @@ When you run the script on a line, following gui is generated:
 
 ![image](./assets/edittags1.png)
 
-As you can see the GUI looks very much like HYDRA. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means that if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the GUI, but you can also tick any tags of the GUI to add that tag to the line. You can also untick any tag to remove them from the line. The order of your tags are respected.
+I've tried to make GUI as similar to HYDRA as possible since the familiarity helps with finding which tags you want to edit. The tags present in your lines are ticked and the effective tag values are pre-filled. Here effective tags value means that if the tag is not available in the line, the tag value is taken from style. Not only you can change the value of the ticked tag in the GUI, but you can also tick any tags of the GUI to add that tag to the line. You can also untick any tag to remove them from the line. The order of your tags are respected.
 
 While I did not plan to add an option to modify tags in multiple lines, for the sake of completion, I added one nonetheless. Its usefulness is highly doubtful. I took inspiration from unanimated's Modifire. In short, if you select multiple lines and run the script, following GUI will be shown which shows tags in all the selected lines without duplication. It's essentially find and replace for tags i.e. if you change the value of the tag in the GUI, all the instances of that said tag will be modified. However, the difference is that you can find and replace as many tags as you want all at once.
 
@@ -76,7 +76,7 @@ On top of that, it also supports extrapolating only tags selected by the user.
 **Steps:**
 
 - If you already have badly tracked lines in Aegisub, mark those lines with 'x' in Effect.
-- Instead, if you only have correctly tracked lines in Aegisub, write 'x,n' in the first of last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
+- Instead, if you only have correctly tracked lines in Aegisub, write 'x,n' in the first or last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
 
 - Select the lines you marked plus frames before or after it. How many frames you select depends on how "linear" the tracking is. With perfectly linear tracking, you can select all the tracked lines to get more accurate extrapolation. If there seems to be a small accel, use only about 5 reference frames.
 
@@ -244,7 +244,7 @@ How to use:
 
 The first thing to do after you install the script is to set up the config. By default, it contains the values I use and what I consider sane defaults. You are however free to change it and the script will perform as intended as long as the values you put are within reason. The second thing to do is of course hotkey the script in audio section.
 
-Now you are ready for timing. Here, you'll first do the exact timing on the line and then press the hotkey. The script will make the decision for you whether it should add lead in, snap to keyframe, link the lines together or add lead out. You then move to the next line and repeat. _Exact time, hotkey. Exact time, hotkey. That's it._
+Now you are ready for timing. Here, you'll first do the exact timing on the line and then press the hotkey. The script will make the decision for you whether it should add lead in, snap to keyframe, link the lines together or add lead out. You then move to the next line by pressing 'g' and repeat. _Exact time, hotkey. Exact time, hotkey. That's it._
 
 I have come to like this method because it has the convenience of decision-making of TPP but at the same time, if I do not agree with the script, I am free to fix it and move to next line.
 
