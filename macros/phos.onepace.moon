@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.7"
+export script_version = "1.0.8"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -366,6 +366,7 @@ preprocessing = (subs, sel) ->
       title:     { fontname: "M+ 1c",                 italic: false, color2: "&H000000FF&", margin_t: 360, color4: "&H00000000&", fontsize: 95, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 15,  angle: 0, bold: true,  scale_y: 100, margin_b: 360, color1: "&H00FEFEFE&", margin_l: 15,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.5, underline: false, name: "Title-207+",      shadow: 0   },
       captions:  { fontname: "FOT-Greco Std DB Strp", italic: false, color2: "&H000000FF&", margin_t: 30,  color4: "&H00000000&", fontsize: 56, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 15,  angle: 0, bold: false, scale_y: 100, margin_b: 30,  color1: "&H00FFFFFF&", margin_l: 15,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3,   underline: false, name: "Captions-207+",   shadow: 0   },
       credits:   { fontname: "FOT-Greco Std DB Strp", italic: false, color2: "&H000000FF&", margin_t: 15,  color4: "&H00000000&", fontsize: 55, color3: "&H00000000&", class: "style", spacing: 1.5, strikeout: false, encoding: 1, margin_r: 15,  angle: 0, bold: false, scale_y: 105, margin_b: 15,  color1: "&H00FFFFFF&", margin_l: 15,  align: 7, scale_x: 105, section: "[V4+ Styles]", borderstyle: 1, outline: 3.7, underline: false, name: "Credits-207+",    shadow: 0   },
+      warning:   { fontname: "Impress BT Pace",       italic: false, color2: "&H000000FF&", margin_t: 10,  color4: "&H00000000&", fontsize: 90, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 10,  angle: 0, bold: false, scale_y: 100, margin_b: 10,  color1: "&H00FFFFFF&", margin_l: 10,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.0, underline: false, name: "Warning",         shadow: 2.0 },
       },
     "207-": {
       main:      { fontname: "Impress BT Pace",       italic: false, color2: "&H00002EFF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Main-207-",       shadow: 3.8 },
@@ -376,6 +377,7 @@ preprocessing = (subs, sel) ->
       title:     { fontname: "M+ 1c",                 italic: false, color2: "&H00002EFF&", margin_t: 383, color4: "&H00000000&", fontsize: 95, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 15,  angle: 0, bold: true,  scale_y: 100, margin_b: 383, color1: "&H00FEFEFE&", margin_l: 15,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.5, underline: false, name: "Title-207-",      shadow: 0   },
       captions:  { fontname: "Chinacat",              italic: false, color2: "&H000019FF&", margin_t: 27,  color4: "&H00000000&", fontsize: 99, color3: "&H00000000&", class: "style", spacing: 5,   strikeout: false, encoding: 1, margin_r: 16,  angle: 0, bold: true,  scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 16,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.4, underline: false, name: "Captions-207-",   shadow: 0   },
       credits:   { fontname: "FOT-Greco Std B Strp",  italic: false, color2: "&H00002EFF&", margin_t: 16,  color4: "&H00000000&", fontsize: 43, color3: "&H00000000&", class: "style", spacing: 1.6, strikeout: false, encoding: 1, margin_r: 16,  angle: 0, bold: true,  scale_y: 100, margin_b: 16,  color1: "&H00FFFFFF&", margin_l: 16,  align: 7, scale_x: 95,  section: "[V4+ Styles]", borderstyle: 1, outline: 5,   underline: false, name: "Credits-207-",    shadow: 0   },
+      warning:   { fontname: "Impress BT Pace",       italic: false, color2: "&H000000FF&", margin_t: 10,  color4: "&H00000000&", fontsize: 90, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 10,  angle: 0, bold: false, scale_y: 100, margin_b: 10,  color1: "&H00FFFFFF&", margin_l: 10,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.0, underline: false, name: "Warning",         shadow: 2.0 },
     },
   }
 
@@ -400,13 +402,15 @@ preprocessing = (subs, sel) ->
 
   -- ==========ADD CHAPTER AND KARAOKE MARKERS==================
   line_top = {
-    line1: { actor: "",      class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
-    line2: { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
-    line3: { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
-    line4: { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part A}"}
-    line5: { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part B}"}
-    line6: { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
-    line7: { actor: "",      class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
+    line1: { actor: "",      class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
+    line2: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line3: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line4: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part A}"}
+    line5: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part B}"}
+    line6: { actor: "OP",    class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+    line7: { actor: "",      class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+    line8: { actor: "",      class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+    line9: { actor: "",      class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
   }
   line_bottom = {
     line1: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "============================SIGNS AND TITLE========================="}
@@ -417,7 +421,7 @@ preprocessing = (subs, sel) ->
   for i = 1, #subs
     if subs[i].class == "dialogue"
       count = i
-      for x = 1, 7
+      for x = 1, 9
         current_line = line_top["line"..x]
         subs.insert(count, current_line)
         count += 1
