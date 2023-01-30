@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.6"
+export script_version = "1.0.7"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -336,17 +336,24 @@ preprocessing = (subs, sel) ->
     aegisub.log ("You neither have video loaded. Nor did you choose any option. I give up.")
     aegisub.cancel!
 
+  infoIndex, infoLine = 0, {}
   for i = 1, #subs
     if subs[i].class == "info"
       line = subs[i]
+      infoIndex = i
+      infoLine = line
       line.value = tostring(xres) if line.key == "PlayResX"
       line.value = tostring(yres) if line.key == "PlayResY"
       line.value = "TV.709" if line.key == "YCbCr Matrix"
       line.value = "yes" if line.key == "ScaledBorderAndShadow"
       line.value = tostring(0) if line.key == "WrapStyle"
-
       subs[i] = line
     break if subs[i].class=="dialogue"
+
+  infoLine.key, infoLine.value = "LayoutResY", tostring(yres)
+  subs.insert(infoIndex, infoLine)
+  infoLine.key, infoLine.value = "LayoutResX", tostring(xres)
+  subs.insert(infoIndex, infoLine)
 
   -- ==========ADD STYLES==================
   stl = {
@@ -531,7 +538,8 @@ japanese = (subs, sel, action) ->
     elseif action == "remove_after"
       line.text = line.text\gsub("\\N.+$", "")
     subs[i] = line
-      
+
+
 onepace = (subs, sel) ->
   dlg = {
     { x: 0, y: 0, class: "label", label: script_name .. " by " .. script_author .. "\n", },
