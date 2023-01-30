@@ -1,6 +1,6 @@
 export script_name = "Fit Text in Clip"
 export script_description = "Fit the text inside the rectangular clip"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.FitTextInClip"
 
@@ -50,13 +50,11 @@ textJustification = (words, maxWidth, fontObj) ->
       table.insert result, table.concat(currentLine, " ")
       currentLine, width = {}, 0
     table.insert currentLine, word
-    width += textWidth(word.." ")
+    currText = table.concat(currentLine, " ")
+    width = textWidth(currText)
   table.insert result, table.concat(currentLine, " ")
 
-  finalText = ""
-  for ln in *result
-    finalText ..= ln.."\\N"
-  return finalText\gsub "\\N$", ""
+  return table.concat(result, "\\N")
 
 
 --- Main processing function
@@ -82,6 +80,11 @@ main = (sub, sel) ->
     clipWidth = x2 - x1
 
     effTags = (data\getEffectiveTags -1, true, true, false).tags
+
+    if effTags.align\getTagParams! != 7
+      logger\warn "Please use \\an7 in the line."
+      return
+
     local fontObj
     with effTags
       fontObj = Yutils.decode.create_font .fontname\getTagParams!,
@@ -89,14 +92,6 @@ main = (sub, sel) ->
         .strikeout\getTagParams! > 0, .fontsize\getTagParams!, .scale_x\getTagParams! / 100,
         .scale_y\getTagParams! / 100, .spacing\getTagParams!
 
-    -- Change alignment to 7
-    if effTags.align\getTagParams! != 7
-      pos, align = data\getPosition!
-      metrics = data\getTextMetrics true
-      target = ASS\createTag("align", 7)
-      width, height = metrics.width, metrics.height
-      pos\add target\getPositionOffset width, height, align
-      data\replaceTags {target, pos}
 
     data\callback ((section) ->
       text = section\replace("\\N", " ")\replace("%s+", " ")\getString!
