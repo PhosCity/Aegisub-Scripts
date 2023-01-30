@@ -1,6 +1,6 @@
 export script_name = "Fit Text in Clip"
 export script_description = "Fit the text inside the rectangular clip"
-export script_version = "0.0.3"
+export script_version = "0.0.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.FitTextInClip"
 
@@ -20,10 +20,9 @@ depctrl = DependencyControl{
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
     {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
      feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
-    {"Yutils"}
   }
 }
-LineCollection, ASS, Functional, Yutils = depctrl\requireModules!
+LineCollection, ASS, Functional = depctrl\requireModules!
 logger = depctrl\getLogger!
 { :string } = Functional
 
@@ -80,20 +79,12 @@ main = (sub, sel) ->
     clipWidth = x2 - x1
 
     effTags = (data\getEffectiveTags -1, true, true, false).tags
-
     if effTags.align\getTagParams! != 7
       logger\warn "Please use \\an7 in the line."
       return
 
-    local fontObj
-    with effTags
-      fontObj = Yutils.decode.create_font .fontname\getTagParams!,
-        .bold\getTagParams! > 0, .italic\getTagParams! > 0, .underline\getTagParams! > 0,
-        .strikeout\getTagParams! > 0, .fontsize\getTagParams!, .scale_x\getTagParams! / 100,
-        .scale_y\getTagParams! / 100, .spacing\getTagParams!
-
-
     data\callback ((section) ->
+      fontObj = section\getYutilsFont!
       text = section\replace("\\N", " ")\replace("%s+", " ")\getString!
       words = string.split text, " "
       result = textJustification(words, clipWidth, fontObj)
