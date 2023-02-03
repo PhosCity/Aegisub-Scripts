@@ -2,7 +2,7 @@ export script_name = "QC Report"
 export script_description = "Write and generate QC reports"
 export script_author = "PhosCity"
 export script_namespace = "phos.qcreport"
-export script_version = "1.0.1"
+export script_version = "1.0.3"
 
 default_config =
   section: {"Timing", "Typesetting", "Editing"},
@@ -14,6 +14,9 @@ default_config =
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl({})
 config = depctrl\getConfigHandler(default_config, "config", false)
+logger = depctrl\getLogger!
+
+show_hour = false
 
 
 config_setup = () ->
@@ -58,13 +61,13 @@ config_setup = () ->
 clear_notes = (subs, sel) ->
   to_delete = {}
   for i = 1, #subs do
-    if subs[i].class == "dialogue"
-      line = subs[i]
-      continue unless line.text\match "{%*%[.*%*}"
-      line.text = line.text\gsub "{%*%[.*%*}", ""
-      line.effect = line.effect\gsub "%[QC-[^%]]+%]", ""
-      if line.text == "" then table.insert(to_delete, i)
-      subs[i] = line
+    continue unless subs[i].class == "dialogue"
+    line = subs[i]
+    continue unless line.text\match "{%*%[.*%*}"
+    line.text = line.text\gsub "{%*%[.*%*}", ""
+    line.effect = line.effect\gsub "%[QC-[^%]]+%]", ""
+    if line.text == "" then table.insert(to_delete, i)
+    subs[i] = line
   subs.delete(to_delete)
 
 
@@ -89,7 +92,7 @@ useVideo = (subs, header, note) ->
   video_frame = aegisub.project_properties().video_position
 
   unless video_frame
-    aegisub.log "Video is not loaded. Adding note to current selected line."
+    logger\log "Video is not loaded. Adding note to current selected line."
     return nil
   else
     time_frame = aegisub.ms_from_frame(video_frame)
@@ -157,27 +160,35 @@ ms2timecode = (num) ->
   hh = math.floor((num / (60 * 60 * 1000)) % 24)
   mm = math.floor((num / (60 * 1000)) % 60)
   ss = math.floor((num / 1000) % 60)
-  ms = num % 1000
-  return string.format("%01d:%02d:%02d.%01d", hh, mm, ss, ms)
+  if show_hour
+    return string.format("%01d:%02d:%02d", hh, mm, ss)
+  else
+    return string.format("%02d:%02d", mm, ss)
 
 
 generate_QC = (subs, sel) ->
+  maxTime = 0
+  for i = 1, #subs
+    continue unless subs[i].class == "dialogue"
+    maxTime = math.max(subs[i].start_time, maxTime)
+  show_hour = math.floor((maxTime/(60*60*1000))%24) > 0
+
   report = {}
   for i = 1, #subs do
-    if subs[i].class == "dialogue"
-      line = subs[i]
-      for qc in line.text\gmatch "{%*([^%*]+)%*}"
-        section_header = qc\match "^%[([^%]]+)%].*"
-        note = qc\gsub("#{section_header}", "")\gsub("[%[%]]", "")\gsub("^%s+", "")\gsub("\\N", "\n")
-        note = ms2timecode(line.start_time).." - "..note.."\n"
-        report[section_header] or= {}
-        table.insert(report[section_header], note)
+    continue unless subs[i].class == "dialogue"
+    line = subs[i]
+    for qc in line.text\gmatch "{%*([^%*]+)%*}"
+      section_header = qc\match "^%[([^%]]+)%].*"
+      note = qc\gsub("#{section_header}", "")\gsub("[%[%]]", "")\gsub("^%s+", "")\gsub("\\N", "\n")
+      note = ms2timecode(line.start_time).." - "..note
+      report[section_header] or= {}
+      table.insert(report[section_header], note)
 
   for k, v in pairs report
-    aegisub.log "[#{k}]\n"
-    for _, note in ipairs v
-      aegisub.log note
-    aegisub.log "\n"
+    logger\log "[#{k}]"
+    for note in *v
+      logger\log note
+    logger\log " "
 
 
 depctrl\registerMacros({
