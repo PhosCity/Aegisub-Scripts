@@ -112,6 +112,10 @@
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
 							"sha1": "12d5b611c75bbf8029496f976a51799620fc88f0"
+						},
+						{
+							"name": ".lua",
+							"delete": true
 						}
 					],
 					"requiredModules": [
