@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.9"
+export script_version = "1.1.0"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -294,9 +294,8 @@ preprocessing = (subs, sel) ->
   for i = 1, #subs
     continue unless subs[i].class == "dialogue"
     line = subs[i]
-    text, style  = line.text, line.style
-    continue unless lineIsDialogue(style)
-    text = text\gsub("{\\i[10]?}", "")          -- Remove all italics as italics are handled by styles
+    text = line.text
+    text = text\gsub("{\\i[10]?}", "")          -- Since we're looping through all lines, remove all italics as italics are handled by styles
     line.text = text
     table.insert subtable, line                 -- Put lines into table for later sorting
     subs[i] = line
@@ -354,7 +353,28 @@ preprocessing = (subs, sel) ->
   infoLine.key, infoLine.value = "LayoutResX", tostring(xres)
   subs.insert(infoIndex, infoLine)
 
-  -- ==========ADD STYLES==================
+  -- ==========MANAGE STYLES==================
+  for i = 1, #subs
+    if subs[i].class == "style"
+      style = subs[i].name
+      if style\match("[Mm]ain") or style\match("[Tt]houghts") or style\match("[Ff]lashbacks") or style\match("[Nn]arrator") or style\match("[Kk]araoke") or style\match("[Cc]aption")
+        btn, res = aegisub.dialog.display({
+          { x: 0, y: 0, class: "label",    label: "It appears that this file already has styles added."},
+          { x: 0, y: 1, class: "label",    label: "It is not recommended to run this in a script that has already been timed/edited.", width: 10 },
+          { x: 0, y: 2, class: "label",    label: "The script will replace all styles and add new muxer markers.", width: 10 },
+          { x: 0, y: 3, class: "label",    label: "Do you want to proceed?", width: 10 },
+        }, {"Yes", "No"})
+        return if btn == "No"
+        break
+    break if subs[i].class=="dialogue"
+
+  -- ==========DELETE ALL OLD STYLES==================
+  for i = 1, #subs
+    if subs[i].class == "style"
+      subs.delete(i)
+    break if subs[i].class=="dialogue"
+
+  -- ==========ADD NEW STYLES==================
   stl = {
     "207+": {
       main:      { fontname: "Impress BT Pace",       italic: false, color2: "&H000000FF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 300, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 300, align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Main-207+",       shadow: 3.8 },
@@ -383,7 +403,7 @@ preprocessing = (subs, sel) ->
   st = switch xres
     when 1440 then stl["207-"]
     when 1920 then stl["207+"]
-  for i = 1, #subs 
+  for i = 1, #subs
     count = i-1
     if subs[i].class == "dialogue"
       for _, value in pairs st
@@ -430,19 +450,19 @@ preprocessing = (subs, sel) ->
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 1940,   end_time: 1980,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
   -- elseif filename\match "[Tt]hriller"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   -- elseif filename\match "[Ii]mpel" or filename\match "[Ii][dD]"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   -- elseif filename\match "[Mm]arineford"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   elseif filename\match "[Pp]ostwar" or filename\match "[Pp][Ww]"
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 151000, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
@@ -455,24 +475,24 @@ preprocessing = (subs, sel) ->
     line_top["line4"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
 
   -- elseif filename\match "[Dd]ressrosa"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   -- elseif filename\match "[Zz]ou"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   -- elseif filename\match "[Ww]hole" or filename\match "[Ww][Cc][Ii]"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   -- elseif filename\match "[Rr]everie"
-  --   line_top["line2"] = 
-  --   line_top["line3"] = 
-  --   line_top["line4"] = 
+  --   line_top["line2"] =
+  --   line_top["line3"] =
+  --   line_top["line4"] =
 
   elseif filename\match "[Ww]ano"
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
