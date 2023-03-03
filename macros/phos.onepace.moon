@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.0.8"
+export script_version = "1.0.9"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -319,16 +319,15 @@ preprocessing = (subs, sel) ->
   xres, yres, _, _ = aegisub.video_size()
   unless xres         -- Video is not loaded
     btn, res = aegisub.dialog.display({
-      { x: 0, y: 0, class: "label", label: "It appears that video is not loaded so choose the resolution:", width: 10 },
-      { x: 0, y: 1, class: "checkbox", label: "1920x1080", name: "207+"},
-      { x: 0, y: 2, class: "checkbox", label: "1440x1080", name: "207-"},
+      { x: 0, y: 0, class: "label",    label: "It appears that video is not loaded so choose the resolution:", width: 10 },
+      { x: 0, y: 1, class: "dropdown", name: "resol", value: "", items: {"1920x1080", "1440x1080"}},
     }, {"OK", "Cancel"}, {"ok": "OK", "cancel": "Cancel"})
 
     if btn
-      if res["207+"]
+      if res.resol == "1920x1080"
         xres = 1920
         yres = 1080
-      else
+      elseif res.resol == "1440x1080"
         xres = 1440
         yres = 1080
 
@@ -376,7 +375,7 @@ preprocessing = (subs, sel) ->
       narrator:  { fontname: "Impress BT Pace",       italic: true,  color2: "&H000000FF&", margin_t: 27,  color4: "&H78000000&", fontsize: 82, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 180, angle: 0, bold: false, scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 180, align: 8, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.8, underline: false, name: "Narrator-207-",   shadow: 3.8 },
       title:     { fontname: "M+ 1c",                 italic: false, color2: "&H00002EFF&", margin_t: 383, color4: "&H00000000&", fontsize: 95, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 15,  angle: 0, bold: true,  scale_y: 100, margin_b: 383, color1: "&H00FEFEFE&", margin_l: 15,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.5, underline: false, name: "Title-207-",      shadow: 0   },
       captions:  { fontname: "Chinacat",              italic: false, color2: "&H000019FF&", margin_t: 27,  color4: "&H00000000&", fontsize: 99, color3: "&H00000000&", class: "style", spacing: 5,   strikeout: false, encoding: 1, margin_r: 16,  angle: 0, bold: true,  scale_y: 100, margin_b: 27,  color1: "&H00FFFFFF&", margin_l: 16,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 3.4, underline: false, name: "Captions-207-",   shadow: 0   },
-      credits:   { fontname: "FOT-Greco Std B Strp",  italic: false, color2: "&H00002EFF&", margin_t: 16,  color4: "&H00000000&", fontsize: 43, color3: "&H00000000&", class: "style", spacing: 1.6, strikeout: false, encoding: 1, margin_r: 16,  angle: 0, bold: true,  scale_y: 100, margin_b: 16,  color1: "&H00FFFFFF&", margin_l: 16,  align: 7, scale_x: 95,  section: "[V4+ Styles]", borderstyle: 1, outline: 5,   underline: false, name: "Credits-207-",    shadow: 0   },
+      credits:   { fontname: "FOT-Greco Std B Strp",  italic: false, color2: "&H00002EFF&", margin_t: 16,  color4: "&H00000000&", fontsize: 50, color3: "&H00000000&", class: "style", spacing: 1.6, strikeout: false, encoding: 1, margin_r: 16,  angle: 0, bold: true,  scale_y: 100, margin_b: 16,  color1: "&H00FFFFFF&", margin_l: 16,  align: 7, scale_x: 95,  section: "[V4+ Styles]", borderstyle: 1, outline: 3,   underline: false, name: "Credits-207-",    shadow: 0   }
       warning:   { fontname: "Impress BT Pace",       italic: false, color2: "&H000000FF&", margin_t: 10,  color4: "&H00000000&", fontsize: 90, color3: "&H00000000&", class: "style", spacing: 0,   strikeout: false, encoding: 1, margin_r: 10,  angle: 0, bold: false, scale_y: 100, margin_b: 10,  color1: "&H00FFFFFF&", margin_l: 10,  align: 2, scale_x: 100, section: "[V4+ Styles]", borderstyle: 1, outline: 2.0, underline: false, name: "Warning",         shadow: 2.0 },
     },
   }
@@ -402,26 +401,105 @@ preprocessing = (subs, sel) ->
 
   -- ==========ADD CHAPTER AND KARAOKE MARKERS==================
   line_top = {
-    line1: { actor: "",      class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
-    line2: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
-    line3: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
-    line4: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part A}"}
-    line5: { actor: "chptr", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Part B}"}
-    line6: { actor: "OP",    class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
-    line7: { actor: "",      class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
-    line8: { actor: "",      class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
-    line9: { actor: "",      class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
+    line1: { actor: "", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
   }
+  filename = aegisub.file_name!
+  if filename\match "[Rr]omance" or filename\match "[Rr][Dd]" or filename\match "[Oo]range" or filename\match "[Ss]yrup" or filename\match "[Gg]aimon" or filename\match "[Bb]aratie" or filename\match "[Aa]rlong" or filename\match "[Ll]oguetown"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 110170, end_time: 110210, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 47900,  end_time: 48030,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  elseif filename\match "[Rr]everse" or filename\match "[Ww]hisky" or filename\match "[Ll]ittle" or filename\match "[Ll][Gg]" or filename\match "[Dd]rum" or filename\match "[Dd][iI]" or filename\match "[Aa]rabasta"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109920, end_time: 110130, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 41060,  end_time: 41100,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  elseif filename\match "[Jj]aya" or filename\match "[Ss]kypiea"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109710, end_time: 109760, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 25420,  end_time: 25460,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  elseif filename\match "[Dd]avy" or filename\match "[Dd][Bb][Ff]" or filename\match "[Rr]ing" or filename\match "[lL][Rr][Rr][Ll]" or filename\match "[Ww]ater" or filename\match "[wW]7"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 110090, end_time: 110180, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 26260,  end_time: 26340,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  elseif filename\match "[Ee]nies" or filename\match "[eE][Ll]"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109840, end_time: 109880, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 1940,   end_time: 1980,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  -- elseif filename\match "[Tt]hriller"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  -- elseif filename\match "[Ii]mpel" or filename\match "[Ii][dD]"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  -- elseif filename\match "[Mm]arineford"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  elseif filename\match "[Pp]ostwar" or filename\match "[Pp][Ww]"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 151000, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 151000, end_time: 151040, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 3620,   end_time: 3650,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  elseif filename\match "[Rr]eturn" or filename\match "[Rr][Tt][Ss]" or filename\match "[Ff]ishmen" or filename\match "[Ff][Ii]" or filename\match "[Ff]ishman"
+    line_top["line2"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 38920,  end_time: 39020,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 113200, end_time: 156070, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+
+  -- elseif filename\match "[Dd]ressrosa"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  -- elseif filename\match "[Zz]ou"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  -- elseif filename\match "[Ww]hole" or filename\match "[Ww][Cc][Ii]"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  -- elseif filename\match "[Rr]everie"
+  --   line_top["line2"] = 
+  --   line_top["line3"] = 
+  --   line_top["line4"] = 
+
+  elseif filename\match "[Ww]ano"
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 101870, end_time: 101960, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 9990,   end_time: 10030,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  else
+    -- TODO: Maybe prompt user in this case?
+    line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
+    line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
+    line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
+
+  line_top["line5"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+  line_top["line6"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+  line_top["line7"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
+
   line_bottom = {
     line1: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "============================SIGNS AND TITLE========================="}
     line2: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.title.name,   text: ""}
     line3: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "===============================CREDITS=============================="}
     line4: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.credits.name, text: ""}
   }
+
   for i = 1, #subs
     if subs[i].class == "dialogue"
       count = i
-      for x = 1, 9
+      for x = 1, 7
         current_line = line_top["line"..x]
         subs.insert(count, current_line)
         count += 1
@@ -486,12 +564,12 @@ transform_color = (subs, sel) ->
     framerate = round(framerate, 6)
 
   btn, res = aegisub.dialog.display({
-    { x: 0, y: 0, class: "label", label: "Color:", },
-    { x: 1, y: 0, class: "color", name: "color", width:2 },
-    { x: 0, y: 1, class: "checkbox", name: "transform_start", label: "Start:", },
-    { x: 1, y: 1, class: "floatedit", name: "start", min: 0, width: 2  },
-    { x: 0, y: 2, class: "checkbox", name: "transform_end", label: "End:", },
-    { x: 1, y: 2, class: "floatedit", name: "end", min: 0, width: 2},
+    { x: 0, y: 0, class: "label",     label: "Color:",         },
+    { x: 1, y: 0, class: "color",     name: "color",           width:2 },
+    { x: 0, y: 1, class: "checkbox",  name: "transform_start", label: "Start:", },
+    { x: 1, y: 1, class: "floatedit", name: "start",           min: 0,          width: 2  },
+    { x: 0, y: 2, class: "checkbox",  name: "transform_end",   label: "End:",   },
+    { x: 1, y: 2, class: "floatedit", name: "end",             min: 0,          width: 2},
   }, {"OK", "Cancel"}, {"ok": "OK", "Cancel": "Cancel"})
 
   if btn
@@ -548,21 +626,21 @@ onepace = (subs, sel) ->
   dlg = {
     { x: 0, y: 0, class: "label", label: script_name .. " by " .. script_author .. "\n", },
     { x: 1, y: 0, class: "label", label: "(ver. " .. script_version .. ")\n", },
-    { x: 0, y: 1, class: "checkbox", name: "preprocessing", label: "Preprocessing", hint: "Preprocesses script to make it ready for working.", },
-    { x: 1, y: 1, class: "checkbox", name: "linebreaker", label: "Line Unbreaker", hint: "Removes line breaker except in double-dash lines", },
-    { x: 2, y: 1, class: "checkbox", name: "split", label: "Split", hint: "Splits those anything dashed lines", },
-    { x: 0, y: 2, class: "label", label: "Only use the features\n" },
-    { x: 1, y: 2, class: "label", label: "above before timing.\n" },
-    { x: 0, y: 3, class: "checkbox", name: "honorific", label: "Honorifics", hint: "Italicize honorifics", },
-    { x: 1, y: 3, class: "checkbox", name: "replace", label: "Replace", hint: "Various sub fixes", },
-    { x: 2, y: 3, class: "checkbox", name: "fadetocolor", label: "Fade to color", hint: "Fade from/to black/white", },
-    { x: 0, y: 4, class: "checkbox", name: "attack", label: "Attack", hint: "Apply fade to attacks", },
-    { x: 1, y: 4, class: "checkbox", name: "fixerrors", label: "Fix common errors", hint: "Perform final checks in the script", },
-    { x: 2, y: 4, class: "checkbox", name: "musicnote", label: "Music Note", hint: "Add music note to characters singing songs", },
-    { x: 0, y: 5, class: "label", label: "Japanese Subs:" },
-    { x: 0, y: 6, class: "checkbox", name: "jpn_cleanup", label: "Cleanup", hint: "Removes extraneous stuff in japanese subs", },
-    { x: 1, y: 6, class: "checkbox", name: "jpn_remove_before", label: "Remove before linebreaker", hint: "Remove text before line breaker", },
-    { x: 2, y: 6, class: "checkbox", name: "jpn_remove_after", label: "Remove after linebreaker", hint: "Remove text after line breaker", },
+    { x: 0, y: 1, class: "checkbox", name: "preprocessing",              label: "Preprocessing",             hint: "Preprocesses script to make it ready for working.", },
+    { x: 1, y: 1, class: "checkbox", name: "linebreaker",                label: "Line Unbreaker",            hint: "Removes line breaker except in double-dash lines",  },
+    { x: 2, y: 1, class: "checkbox", name: "split",                      label: "Split",                     hint: "Splits those anything dashed lines",                },
+    { x: 0, y: 2, class: "label",    label: "Only use the features\n" },
+    { x: 1, y: 2, class: "label",    label: "above before timing.\n" },
+    { x: 0, y: 3, class: "checkbox", name: "honorific",                  label: "Honorifics",                hint: "Italicize honorifics",                              },
+    { x: 1, y: 3, class: "checkbox", name: "replace",                    label: "Replace",                   hint: "Various sub fixes",                                 },
+    { x: 2, y: 3, class: "checkbox", name: "fadetocolor",                label: "Fade to color",             hint: "Fade from/to black/white",                          },
+    { x: 0, y: 4, class: "checkbox", name: "attack",                     label: "Attack",                    hint: "Apply fade to attacks",                             },
+    { x: 1, y: 4, class: "checkbox", name: "fixerrors",                  label: "Fix common errors",         hint: "Perform final checks in the script",                },
+    { x: 2, y: 4, class: "checkbox", name: "musicnote",                  label: "Music Note",                hint: "Add music note to characters singing songs",        },
+    { x: 0, y: 5, class: "label",    label: "Japanese Subs:" },
+    { x: 0, y: 6, class: "checkbox", name: "jpn_cleanup",                label: "Cleanup",                   hint: "Removes extraneous stuff in japanese subs",         },
+    { x: 1, y: 6, class: "checkbox", name: "jpn_remove_before",          label: "Remove before linebreaker", hint: "Remove text before line breaker",                   },
+    { x: 2, y: 6, class: "checkbox", name: "jpn_remove_after",           label: "Remove after linebreaker",  hint: "Remove text after line breaker",                    },
   }
   buttons = { "Apply", "Apply All", "Cancel" }
   btn, res = aegisub.dialog.display(dlg, buttons)
