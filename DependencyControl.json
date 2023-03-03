@@ -18,14 +18,14 @@
 			"description": "One Pace Stuff",
 			"channels": {
 				"personal": {
-					"version": "1.0.8",
-					"released": "2023-01-30",
+					"version": "1.0.9",
+					"released": "2023-03-03",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "b24191a49a2b1758055aa99cc5935de031966060"
+							"sha1": "5056538bcdf9a63c2b7a51bc32c95f52110da862"
 						}
 					]
 				}
