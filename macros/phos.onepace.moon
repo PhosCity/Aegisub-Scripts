@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.1.0"
+export script_version = "1.1.1"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -289,16 +289,30 @@ fixErrors = (subs, sel) ->
 
 
 preprocessing = (subs, sel) ->
+
+  parseLineFold = (line) ->
+    return if not line.extra
+    info = line.extra["_aegi_folddata"]
+    return if not info
+    side, collapsed, id = info\match("^(%d+);(%d+);(%d+)$")
+    return {:side, :collapsed, :id}
+
   fixErrors(subs, sel)                          -- Fix common errors in pace subs
   subtable = {}
+  highestFoldId = 0
   for i = 1, #subs
     continue unless subs[i].class == "dialogue"
     line = subs[i]
     text = line.text
     text = text\gsub("{\\i[10]?}", "")          -- Since we're looping through all lines, remove all italics as italics are handled by styles
     line.text = text
+
+    -- Collect fold data
+    foldData = parseLineFold line
+    highestFoldId = math.max(highestFoldId, foldData.id) if foldData
     table.insert subtable, line                 -- Put lines into table for later sorting
     subs[i] = line
+  foldId = highestFoldId + 1
 
   -- =================SORTING=======================
   --sort lines by time
@@ -507,24 +521,42 @@ preprocessing = (subs, sel) ->
 
   line_top["line5"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
   line_top["line6"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
-  line_top["line7"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
+  line_top["line7"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
+  line_top["line8"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
 
   line_bottom = {
-    line1: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "============================SIGNS AND TITLE========================="}
-    line2: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.title.name,   text: ""}
-    line3: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "===============================CREDITS=============================="}
-    line4: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.credits.name, text: ""}
+    line1: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "===============================DIALOGUE============================"}
+    line2: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "============================SIGNS AND TITLE========================="}
+    line3: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.title.name,   text: ""}
+    line4: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "============================SIGNS AND TITLE========================="}
+    line5: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "===============================CREDITS=============================="}
+    line6: { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: st.credits.name, text: ""}
+    line7: { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle,       text: "===============================CREDITS=============================="}
   }
 
   for i = 1, #subs
     if subs[i].class == "dialogue"
       count = i
-      for x = 1, 7
+      for x = 1, 8
+        if x == 1 or x == 8
+          line_top["line"..x]["extra"] or= {}
+          line_top["line"..x]["extra"]["_aegi_folddata"] = "0;1;#{foldId}"
+        elseif x == 7
+          line_top["line"..x]["extra"] or= {}
+          line_top["line"..x]["extra"]["_aegi_folddata"] = "1;1;#{foldId}"
+          foldId += 1
         current_line = line_top["line"..x]
         subs.insert(count, current_line)
         count += 1
       break
-  for x = 1, 4
+  for x = 1, 7
+    if x == 2 or x == 5
+      line_bottom["line"..x]["extra"] or= {}
+      line_bottom["line"..x]["extra"]["_aegi_folddata"] = "0;1;#{foldId}"
+    elseif x == 1 or x == 4 or x == 7
+      line_bottom["line"..x]["extra"] or= {}
+      line_bottom["line"..x]["extra"]["_aegi_folddata"] = "1;1;#{foldId}"
+      foldId += 1
     current_line = line_bottom["line"..x]
     subs.insert(#subs+1, current_line)
 
