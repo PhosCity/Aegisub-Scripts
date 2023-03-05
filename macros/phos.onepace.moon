@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.1.1"
+export script_version = "1.1.2"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -310,7 +310,9 @@ preprocessing = (subs, sel) ->
     -- Collect fold data
     foldData = parseLineFold line
     highestFoldId = math.max(highestFoldId, foldData.id) if foldData
-    table.insert subtable, line                 -- Put lines into table for later sorting
+
+    -- Put lines into table for later sorting
+    table.insert subtable, line
     subs[i] = line
   foldId = highestFoldId + 1
 
@@ -438,77 +440,77 @@ preprocessing = (subs, sel) ->
     line1: { actor: "", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
   }
   filename = aegisub.file_name!
-  if filename\match "[Rr]omance" or filename\match "[Rr][Dd]" or filename\match "[Oo]range" or filename\match "[Ss]yrup" or filename\match "[Gg]aimon" or filename\match "[Bb]aratie" or filename\match "[Aa]rlong" or filename\match "[Ll]oguetown"
+  if filename\match("[Rr]omance") or filename\match("[Rr][Dd]") or filename\match("[Oo]range") or filename\match("[Ss]yrup") or filename\match("[Gg]aimon") or filename\match("[Bb]aratie") or filename\match("[Aa]rlong") or filename\match("[Ll]oguetown")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 110170, end_time: 110210, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 47900,  end_time: 48030,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  elseif filename\match "[Rr]everse" or filename\match "[Ww]hisky" or filename\match "[Ll]ittle" or filename\match "[Ll][Gg]" or filename\match "[Dd]rum" or filename\match "[Dd][iI]" or filename\match "[Aa]rabasta"
+  elseif filename\match("[Rr]everse") or filename\match("[Ww]hisky") or filename\match("[Ll]ittle") or filename\match("[Ll][Gg]") or filename\match("[Dd]rum") or filename\match("[Dd][iI]") or filename\match("[Aa]rabasta")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109920, end_time: 110130, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 41060,  end_time: 41100,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  elseif filename\match "[Jj]aya" or filename\match "[Ss]kypiea"
+  elseif filename\match("[Jj]aya") or filename\match("[Ss]kypiea")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109710, end_time: 109760, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 25420,  end_time: 25460,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  elseif filename\match "[Dd]avy" or filename\match "[Dd][Bb][Ff]" or filename\match "[Rr]ing" or filename\match "[lL][Rr][Rr][Ll]" or filename\match "[Ww]ater" or filename\match "[wW]7"
+  elseif filename\match("[Dd]avy") or filename\match("[Dd][Bb][Ff]") or filename\match("[Rr]ing") or filename\match("[lL][Rr][Rr][Ll]") or filename\match("[Ww]ater") or filename\match("[wW]7")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 110090, end_time: 110180, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 26260,  end_time: 26340,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  elseif filename\match "[Ee]nies" or filename\match "[eE][Ll]"
+  elseif filename\match("[Ee]nies") or filename\match("[eE][Ll]")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 109840, end_time: 109880, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 1940,   end_time: 1980,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  -- elseif filename\match "[Tt]hriller"
+  -- elseif filename\match("[Tt]hriller")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  -- elseif filename\match "[Ii]mpel" or filename\match "[Ii][dD]"
+  -- elseif filename\match("[Ii]mpel") or filename\match("[Ii][dD]")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  -- elseif filename\match "[Mm]arineford"
+  -- elseif filename\match("[Mm]arineford")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  elseif filename\match "[Pp]ostwar" or filename\match "[Pp][Ww]"
+  elseif filename\match("[Pp]ostwar") or filename\match("[Pp][Ww]")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 151000, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 151000, end_time: 151040, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 3620,   end_time: 3650,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  elseif filename\match "[Rr]eturn" or filename\match "[Rr][Tt][Ss]" or filename\match "[Ff]ishmen" or filename\match "[Ff][Ii]" or filename\match "[Ff]ishman"
+  elseif filename\match("[Rr]eturn") or filename\match("[Rr][Tt][Ss]") or filename\match("[Ff]ishmen") or filename\match("[Ff][Ii]") or filename\match("[Ff]ishman")
     line_top["line2"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 38920,  end_time: 39020,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 113200, end_time: 156070, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 20,     layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
 
-  -- elseif filename\match "[Dd]ressrosa"
+  -- elseif filename\match("[Dd]ressrosa")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  -- elseif filename\match "[Zz]ou"
+  -- elseif filename\match("[Zz]ou")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  -- elseif filename\match "[Ww]hole" or filename\match "[Ww][Cc][Ii]"
+  -- elseif filename\match("[Ww]hole") or filename\match("[Ww][Cc][Ii]")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  -- elseif filename\match "[Rr]everie"
+  -- elseif filename\match("[Rr]everie")
   --   line_top["line2"] =
   --   line_top["line3"] =
   --   line_top["line4"] =
 
-  elseif filename\match "[Ww]ano"
+  elseif filename\match("[Ww]ano")
     line_top["line2"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Opening}"}
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 101870, end_time: 101960, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 9990,   end_time: 10030,  layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
@@ -678,21 +680,21 @@ onepace = (subs, sel) ->
   dlg = {
     { x: 0, y: 0, class: "label", label: script_name .. " by " .. script_author .. "\n", },
     { x: 1, y: 0, class: "label", label: "(ver. " .. script_version .. ")\n", },
-    { x: 0, y: 1, class: "checkbox", name: "preprocessing",              label: "Preprocessing",             hint: "Preprocesses script to make it ready for working.", },
-    { x: 1, y: 1, class: "checkbox", name: "linebreaker",                label: "Line Unbreaker",            hint: "Removes line breaker except in double-dash lines",  },
-    { x: 2, y: 1, class: "checkbox", name: "split",                      label: "Split",                     hint: "Splits those anything dashed lines",                },
+    { x: 0, y: 1, class: "checkbox", name: "preprocessing",     label: "Preprocessing",             hint: "Preprocesses script to make it ready for working.", },
+    { x: 1, y: 1, class: "checkbox", name: "linebreaker",       label: "Line Unbreaker",            hint: "Removes line breaker except in double-dash lines",  },
+    { x: 2, y: 1, class: "checkbox", name: "split",             label: "Split",                     hint: "Splits those anything dashed lines",                },
     { x: 0, y: 2, class: "label",    label: "Only use the features\n" },
     { x: 1, y: 2, class: "label",    label: "above before timing.\n" },
-    { x: 0, y: 3, class: "checkbox", name: "honorific",                  label: "Honorifics",                hint: "Italicize honorifics",                              },
-    { x: 1, y: 3, class: "checkbox", name: "replace",                    label: "Replace",                   hint: "Various sub fixes",                                 },
-    { x: 2, y: 3, class: "checkbox", name: "fadetocolor",                label: "Fade to color",             hint: "Fade from/to black/white",                          },
-    { x: 0, y: 4, class: "checkbox", name: "attack",                     label: "Attack",                    hint: "Apply fade to attacks",                             },
-    { x: 1, y: 4, class: "checkbox", name: "fixerrors",                  label: "Fix common errors",         hint: "Perform final checks in the script",                },
-    { x: 2, y: 4, class: "checkbox", name: "musicnote",                  label: "Music Note",                hint: "Add music note to characters singing songs",        },
+    { x: 0, y: 3, class: "checkbox", name: "honorific",         label: "Honorifics",                hint: "Italicize honorifics",                       },
+    { x: 1, y: 3, class: "checkbox", name: "replace",           label: "Replace",                   hint: "Various sub fixes",                          },
+    { x: 2, y: 3, class: "checkbox", name: "fadetocolor",       label: "Fade to color",             hint: "Fade from/to black/white",                   },
+    { x: 0, y: 4, class: "checkbox", name: "attack",            label: "Attack",                    hint: "Apply fade to attacks",                      },
+    { x: 1, y: 4, class: "checkbox", name: "fixerrors",         label: "Fix common errors",         hint: "Perform final checks in the script",         },
+    { x: 2, y: 4, class: "checkbox", name: "musicnote",         label: "Music Note",                hint: "Add music note to characters singing songs", },
     { x: 0, y: 5, class: "label",    label: "Japanese Subs:" },
-    { x: 0, y: 6, class: "checkbox", name: "jpn_cleanup",                label: "Cleanup",                   hint: "Removes extraneous stuff in japanese subs",         },
-    { x: 1, y: 6, class: "checkbox", name: "jpn_remove_before",          label: "Remove before linebreaker", hint: "Remove text before line breaker",                   },
-    { x: 2, y: 6, class: "checkbox", name: "jpn_remove_after",           label: "Remove after linebreaker",  hint: "Remove text after line breaker",                    },
+    { x: 0, y: 6, class: "checkbox", name: "jpn_cleanup",       label: "Cleanup",                   hint: "Removes extraneous stuff in japanese subs",  },
+    { x: 1, y: 6, class: "checkbox", name: "jpn_remove_before", label: "Remove before linebreaker", hint: "Remove text before line breaker",            },
+    { x: 2, y: 6, class: "checkbox", name: "jpn_remove_after",  label: "Remove after linebreaker",  hint: "Remove text after line breaker",             },
   }
   buttons = { "Apply", "Apply All", "Cancel" }
   btn, res = aegisub.dialog.display(dlg, buttons)
