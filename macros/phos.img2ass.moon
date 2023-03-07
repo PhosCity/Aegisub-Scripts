@@ -1,7 +1,7 @@
 export script_name = "Phos-img2ass"
 export script_description = "Img2ass that is optimized to not be img2ass"
 export script_author = "PhosCity"
-export script_version = "0.1.5"
+export script_version = "0.1.6"
 export script_namespace = "phos.img2ass"
 
 DependencyControl = require "l0.DependencyControl"
@@ -18,7 +18,6 @@ zf, Functional = depctrl\requireModules!
 logger = depctrl\getLogger!
 {:list} = Functional
 
-pathsep = package.config\sub(1, 1)
 createGUI = ->
   dlg = {
     {x: 0, y: 0, width: 1, height: 1, class: "label",   label: "Tolerance"},
@@ -31,10 +30,6 @@ createGUI = ->
     {x: 1, y: 6, width: 1, height: 1, class: "intedit", name: "linelimit", value: 700, min: 0},
   }
 
-  if pathsep != "\\" --Not Windows
-    dlg[#dlg+1] = {x: 0, y: 8, width: 1, height: 1, class: "label", label: "Filepath"}
-    dlg[#dlg+1] = {x: 0, y: 9, width: 2, height: 1, class: "edit",  name: "filepath",   value: ""}
-
   btn, res = aegisub.dialog.display dlg, {"OK", "Cancel"}, {"ok": "OK", "cancel": "Cancel"}
   aegisub.cancel! unless btn
   res
@@ -46,23 +41,12 @@ data2hex = (data) ->
   alpha = ("%02X")\format 255 - a
   return color, alpha
 
-is_file_readable = (file) ->
-  handle = io.open(file, "r")
-  if handle
-    io.close()
-    return true
-  return false
-
 main = (sub, selected, act) ->
   res = createGUI!
 
   exts = "*.png;*.jpeg;*.jpe;*.jpg;*.jfif;*.jfi;*.bmp;*.dib"
-  local filename
-  if pathsep == "\\" -- Windows
-    filename = aegisub.dialog.open "Open Image File", "", "", "Image extents (#{exts})|#{exts};", false, true
-  else
-    filename = res.filepath
-  logger\assert is_file_readable(filename), "Could not open file for reading: #{filename}"
+  filename = aegisub.dialog.open "Open Image File", "", "", "Image extents (#{exts})|#{exts};", false, true
+  aegisub.cancel! unless filename
 
   dlg = zf.dialog sub, selected, active
   sel = selected[#selected]
@@ -71,7 +55,7 @@ main = (sub, selected, act) ->
   {:width, :height, :data} = img
 
   logger\log "Make Image found #{width * height} pixels in your image."
-  linesOfSameColor, lineCount, insert = {}, 0, table.insert
+  linesOfSameColor, lineCount = {}, 0
   for y = 0, height - 1
     for x = 0, width - 1
         index = y * width + x
@@ -82,7 +66,7 @@ main = (sub, selected, act) ->
           unless linesOfSameColor[color]
             linesOfSameColor[color] = {}
             lineCount += 1
-          insert linesOfSameColor[color], shape
+          table.insert linesOfSameColor[color], shape
   logger\log "But I reduced them to #{lineCount} chunks of same colors."
 
   img = nil
@@ -97,10 +81,9 @@ main = (sub, selected, act) ->
       tonumber(b, 16), tonumber(g, 16), tonumber(r, 16)
 
     logger\log "Now, I'll try to group them into chunks of similar colors to reduce the line count even more."
-    count, lineCount = 1, 0
+    lineCount = 0
     for color, lines in pairs linesOfSameColor
       aegisub.cancel! if aegisub.progress.is_cancelled!
-      count += 1
       b, g, r = extractRGB color
       minDiff = math.huge
       for col, _ in pairs finalTable
@@ -132,10 +115,8 @@ main = (sub, selected, act) ->
   linesOfSameColor = nil
   res = nil
 
-  count = 1
   for color, shapeTable in pairs finalTable
     aegisub.cancel! if aegisub.progress.is_cancelled!
-    count += 1
     shape = zf.clipper(table.concat shapeTable, " ")\simplify("even_odd")\build "line"
     line = sub[act]
     line.text = "{\\an7\\pos(0,0)\\fscx100\\fscy100\\bord0\\shad0\\frz0\\c&H#{color}&\\alpha&H00&\\p1}" .. shape
