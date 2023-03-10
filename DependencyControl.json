@@ -43,18 +43,19 @@
 			"description": "Adds wobbling to text and shape",
 			"channels": {
 				"main": {
-					"version": "2.0.3",
-					"released": "2022-11-05",
+					"version": "2.0.4",
+					"released": "2023-03-10",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "1f09a176aced1838d91e101a229184e52fbb04d9"
+							"sha1": "454ad8ceb28e911d0f9158444cfe1537601255ea"
 						},
 						{
 							"name": ".lua",
-							"delete": true
+							"delete": true,
+							"sha1": "454ad8ceb28e911d0f9158444cfe1537601255ea"
 						}
 					],
 					"requiredModules": [
