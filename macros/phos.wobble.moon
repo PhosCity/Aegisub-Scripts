@@ -1,6 +1,6 @@
 export script_name = "Wobble"
 export script_description = "Adds wobbling to text and shape"
-export script_version = "2.0.5"
+export script_version = "2.0.6"
 export script_author = "PhosCity"
 export script_namespace = "phos.wobble"
 
@@ -104,20 +104,20 @@ frequencyValue = (percentage_value) ->
 
 
 interpolate = (startValue, endValue, accel, lineCnt, i) ->
-	factor = (i - 1) ^ accel / (lineCnt - 1) ^ accel
-	if factor <= 0
-		return startValue
-	elseif factor >= 1
-		return endValue
-	else
-		return factor * (endValue - startValue) + startValue
+  factor = (i - 1) ^ accel / (lineCnt - 1) ^ accel
+  if factor <= 0
+    return startValue
+  elseif factor >= 1
+    return endValue
+  else
+    return factor * (endValue - startValue) + startValue
 
 
 wobble = (shape, res) ->
   frequencyX = frequencyValue res.wobbleFrequencyX
   frequencyY = frequencyValue res.wobbleFrequencyY
   if (frequencyX > 0 and res.wobbleStrengthX > 0) or (frequencyY > 0 and res.wobbleStrengthY > 0)
-    shape = Yutils.shape.filter(Yutils.shape.split(Yutils.shape.flatten(shape), 1), (x, y) ->
+    shape = Yutils.shape.filter(Yutils.shape.split(shape, 1), (x, y) ->
       return x + math.sin(y * frequencyX * math.pi * 2 + res.wavingSpeed) * res.wobbleStrengthX, y + math.sin(x * frequencyY * math.pi * 2 + res.wavingSpeed) * res.wobbleStrengthY
     )
   shape
@@ -235,7 +235,7 @@ main = (wobbleType) ->
         noiseDepth = 4
         noiseSeed = 1985
         scale = noiseScale * 500
-        shape = Yutils.shape.filter(Yutils.shape.split(Yutils.shape.flatten(shape), 5), (x, y) ->
+        shape = Yutils.shape.filter(Yutils.shape.split(shape, 5), (x, y) ->
           dx = perlinNoise(x / scale, y / scale + time, noiseFreq, noiseDepth, noiseSeed) - 0.5
           dy = perlinNoise(x / scale + 101 + time, y / (scale + (101 + time)), noiseFreq, noiseDepth, noiseSeed) - 0.5
           return x + (dx * magnitude * 2), y + (dy * magnitude * 2)
