@@ -126,18 +126,19 @@
 			"description": "Script that uses svg2ass to convert svg files to ass lines",
 			"channels": {
 				"main": {
-					"version": "1.2.3",
-					"released": "2023-03-02",
+					"version": "1.2.4",
+					"released": "2023-03-15",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "12d5b611c75bbf8029496f976a51799620fc88f0"
+							"sha1": "0ead4b6b4927f55e7d4f67b94171f904a46a172d"
 						},
 						{
 							"name": ".lua",
-							"delete": true
+							"delete": true,
+							"sha1": "0ead4b6b4927f55e7d4f67b94171f904a46a172d"
 						}
 					],
 					"requiredModules": [
