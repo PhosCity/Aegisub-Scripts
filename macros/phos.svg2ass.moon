@@ -1,6 +1,6 @@
 export script_name = "svg2ass"
 export script_description = "Script that uses svg2ass to convert svg files to ass lines"
-export script_version = "1.2.3"
+export script_version = "1.2.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.svg2ass"
 
@@ -162,6 +162,7 @@ main = (sub, sel) ->
         if (data\getSectionCount ASS.Section.Drawing) == 0
           data\replaceTags {ASS\createTag "align", 7}
           data\replaceTags {ASS\createTag "position", 0, 0}
+        data\stripDrawings!
         data\insertSections ASS.Section.Drawing {drawing}
       elseif res.clip
         data\replaceTags {ASS\createTag "clip_vect", drawing}
