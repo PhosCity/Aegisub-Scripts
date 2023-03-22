@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
@@ -55,12 +55,13 @@ main = (sub, sel) ->
   targetColor = getColor(currentFrame, xCord, yCord)
   targetB, targetG, targetR = extractRGB(targetColor)
 
-  determineFadeTime = (fadeType, start, _end) ->
+  determineFadeTime = (fadeType, startFrame, endFrame) ->
     local fadeTime
-    for i = start, _end, fadeType == "Fade in" and 1 or -1
+    for i = startFrame, endFrame
       color = getColor(i, xCord, yCord)
       b, g, r = extractRGB(color)
-      if math.sqrt((b-targetB)^2 + (g-targetG)^2 + (r-targetR)^2) < 5
+      euclideanDistance = math.sqrt((b-targetB)^2 + (g-targetG)^2 + (r-targetR)^2)
+      if (fadeType == "Fade in" and euclideanDistance < 5) or (fadeType == "Fade out" and euclideanDistance > 5)
         fadeTime = math.floor((aegisub.ms_from_frame(i+1)+ aegisub.ms_from_frame(i))/2)
         break
     windowAssertError fadeTime, "#{fadeType} time could not be determined."
@@ -72,11 +73,11 @@ main = (sub, sel) ->
     aegisub.cancel! if aegisub.progress.is_cancelled!
     local fadein, fadeout
     if res.fadein
-      fadeinTime = determineFadeTime("Fade in", line.startFrame, line.endFrame)
+      fadeinTime = determineFadeTime("Fade in", line.startFrame, currentFrame)
       fadein = fadeinTime - line.start_time
 
     if res.fadeout
-      fadeoutTime = determineFadeTime("Fade out", line.endFrame, line.startFrame)
+      fadeoutTime = determineFadeTime("Fade out", currentFrame, line.endFrame)
       fadeout = line.end_time - fadeoutTime
 
     if fadein or fadeout
