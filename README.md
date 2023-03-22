@@ -2,6 +2,7 @@
 
 - [Typesetting](#typesetting)
   - [Add Grain](#add-grain)
+  - [Auto Fade](#auto-fade)
   - [Change Alignment](#change-alignment)
   - [Edit Tags](#edit-tags)
   - [Extrapolate Tracking](#extrapolate-tracking)
@@ -41,6 +42,21 @@ This is the script that allows you to add static and dynamic grain to your sign.
 - Add "!" as usual.
 - Use your favorite line2fbf script to convert line2fbf. In some cases you can go further and check if the anime is animated on twos or threes and use [petzku's script](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.SplitTimer.moon) to split line in `n` frames accordingly.
 - Run the script and you have a dynamic grain.
+
+### Auto Fade
+
+**_Not Available in Dependency Control_**
+
+This script will automatically calculate fade in and fade out for you. You need to use arch1t3cht's Aegisub for this script.
+
+**Steps:**
+
+- Time your sign
+- Determine if your sign has fade in, fade out or both.
+- Play the video until you reach a frame where there is neither fade in nor fade out.
+- Hover over the Japanese sign and right click and choose "Copy coordinates to Clipboard".
+- Open the script (while staying in the same video frame) and paste the coordinates. Then choose if you want fade in or fade out or both and run the script.
+- The script will automatically add appropriate fade to your text. Fade out is a bit slower than fade in.
 
 ### Change Alignment
 
