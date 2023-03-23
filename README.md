@@ -49,15 +49,15 @@ This is the script that allows you to add static and dynamic grain to your sign.
 
 This script will automatically calculate fade in and fade out for you. You need to use arch1t3cht's Aegisub for this script.
 
-https://user-images.githubusercontent.com/65547311/226902839-28768b67-d9f1-44aa-ab8a-6ab930764ecd.mp4
+https://user-images.githubusercontent.com/65547311/227202163-633bc88d-5bee-4c43-a611-084b3479aa8a.mp4
 
 **Steps:**
 
 - Time your sign.
 - Determine if your sign has fade in, fade out or both.
 - Play the video until you reach a frame in which there is neither fade in nor fade out.
-- Hover over the Japanese sign, right click and choose "Copy coordinates to Clipboard".
-- Open the script (while staying in the same video frame) and paste the coordinates. Then choose if you want fade in or fade out or both and run the script.
+- You can either add a single point clip/iclip over the sign or hover over the Japanese sign, right click and choose "Copy coordinates to Clipboard".
+- Open the script (while staying in the same video frame) and paste the coordinates. Then choose `Fade in` or `Fade out` or `Both` button depending on what you want.
 - The script will automatically add appropriate fade to your text.
 
 ### Change Alignment
