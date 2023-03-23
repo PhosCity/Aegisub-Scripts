@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "0.0.4"
+export script_version = "0.0.5"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
@@ -108,12 +108,19 @@ main = (sub, sel) ->
       fadeout = line.end_time - fadeoutTime
       fadeout = 0 if fadeout < fadeLimit
 
+    data = ASS\parse line
+    -- If the line already has fad tag and you only choose to determine fade in or fade out, the other time will remain unchanged.
+    fad = data\getTags "fade_simple"
+    if #fad != 0 and btn != "Both"
+      t1, t2 = fad[1]\getTagParams!
+      fadein = t1 if btn == "Fade out"
+      fadeout = t2 if btn == "Fade in"
+
     if fadein or fadeout
       fadein or= 0
       fadeout or= 0
-      data = ASS\parse line
       data\removeTags {"clip_vect", "iclip_vect"} if removeClip
-      if fadein != 0 and fadeout != 0
+      if fadein != 0 or fadeout != 0
         data\replaceTags {ASS\createTag "fade_simple", fadein, fadeout}
       data\commit!
     else
