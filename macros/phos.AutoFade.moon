@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "0.0.3"
+export script_version = "0.0.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
@@ -39,6 +39,7 @@ createGUI = (coordinateValue) ->
 
 main = (sub, sel) ->
   windowAssertError aegisub.get_frame, "You are using unsupported Aegisub.\nPlease use arch1t3cht's Aegisub for this script."
+  fadeLimit = (aegisub.ms_from_frame(2)-aegisub.ms_from_frame(1))/2  -- Fade time below this can be negleted.
 
   getColor = (curFrame, x, y) ->
     frame = aegisub.get_frame(curFrame, false)
@@ -49,14 +50,17 @@ main = (sub, sel) ->
     b, g, r = color\match "&H(..)(..)(..)&"
     tonumber(b, 16), tonumber(g, 16), tonumber(r, 16)
 
+  euclideanDistance = (color1, color2) ->
+    b1, g1, r1 = extractRGB(color1)
+    b2, g2, r2 = extractRGB(color2)
+    math.sqrt((b1-b2)^2 + (g1-g2)^2 + (r1-r2)^2)
+
   determineFadeTime = (fadeType, startFrame, endFrame, xCord, yCord, targetColor) ->
     local fadeTime
-    targetB, targetG, targetR = extractRGB(targetColor)
     for i = startFrame, endFrame
       color = getColor(i, xCord, yCord)
-      b, g, r = extractRGB(color)
-      euclideanDistance = math.sqrt((b-targetB)^2 + (g-targetG)^2 + (r-targetR)^2)
-      if (fadeType == "Fade in" and euclideanDistance < 5) or (fadeType == "Fade out" and euclideanDistance > 5)
+      dist = euclideanDistance(color, targetColor)
+      if (fadeType == "Fade in" and dist < 5) or (fadeType == "Fade out" and dist > 5)
         fadeTime = math.floor((aegisub.ms_from_frame(i+1)+ aegisub.ms_from_frame(i))/2)
         break
     windowAssertError fadeTime, "#{fadeType} time could not be determined."
@@ -77,28 +81,40 @@ main = (sub, sel) ->
     res, btn = createGUI xCord and "#{xCord},#{yCord}" or ""
 
     xCord, yCord = res.coordinate\match "([%d.]+),([%d.]+)"
-    -- TODO: Validate coordinate
+    if not xCord and not yCord
+      windowAssertError false, "The co-ordinate could not be properly determined. The format of the co-ordinate is x,y"
 
     currentFrame = aegisub.project_properties!.video_position
-    windowAssertError currentFrame > line.startFrame, "Your current video position is before the start time of the line."
-    windowAssertError currentFrame < line.endFrame, "Your current video position is after the end time of the line."
+    windowAssertError currentFrame >= line.startFrame, "Your current video position is before the start time of the line."
+    windowAssertError currentFrame <= line.endFrame, "Your current video position is after the end time of the line."
     targetColor = getColor(currentFrame, xCord, yCord)
 
     if btn == "Fade in" or btn == "Both"
       fadeinTime = determineFadeTime("Fade in", line.startFrame, currentFrame, xCord, yCord, targetColor)
       fadein = fadeinTime - line.start_time
+      fadein = 0 if fadein < fadeLimit
 
     if btn == "Fade out" or btn == "Both"
+      -- Speed up calculation of fade out by skipping having to step through each frame
+      while true
+        fr = math.floor((currentFrame + line.endFrame) / 2)
+        color = getColor(fr, xCord, yCord)
+        if euclideanDistance(color, targetColor) < 5
+          currentFrame = fr
+        else
+          break
+        break if line.endFrame - currentFrame < 10
       fadeoutTime = determineFadeTime("Fade out", currentFrame, line.endFrame, xCord, yCord, targetColor)
       fadeout = line.end_time - fadeoutTime
-      fadeout = math.max(fadeout, 0)      -- If you try to calculate fade out when there is no fade out, the calculated time may be negative.
+      fadeout = 0 if fadeout < fadeLimit
 
     if fadein or fadeout
       fadein or= 0
       fadeout or= 0
       data = ASS\parse line
-      data\replaceTags {ASS\createTag "fade_simple", fadein, fadeout}
       data\removeTags {"clip_vect", "iclip_vect"} if removeClip
+      if fadein != 0 and fadeout != 0
+        data\replaceTags {ASS\createTag "fade_simple", fadein, fadeout}
       data\commit!
     else
       windowAssertError false, "Neither fade in nor fade out could be determined."
