@@ -1,6 +1,6 @@
 export script_name = "Add Grain"
 export script_description = "Add static and dynamic grain"
-export script_version = "1.1.3"
+export script_version = "1.1.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.AddGrain"
 
@@ -29,19 +29,18 @@ dialog = {
   {x: 1, y: 2, class: "color", value: "&HFFFFFF&", name: "color1"}
   {x: 0, y: 3, class: "label", label: "Layer 2"}
   {x: 1, y: 3, class: "color", value:  "&H000000&", name: "color2"}
-} 
+}
 
 --- Checks if the grain font is installed and informs the user
 isGrainInstalled = ->
-  isInstalled = false
   message = "It seems you have not installed grain font.
-The script will proceed but will not look as intented unless you install the font.
+The script will proceed but will not look as intended unless you install the font.
 You can install it from following link:
 https://cdn.discordapp.com/attachments/425357202963038208/708726507173838958/grain.ttf"
 
   for font in *Yutils.decode.list_fonts!
-    isInstalled = true if font.name == "Grain" and font.longname == "Grain Regular"
-  logger\log message unless isInstalled
+    return if font.name == "Grain" and font.longname == "Grain Regular"
+  logger\log message
 
 
 --- Randomize a character by returning any character among 0-9a-zA-z!"',.:;?
@@ -85,7 +84,7 @@ main = (useGui, mode) ->
         r, g, b = util.extract_color(colorString)
       elseif type(colorString) == "table"
         b, g, r = unpack colorString
-      return {ASS\createTag colorType, b, g, r}
+      return ASS\createTag colorType, b, g, r
 
     toDelete, toAdd = {}, {}
     local intensity, firstColor, secondColor
@@ -107,18 +106,23 @@ main = (useGui, mode) ->
       -- Pure white layer
       data\callback ((section) -> section\replace "!!", randomize), ASS.Section.Text
       data\removeTags {"fontname", "outline", "shadow", "color1"}
-      data\insertTags {ASS\createTag 'fontname', "Grain"}
-      data\insertTags {ASS\createTag 'outline', 0}
-      data\insertTags {ASS\createTag 'shadow', 0}
-      data\insertTags {ASS\createTag 'bold', 0} 
-      data\insertTags firstColor
+
+      data\insertTags {
+        ASS\createTag 'fontname', "Grain"
+        ASS\createTag 'outline', 0
+        ASS\createTag 'shadow', 0
+        ASS\createTag 'bold', 0
+        firstColor
+      }
       if mode == "dense"
-        data\removeTags {"color3", "color4", "alpha1", "alpha3"}
-        data\insertTags createColor {255, 255, 255}, "color3"
-        data\insertTags createColor {255, 255, 255}, "color3"
-        data\replaceTags {ASS\createTag 'shadow', 0.01}
-        data\insertTags {ASS\createTag 'alpha1', 254}
-        data\insertTags {ASS\createTag 'alpha3', 255}
+        data\removeTags {"color3", "color4", "alpha1", "alpha3", "shadow", "shadow_x", "shadow_y"}
+        data\insertTags {
+          createColor {255, 255, 255}, "color3"
+          createColor {255, 255, 255}, "color4"
+          ASS\createTag 'alpha1', 0xFE
+          ASS\createTag 'alpha3', 0xFF
+          ASS\createTag 'shadow', 0.01
+        }
       data\cleanTags!
       table.insert toAdd, ASS\createLine { line }
 
@@ -126,8 +130,10 @@ main = (useGui, mode) ->
       data\callback ((section) -> section\replace "[^\\N]", randomize), ASS.Section.Text
       data\replaceTags secondColor
       if mode == "dense"
-        data\replaceTags createColor {0, 0, 0}, "color3"
-        data\replaceTags createColor {0, 0, 0}, "color3"
+        data\replaceTags {
+          createColor {0, 0, 0}, "color3"
+          createColor {0, 0, 0}, "color4"
+        }
       table.insert toAdd, ASS\createLine { line }
 
     -- Start iteration
@@ -144,7 +150,7 @@ main = (useGui, mode) ->
     lines\insertLines!
     lines\deleteLines toDelete
 
-  
+
 -- Register macros
 depctrl\registerMacros({
   { "Add grain", "Add grain", main false, "normal" },
