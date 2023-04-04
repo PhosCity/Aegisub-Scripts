@@ -1,6 +1,6 @@
 export script_name = "svg2ass"
 export script_description = "Script that uses svg2ass to convert svg files to ass lines"
-export script_version = "1.2.4"
+export script_version = "1.2.5"
 export script_author = "PhosCity"
 export script_namespace = "phos.svg2ass"
 
@@ -174,9 +174,7 @@ main = (sub, sel) ->
     return lines\getSelection!
   else
     -- Add shapes as new lines
-    count = 0
-    for ln in *result
-      count += 1
+    for ln in *(list.reverse result)
       prefix, tags, text = ln\match "([^{]+)({[^}]+})(.*){\\p0}"
       primaryColor = tags\match("\\1c&H%x+&")\gsub("\\1c&", "\\c&")
       tags = "{\\an7\\pos(0,0)#{opt.userTags}#{primaryColor}\\p1}"
@@ -197,7 +195,7 @@ main = (sub, sel) ->
         end_time: endTime
         style: style
       }
-      lines\addLine newLine, nil, true, sel[#sel] + count
+      lines\addLine newLine, nil, true, sel[1]
     lines\insertLines!
     return [x for index, x in ipairs lines\getSelection! when index > #sel]
 
