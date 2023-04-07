@@ -404,6 +404,47 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.FoldOperations": {
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Fold Operations",
+			"description": "Different operations on folds",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2023-01-11",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "9134e7e4967373bacf84aab6ee0b39aeec02e69e"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "a-mo.LineCollection",
+							"name": "Aegisub-Motion (LineCollection)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.3.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.Functional",
+							"name": "(Almost) Functional Suite",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.6.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	}
 }
