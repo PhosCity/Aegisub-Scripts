@@ -1,0 +1,67 @@
+site_name: PhosCity's Aegisub Script
+site_author: PhosCity
+
+repo_name: PhosCity/Aegisub-Scripts
+repo_url: https://github.com/PhosCity/Aegisub-Scripts
+
+nav:
+  - Home: index.md
+  - Typesetting:
+      - Add Grain: Add Grain.md
+      - Fold Operations: Fold Operations.md
+      - Remove Tags: Remove Tags.md
+      - Rotated Gradient: Rotated Gradient.md
+      - svg2ass: svg2ass.md
+      - Wave: Wave.md
+      - Wobble: Wobble.md
+      - Auto Fade: Auto Fade.md
+      - Change Alignment: Change Alignment.md
+      - Edit Tags: Edit Tags.md
+      - Extrapolate Tracking: Extrapolate Tracking.md
+      - Fit Text in Clip: Fit Text in Clip.md
+      - Vector Gradient: Vector Gradient.md
+  - Timing:
+      - Timing Assistant: Timing Assistant.md
+      - Bidirectional Snapping: Bidirectional Snapping.md
+  - Karaoke:
+      - KFX: KFX.md
+  - QC:
+      - Quality Report: Quality Report.md
+  - Others:
+      - ASSFoundation: ASSFoundation.md
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences

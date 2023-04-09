@@ -7,3 +7,5 @@
 !DependencyControl.json
 !/assets/*
 !test/*.ass
+!docs/**
+!mkdocs.yml
