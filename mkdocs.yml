@@ -8,13 +8,13 @@ nav:
   - Home: index.md
   - Typesetting:
       - Add Grain: Add Grain.md
+      - Auto Fade: Auto Fade.md
       - Fold Operations: Fold Operations.md
       - Remove Tags: Remove Tags.md
       - Rotated Gradient: Rotated Gradient.md
       - svg2ass: svg2ass.md
       - Wave: Wave.md
       - Wobble: Wobble.md
-      - Auto Fade: Auto Fade.md
       - Change Alignment: Change Alignment.md
       - Edit Tags: Edit Tags.md
       - Extrapolate Tracking: Extrapolate Tracking.md

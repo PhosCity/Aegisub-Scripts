@@ -1,4 +1,4 @@
-<font color="red">**Not Available in Dependency Control**</font>
+<font color="green">**Available in Dependency Control**</font>
 
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.AutoFade.moon)
 
