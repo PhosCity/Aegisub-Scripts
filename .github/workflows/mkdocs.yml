@@ -11,6 +11,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
