@@ -11,16 +11,26 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+
+      - name: Set up Python runtime
+        uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - uses: actions/cache@v2
+
+      - name: Set up build cache
+        uses: actions/cache@v2
         with:
           key: ${{ github.ref }}
           path: .cache
-      - run: pip install mkdocs-material
-      - run: mkdocs gh-deploy --force
+
+      - name: Install Python dependencies
+        run: |
+          pip install mkdocs-material
+
+      - name: Deploy documentation
+        env:
+          GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
+        run: |
+          mkdocs gh-deploy --force
