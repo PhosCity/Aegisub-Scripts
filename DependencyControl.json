@@ -501,14 +501,14 @@
 			"description": "Extrapolate the tag values where mocha can't reach",
 			"channels": {
 				"main": {
-					"version": "1.0.0",
-					"released": "2023-04-09",
+					"version": "1.0.2",
+					"released": "2023-04-15",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "49848b7d6724b4bf35229a44c39b41963e4d29ce"
+							"sha1": "dde86c6d83cac599f79e970bb7b2f9cb31d7dacf"
 						}
 					],
 					"requiredModules": [
