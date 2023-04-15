@@ -1,22 +1,63 @@
-<font color="red">**Not Available in Dependency Control**</font>
+<font color="green">**Available in Dependency Control**</font>
 
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.ExtrapolateTracking.moon)
 
-When you're motion-tracking a sign, and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines. There is a similar function in 'Significance' script by unanimated, but it only extrapolates scaling and position. This script goes a little beyond and extrapolates the following tags.
+When you're motion-tracking a sign, and you cannot track the first or last few frames either because the sign moved out of the screen or it faded out, you can use this script to extrapolate the tracking for those lines.
 
-![image](./assets/extrapolate.png){: style="height:170px;width:308px"}
+What this script does:
 
-On top of that, it also supports extrapolating only tags selected by the user.
+- Gathers position, scale and rotation data from selected lines
+- Uses k-fold cross validation to find a proper degree of polynomial to fit the data (and some other fuckery when proper degree cannot be found.)
+- Uses that degree to extrapolate the data
+- Generates motion tracking data from the extrapolated data
+- Uses Aegisub Motion internally to apply that motion tracking data
+
+# Screenshot
+
+![image](./assets/extrapolate.png){: style="height:180px;width:355px"}
 
 # Usage
-
-- If you already have badly tracked lines in Aegisub, mark those lines with 'x' in Effect.
-- Instead, if you only have correctly tracked lines in Aegisub, write 'x,n' in the first or last correctly tracked line where you replace 'n' with the number of new lines you want to insert before or after the marked line. For example, if you write 'x,5' in last line, the script will insert 5 new lines with extrapolated tags after it. If you mark the first line, it'll insert 5 new lines before marked line.
-
-- Select the lines you marked plus frames before or after it. How many frames you select depends on how "linear" the tracking is. With perfectly linear tracking, you can select all the tracked lines to get more accurate extrapolation. If there seems to be a small accel, use only about 5 reference frames.
 
 !!! warning "Requirements"
 
     - All selected lines must be 1 frame long.
     - Selection must be consecutive and sorted by time.
     - If lines are split in layers, run the script separately for each layer.
+
+- Try your best to track using Mocha or Blender. It's better to get proper track for as many frames as you can.
+- Apply the motion tracking data to the line. Delete the badly tracked lines in the beginning or end if necessary.
+- Select all the lines and run the script.
+- Choose if you want to extrapolate at start or end using the drop-down in GUI.
+- Enter how many additional frames you want to extrapolate.
+- Click on `Apply` button.
+
+# Examples
+
+!!! info
+
+    The graph generated in the video is for demonstration and debuggin purposes only. It'll not pop up everytime you use script.
+
+## Extrapolation of linear track
+
+<video width="960" height="540" controls>
+  <source src="../assets/extrapolate-linear.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+## Extrapolation of non-linear track
+
+<video width="960" height="540" controls>
+  <source src="../assets/extrapolate-non-linear.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+## Extrapolation of circular track
+
+!!! warning
+
+    In some cases like in the example shown below, when the line rotates about a single origin point, you should disable `Origin` in the gui for proper extrapolation.
+
+<video width="960" height="540" controls>
+  <source src="../assets/extrapolate-circle.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
