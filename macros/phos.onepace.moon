@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.1.2"
+export script_version = "1.1.3"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -38,7 +38,7 @@ progress = (msg, count, total) ->
 	aegisub.progress.set(100*count/total)
 
 
--- Make honorifics lowercase and italicize it
+-- Comment honorifics
 honorifics = (subs, sel) ->
   honorific_lower = { "san", "chan", "kun", "sama", "sensei", "dono",
     "gara", "teia", "yoi", "meow", "waina", "chwan", "swan",
@@ -58,13 +58,10 @@ honorifics = (subs, sel) ->
       if text\match("%-"..item.."[%s%p]")
         text = text\gsub("%-"..item, (c) -> c\lower())
 
-    -- Italicize the honorifics
+    -- Comment the honorifics
     for item in *honorific_lower
       if text\match("%-"..item.."[%s%p]")
-        if style\match("[Ff]lashbacks") or style\match("[Nn]arrator") or text\match("^{\\i1}")
-          text = text\gsub("%-".. item, "-{\\i0}"..item.."{\\i1}")
-        else
-          text = text\gsub("%-".. item, "-{\\i1}"..item.."{\\i0}")
+        text = text\gsub("%-".. item, "{-"..item.."}")
 
     line.text = text
     subs[i] = line
