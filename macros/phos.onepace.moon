@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.1.3"
+export script_version = "1.1.4"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -40,11 +40,24 @@ progress = (msg, count, total) ->
 
 -- Comment honorifics
 honorifics = (subs, sel) ->
-  honorific_lower = { "san", "chan", "kun", "sama", "sensei", "dono",
-    "gara", "teia", "yoi", "meow", "waina", "chwan", "swan",
-    "tan", "jamon", "chaburu", "dayu", "ya", }
 
-  honorific_upper = [item\gsub("^%l", string.upper) for item in *honorific_lower]
+  joinList = (...) ->
+    joined, j, tbls = {}, 0, {...}
+    return if #tbls == 0
+
+    for tbl in *tbls
+      for v in *tbl
+        j += 1
+        joined[j] = v
+    return joined
+
+  honorific_removal = {"san", "chan", "kun", "sama", "dono",
+    "yoi", "waina", "chwan", "swan",
+    "tan", "chaburu", "dayu", "ya",}
+
+  honorific_italicize = {"sensei", "gara", "teia", "meow", "jamon"}
+
+  honorific_upper = [item\gsub("^%l", string.upper) for item in *(joinList honorific_removal, honorific_italicize)]
 
   for i in *sel
     continue unless subs[i].class == "dialogue"
@@ -59,9 +72,17 @@ honorifics = (subs, sel) ->
         text = text\gsub("%-"..item, (c) -> c\lower())
 
     -- Comment the honorifics
-    for item in *honorific_lower
+    for item in *honorific_removal
       if text\match("%-"..item.."[%s%p]")
         text = text\gsub("%-".. item, "{-"..item.."}")
+
+    -- Italicize the verbal tics
+    for item in *honorific_italicize
+      if text\match("%-"..item.."[%s%p]")
+        if style\match("[Ff]lashbacks") or style\match("[Nn]arrator") or text\match("^{\\i1}")
+          text = text\gsub("%-".. item, "-{\\i0}"..item.."{\\i1}")
+        else
+          text = text\gsub("%-".. item, "-{\\i1}"..item.."{\\i0}")
 
     line.text = text
     subs[i] = line
