@@ -119,6 +119,38 @@ uncommentCurrentFold = (sub, _, act) ->
   lines\replaceLines!
 
 
+-- toggle comment state on all the lines in a fold around active line. Any commented lines will become uncommented, and vice versa.
+toggleCommentCurrentFold = (sub, _, act) ->
+  newSelection = selectFoldAroundActiveLine sub, _, act
+  return if #newSelection == 0
+
+  newSelection = correctSelection newSelection
+  lines = LineCollection sub, newSelection, -> true
+  return if #lines.lines == 0
+  lines\runCallback ((lines, line, i) ->
+    aegisub.cancel! if aegisub.progress.is_cancelled!
+    line.comment = not line.comment
+  ), true
+  lines\replaceLines!
+
+
+-- toggles the current fold between "commented" and "uncommented". If the fold contains any lines that are uncommented, assume it is uncommented.
+stateToggleCommentCurrentFold = (sub, _, act) ->
+  newSelection = selectFoldAroundActiveLine sub, _, act
+  return if #newSelection == 0
+
+  newSelection = correctSelection newSelection
+  lines = LineCollection sub, newSelection, -> true
+  return if #lines.lines == 0
+
+  isUncommented = (() -> for line in *lines.lines return true if not line.comment)!
+
+  if isUncommented
+    commentCurrentFold sub, _, act
+  else
+    uncommentCurrentFold sub, _, act
+
+
 -- delete all the lines in a fold around active line
 deleteCurrentFold = (sub, _, act) ->
   newSelection = selectFoldAroundActiveLine sub, _, act
@@ -366,6 +398,8 @@ depctrl\registerMacros({
   {"Select Current Fold", "Select the fold around the active line", selectFoldAroundActiveLine},
   {"Comment Current Fold", "Comment the fold around the active line", commentCurrentFold},
   {"Uncomment Current Fold", "Uncomment the fold around the active line", uncommentCurrentFold},
+  {"Comment or Uncomment Current Fold", "Comment the fold around the active line if it contains uncommented lines, otherwise uncomment it all", stateToggleCommentCurrentFold},
+  {"Toggle Comments in Current Fold", "Toggle comment state on all lines in current fold", toggleCommentCurrentFold},
   {"Delete Current Fold", "Delete the fold around the active line", deleteCurrentFold},
   {"Cut Current Fold", "Cut the fold around the active line", cutCurrentFold},
   {"Copy Current Fold", "Copy the fold around the active line", copyCurrentFold},
