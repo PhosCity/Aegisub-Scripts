@@ -2,7 +2,7 @@ export script_name = "Rotate Gradient"
 export script_description = "Create rotated gradient with clip."
 export script_author = "PhosCity"
 export script_namespace = "phos.RotateGradient"
-export script_version = "2.0.1"
+export script_version = "2.0.2"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
@@ -148,7 +148,7 @@ clipCreator = (points, bounds, slope, gradientDirection) ->
       y1 -= 0.75
       y2 -= 0.75
 
-    clip[i] = ASS\createTag "clip_vect", {m(x1, y1), l(x2, y2), l(x2, y3), l(x1, y4)}
+    clip[i] = ASS\createTag "clip_vect", m(x1, y1), l(x2, y2), l(x2, y3), l(x1, y4)
   return clip
 
 
