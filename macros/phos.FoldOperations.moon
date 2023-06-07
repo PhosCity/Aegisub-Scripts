@@ -120,6 +120,7 @@ uncommentCurrentFold = (sub, _, act) ->
 
 
 -- toggle comment state on all the lines in a fold around active line. Any commented lines will become uncommented, and vice versa.
+-- if any commented lines have the "fold-operation" marker, signifying that they've been commented out by this macro, assume they're not to be uncommented.
 toggleCommentCurrentFold = (sub, _, act) ->
   newSelection = selectFoldAroundActiveLine sub, _, act
   return if #newSelection == 0
@@ -129,7 +130,7 @@ toggleCommentCurrentFold = (sub, _, act) ->
   return if #lines.lines == 0
   lines\runCallback ((lines, line, i) ->
     aegisub.cancel! if aegisub.progress.is_cancelled!
-    line.comment = not line.comment
+    line.comment = not line.comment unless line.comment and line\getExtraData 'fold-operation'
   ), true
   lines\replaceLines!
 
