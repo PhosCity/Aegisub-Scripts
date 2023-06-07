@@ -54,6 +54,14 @@ This comments all the lines in current fold. If a line was already commented bef
 
 This uncomments all the lines in current fold. If the script remembers that a line was commented before running `Comment Current Fold`, it does not uncomment them.
 
+### `Toggle Comments in Current Fold`
+
+This toggles the comments inside the current fold. If the fold was commented using `Comment Current Fold`, the state of the already commented folds is respected.
+
+### `Comment or Uncomment Current Fold`
+
+Comment the fold around the active line if it contains uncommented lines, otherwise uncomment it all.
+
 ### `Delete Current Fold`
 
 This deletes all the lines of current fold.
