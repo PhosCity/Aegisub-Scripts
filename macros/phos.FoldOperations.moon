@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "1.0.0"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
