@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "1.0.0"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
