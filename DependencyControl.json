@@ -409,14 +409,14 @@
 			"description": "Automatically determine fade in and fade out",
 			"channels": {
 				"main": {
-					"version": "1.0.0",
-					"released": "2023-04-09",
+					"version": "1.1.0",
+					"released": "2023-07-22",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "49848b7d6724b4bf35229a44c39b41963e4d29ce"
+							"sha1": "16e6595ede11cb81c66ddf599e8f9bbcc6e9bf7e"
 						}
 					],
 					"requiredModules": [
