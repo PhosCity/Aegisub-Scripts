@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "1.0.0"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
@@ -89,7 +89,7 @@ main = (sub, sel) ->
     windowAssertError currentFrame <= line.endFrame, "Your current video position is after the end time of the line."
 
     -- Try to see if there is a single point clip in the line
-    xCord, yCord = line.text\match "\\i?clip%(m ([%d.]+) ([%d.]+)%)"
+    xCord, yCord = line.text\match "\\i?clip%(m ([%d.]+) ([%d.]+)%s*%)"
     if xCord
       removeClip = true
     else -- Since there is no single point clip, try to see if there is coordinate in clipboard
