@@ -14,7 +14,7 @@ getTime, getFrame = aegisub.ms_from_frame, aegisub.frame_from_ms
 defaultConfig =
   startLeadIn: 120
   startKeysnapBefore: 350
-  startKeysnapAfter: 350
+  startKeysnapAfter: 100
   startLink: 620
   endLeadOut: 400
   endKeysnapBefore: 300
@@ -27,14 +27,14 @@ config = depctrl\getConfigHandler defaultConfig
 configSetup = ->
   y, dlg = 1,  {
 		{x: 0, y: 0,  width: 1, height: 1, class: "label",    label: "Start:"}
-		{x: 0, y: 8,  width: 1, height: 1, class: "label",    label: "End:"}
-		{x: 0, y: 16, width: 5, height: 1, class: "checkbox", label: "Auto-move to next line after making changes", name: "automove", value: config.c.automove}
+		{x: 0, y: 10, width: 1, height: 1, class: "label",    label: "End:"}
+		{x: 0, y: 18, width: 5, height: 1, class: "checkbox", label: "Auto-move to next line after making changes", name: "automove", value: config.c.automove}
 		{x: 3, y: 0,  width: 1, height: 1, class: "checkbox", label: "Debug", name: "debug", value: config.c.debug, hint: "Disply debugging messages"}
   }
   data = {
     {"Lead in",         "startLeadIn",        config.c.startLeadIn,        "100-150 ms",  "Lead in amound from exact start"}
-    {"Key Snap",        "startKeysnapBefore", config.c.startKeysnapBefore, "~2*leadin",   "Time to snap to keyframe before the exact start"}
-    {"Key Snap",        "startKeysnapAfter",  config.c.startKeysnapAFter,  "~2*leadin",   "Time to snap to keyframe after the exact start"}
+    {"Key Snap Before", "startKeysnapBefore", config.c.startKeysnapBefore, "~2*leadin",   "Time to snap to keyframe before the exact start"}
+    {"Key Snap After",  "startKeysnapAfter",  config.c.startKeysnapAFter,  "0-100 ms",   "Time to snap to keyframe after the exact start"}
     {"Line Link",       "startLink",          config.c.startLink,          "~500+leadin", "Time from exact start of current line to end-time of previous line to link"}
     {"Lead out",        "endLeadOut",         config.c.endLeadOut,         "350-450 ms",  "Lead out amount from exact end"}
     {"Key Snap Before", "endKeysnapBefore",   config.c.endKeysnapBefore,   "100-300 ms",  "Time to snap to keyframe before the exact end"}
@@ -45,7 +45,7 @@ configSetup = ->
     dlg[#dlg+1] = {x: 0, y: y+1, width: 1, height: 1, class: "label",   label: item[1]}
     dlg[#dlg+1] = {x: 1, y: y+1, width: 1, height: 1, class: "intedit", name: item[2], value: item[3]}
     dlg[#dlg+1] = {x: 3, y: y+1, width: 1, height: 1, class: "label",   label: "Recommended value: #{item[4]}"}
-    if index %3 == 0 y += 4 else y += 2
+    if index %4 == 0 y += 4 else y += 2
 
   btn, res = aegisub.dialog.display dlg, { "Save", "Reset", "Cancel" }
   aegisub.cancel! if btn == "Cancel"
