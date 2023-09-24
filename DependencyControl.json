@@ -296,13 +296,13 @@
 			"channels": {
 				"main": {
 					"version": "1.0.1",
-					"released": "2023-01-06",
+					"released": "2023-09-24",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "79d9d478501c5e3c17be380da0cf052e49186f22"
+							"sha1": "ba750b6f6f99771ce6edc43487f8b712cde3f482"
 						}
 					]
 				}
