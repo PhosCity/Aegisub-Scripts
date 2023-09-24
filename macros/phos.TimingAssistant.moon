@@ -1,6 +1,6 @@
 export script_name = "Timing Assistant"
 export script_description = "A second brain for timers."
-export script_version = "1.1.0"
+export script_version = "1.1.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.TimingAssistant"
 
@@ -34,7 +34,7 @@ configSetup = ->
   data = {
     {"Lead in",         "startLeadIn",        config.c.startLeadIn,        "100-150 ms",  "Lead in amound from exact start"}
     {"Key Snap Before", "startKeysnapBefore", config.c.startKeysnapBefore, "~2*leadin",   "Time to snap to keyframe before the exact start"}
-    {"Key Snap After",  "startKeysnapAfter",  config.c.startKeysnapAFter,  "0-100 ms",   "Time to snap to keyframe after the exact start"}
+    {"Key Snap After",  "startKeysnapAfter",  config.c.startKeysnapAfter,  "0-100 ms",   "Time to snap to keyframe after the exact start"}
     {"Line Link",       "startLink",          config.c.startLink,          "~500+leadin", "Time from exact start of current line to end-time of previous line to link"}
     {"Lead out",        "endLeadOut",         config.c.endLeadOut,         "350-450 ms",  "Lead out amount from exact end"}
     {"Key Snap Before", "endKeysnapBefore",   config.c.endKeysnapBefore,   "100-300 ms",  "Time to snap to keyframe before the exact end"}
