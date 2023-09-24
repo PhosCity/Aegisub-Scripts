@@ -137,7 +137,7 @@ timeStart = (sub, sel, opt) ->
         debugMsg "Link lines failed because a keyframe is close. Snap end of last line. Add lead in to current line."
 
       elseif (startTime - opt.startLeadIn) > (getTime(nextKeyframe) - 500)
-        line.start_time = getTime(nextKeyframe) -500 unless snap
+        line.start_time = getTime(nextKeyframe) - 500 unless snap
         previousLine.end_time = line.start_time
         debugMsg "Link lines by ensuring that start time is 500 ms away from next keyframe."
 
