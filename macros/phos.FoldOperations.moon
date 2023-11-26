@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "1.1.0"
+export script_version = "1.1.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -80,6 +80,11 @@ selectFoldAroundActiveLine = (sub, _, act) ->
         break
 
   return newSelection
+
+-- selects all the lines in a fold around active line however if you have commented fold names around fold, it deselects them
+selectActiveFold = (sub, _, act) ->
+  newSelection = selectFoldAroundActiveLine sub, _, act
+  return correctSelection newSelection
 
 
 -- comment all the lines in a fold around active line. Remembers line that were already commented.
@@ -396,7 +401,7 @@ gui = (sub, sel, act) ->
 
 
 depctrl\registerMacros({
-  {"Select Current Fold", "Select the fold around the active line", selectFoldAroundActiveLine},
+  {"Select Current Fold", "Select the fold around the active line", selectActiveFold},
   {"Comment Current Fold", "Comment the fold around the active line", commentCurrentFold},
   {"Uncomment Current Fold", "Uncomment the fold around the active line", uncommentCurrentFold},
   {"Comment or Uncomment Current Fold", "Comment the fold around the active line if it contains uncommented lines, otherwise uncomment it all", stateToggleCommentCurrentFold},
