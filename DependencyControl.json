@@ -368,14 +368,14 @@
 			"description": "Different operations on folds",
 			"channels": {
 				"main": {
-					"version": "1.1.0",
-					"released": "2023-06-07",
+					"version": "1.1.1",
+					"released": "2023-11-26",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "64f147f6fbe31997cfe67749d67d3782df8d58b5"
+							"sha1": "1eb0ff20011f3fda9dfd0131b87fd9bb21b3bd91"
 						}
 					],
 					"requiredModules": [
