@@ -2,7 +2,7 @@ export script_name = "One Pace"
 export script_description = "One Pace Stuff"
 export script_author = "PhosCity"
 export script_namespace = "phos.onepace"
-export script_version = "1.1.4"
+export script_version = "1.1.5"
 
 haveDepCtrl, DependencyControl = pcall(require, "l0.DependencyControl")
 local depctrl
@@ -539,8 +539,8 @@ preprocessing = (subs, sel) ->
     line_top["line3"] = { actor: "chptr", class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "{Episode}"}
     line_top["line4"] = { actor: "OP",    class: "dialogue", comment: true, effect: "", start_time: 0, end_time: 0, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: ""}
 
-  line_top["line5"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
-  line_top["line6"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+  line_top["line5"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 0,      end_time: 9990,   layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)\\org(0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
+  line_top["line6"] = { actor: "", class: "dialogue", comment: false, effect: "", start_time: 152510, end_time: 162500, layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: "Warning", text: "{\\fscx0\\fscy0\\clip(0,0,0,0)\\org(0,0)}Your media player does not support the subtitle format used in this episode.\\NSubtitles will likely not function properly.\\NPlease use one of the recommended video players, preferably mpv:\\Nhttps://mpv.io"}
   line_top["line7"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "========================CHAPTERS AND OPENINGS====================="}
   line_top["line8"] = { actor: "", class: "dialogue", comment: true,  effect: "", start_time: 0,      end_time: 0,      layer: 0, margin_l: 0, margin_r: 0, margin_t: 0, section: "[Events]", style: mainStyle, text: "===============================DIALOGUE============================"}
 
