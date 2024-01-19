@@ -1,12 +1,8 @@
 export script_name = "Discord ASS Highlight"
 export script_description = "Copy line to discord with highlights"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.DiscordASSHighlight"
-
--- If you want to highlight coordinate, set this to true. Although if the shape is too long, discord fails to color them.
-highlightCoodinate = false
-
 
 die = (msg) ->
   aegisub.log "msg"
@@ -117,7 +113,7 @@ contours = (shape) ->
   finalString
 
 
-tagColorizer = (text) ->
+tagColorizer = (text, highlightCoodinate) ->
 
   tag = {"alpha", "1a", "3a", "4a",
     "fscx", "fscy",
@@ -147,55 +143,61 @@ tagColorizer = (text) ->
     text=text\gsub "\\#{item}([^\\}]+)([\\}])", formatText("\\",5)..formatText(item,5, "bold")..formatText("%1",6, "bold").."%2"
   text
 
-main = (subs, sel) ->
-  output = "```ansi\n"
-  for i in *sel
-    continue unless subs[i].class == "dialogue"
-    line = subs[i]
+main = (highlightCoodinate = false, copyHeaders = true) ->
+  (subs, sel) ->
+    output = "```ansi\n"
+    for i in *sel
+      continue unless subs[i].class == "dialogue"
+      line = subs[i]
 
-    lineType = line.comment and "Comment: " or "Dialogue: "
-    lineType = formatText(lineType,4)
+      if copyHeaders
+        lineType = line.comment and "Comment: " or "Dialogue: "
+        lineType = formatText(lineType,4)
 
-    layer = formatText(line.layer,3)
+        layer = formatText(line.layer,3)
 
-    startTime = ms2AssTimecode line.start_time
-    startTime = formatText(startTime,3)
+        startTime = ms2AssTimecode line.start_time
+        startTime = formatText(startTime,3)
 
-    endTime = ms2AssTimecode line.end_time
-    endTime = formatText(endTime,3)
+        endTime = ms2AssTimecode line.end_time
+        endTime = formatText(endTime,3)
 
-    style = formatText(line.style,2)
+        style = formatText(line.style,2)
 
-    actor = formatText(line.actor,3)
+        actor = formatText(line.actor,3)
 
-    margin_left = formatText(line.margin_l,3)
-    margin_right = formatText(line.margin_r,3)
-    margin_vertical = formatText(line.margin_t,3)
+        margin_left = formatText(line.margin_l,3)
+        margin_right = formatText(line.margin_r,3)
+        margin_vertical = formatText(line.margin_t,3)
 
-    effect = formatText(line.effect,2)
+        effect = formatText(line.effect,2)
+        output ..= lineType..layer..","..startTime..","..endTime..","..style..","..actor..","..margin_left..","..margin_right..","..margin_vertical..","..effect.."," 
 
-    text = line.text
+      text = line.text
 
-    -- Comments
-    text=text\gsub("{([^\\}]-)}","{"..formatText("%1",1).."}")
+      -- Comments
+      text=text\gsub("{([^\\}]-)}","{"..formatText("%1",1).."}")
 
-    -- Tags
-    tags = text\match("{\\[^}]-}")
-    text = tagColorizer(text) if tags
+      -- Tags
+      tags = text\match("{\\[^}]-}")
+      text = tagColorizer(text, highlightCoodinate) if tags
 
-    -- Shape
-    if highlightCoodinate and text\match "\\p(%d+)"
-      for shape in text\gmatch "}(m [^{]+)"
-        text = text\gsub escLuaExp(shape), contours(shape)
+      -- Shape
+      if highlightCoodinate and text\match "\\p(%d+)"
+        for shape in text\gmatch "}(m [^{]+)"
+          text = text\gsub escLuaExp(shape), contours(shape)
 
-    -- Brackets
-    text = text\gsub "[{}]", formatText("%1",3)
+      -- Brackets
+      text = text\gsub "[{}]", formatText("%1",3)
 
-    -- Line Breaks
-    text = text\gsub "\\N", formatText("\\N", 1)
+      -- Line Breaks
+      text = text\gsub "\\N", formatText("\\N", 1)
 
-    output ..= lineType..layer..","..startTime..","..endTime..","..style..","..actor..","..margin_left..","..margin_right..","..margin_vertical..","..effect..","..text.."\n"
-  output ..= "```"
-  aegisub.log output
+      output ..= text.."\n"
+    output ..= "```"
+    aegisub.log output
 
-aegisub.register_macro(script_name, script_description, main)
+aegisub.register_macro(script_name.."/Copy line", script_description, main nil)
+aegisub.register_macro(script_name.."/Copy line with shape highlights", script_description, main true)
+aegisub.register_macro(script_name.."/Copy line without headers", script_description, main nil, false)
+aegisub.register_macro(script_name.."/Copy line without headers with shape highlights", script_description, main true, false)
