@@ -1,6 +1,6 @@
 export script_name = "Discord ASS Highlight"
 export script_description = "Copy line to discord with highlights"
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.DiscordASSHighlight"
 
@@ -27,8 +27,7 @@ splitTimestamp= (time) ->
 
 ms2AssTimecode = (time) ->
     {:h, :m, :s, :f} = splitTimestamp time
-    if h > 9
-      return nil, "value too large to create an ASS timecode"
+    die "Value too large to create an ASS timecode" if h > 9
     return string.format("%01d:%02d:%02d.%02d", h, m, s, f/10)
 
 
@@ -65,12 +64,11 @@ formatText = (text, color, format) ->
     [5]: "35m",     -- pink
     [6]: "36m",     -- cyan
     [7]: "37m"      -- white
-    [8]: "37m"      -- dark gray
+    [8]: "30m"      -- dark gray
   }
 
   str = "\27["
-  if format
-    str ..= formatCodes[format]..";"
+  str ..= formatCodes[format]..";" if format
   str ..= colorCodes[color] .. text .. "\27[".. colorCodes[0]
   str
 
@@ -82,12 +80,9 @@ contours = (shape) ->
     shapeType = "rect"
   else
     splitShape, splitCount = split shape, "%s+", nil, false
-    shapetype = "vect"
 
   local drawingCmd
-  finalString = ""
-  bezierCount = 0
-  count = 1
+  finalString, bezierCount, count = "", 0, 1
   for i, coord in ipairs splitShape
     if coord\match "[mnlbspc]"
       drawingCmd = coord
@@ -117,17 +112,16 @@ tagColorizer = (text, highlightCoodinate) ->
 
   tag = {"alpha", "1a", "3a", "4a",
     "fscx", "fscy",
-    "fs", "fsp", "fn",
+    "fsp", "fs", "fn",
     "fax", "frx", "fry", "frz",
     "bord", "xbord", "ybord",
     "shad", "xshad", "yshad",
     "blur", "be",
-    "an",
-    "q",
+    "an", "q",
     "fade", "fad",
     "pos", "move", "org"
-    "c", "1c", "3c", "4c",
-    "i", "b", "u", "s", "t"
+    "1c", "c", "3c", "4c",
+    "i", "b", "u", "s", "t", "p"
   }
 
   if highlightCoodinate
@@ -151,10 +145,10 @@ main = (highlightCoodinate = false, copyHeaders = true) ->
       line = subs[i]
 
       if copyHeaders
-        lineType = line.comment and "Comment: " or "Dialogue: "
+        lineType = line.comment and "Comment:" or "Dialogue:"
         lineType = formatText(lineType,4)
 
-        layer = formatText(line.layer,3)
+        layer = formatText(line.layer,1)
 
         startTime = ms2AssTimecode line.start_time
         startTime = formatText(startTime,3)
@@ -164,28 +158,27 @@ main = (highlightCoodinate = false, copyHeaders = true) ->
 
         style = formatText(line.style,2)
 
-        actor = formatText(line.actor,3)
+        actor = formatText(line.actor,2)
 
-        margin_left = formatText(line.margin_l,3)
-        margin_right = formatText(line.margin_r,3)
-        margin_vertical = formatText(line.margin_t,3)
+        margin_left = formatText(line.margin_l,1)
+        margin_right = formatText(line.margin_r,1)
+        margin_vertical = formatText(line.margin_t,1)
 
         effect = formatText(line.effect,2)
-        output ..= lineType..layer..","..startTime..","..endTime..","..style..","..actor..","..margin_left..","..margin_right..","..margin_vertical..","..effect.."," 
+        output ..= "#{lineType} #{layer},#{startTime},#{endTime},#{style},#{actor},#{margin_left},#{margin_right},#{margin_vertical},#{effect},"
 
       text = line.text
 
       -- Comments
-      text=text\gsub("{([^\\}]-)}","{"..formatText("%1",1).."}")
-
-      -- Tags
-      tags = text\match("{\\[^}]-}")
-      text = tagColorizer(text, highlightCoodinate) if tags
+      text=text\gsub("{([^\\}]-)}","{"..formatText("%1",8).."}")
 
       -- Shape
       if highlightCoodinate and text\match "\\p(%d+)"
         for shape in text\gmatch "}(m [^{]+)"
           text = text\gsub escLuaExp(shape), contours(shape)
+
+      -- Tags
+      text = tagColorizer(text, highlightCoodinate) if text\match("{\\[^}]-}")
 
       -- Brackets
       text = text\gsub "[{}]", formatText("%1",3)
