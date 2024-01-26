@@ -1,6 +1,6 @@
 export script_name = "Auto Gradient"
 export script_description = "Automatically attemp to gradient the line."
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoGradient"
 
@@ -12,10 +12,9 @@ depctrl = DependencyControl{
       feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
     {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
-      "aegisub.util"
   },
 }
-LineCollection, ASS, util = depctrl\requireModules!
+LineCollection, ASS = depctrl\requireModules!
 logger = depctrl\getLogger!
 
 getColor = (curFrame, x, y) ->
@@ -28,6 +27,36 @@ round = (num, idp = 0) ->
   fac = 10^idp
   return math.floor(num * fac + 0.5) / fac
 
+distance = (x1, y1, x2, y2) -> math.sqrt (x2-x1)^2 + (y2-y1)^2
+
+getPointsBetweenCoordinates = (startCoord, endCoord) ->
+  x1, y1 = table.unpack startCoord
+  x2, y2 = table.unpack endCoord
+  dist = distance(x1, y1, x2, y2)
+  points = {}
+  for i = 1, dist
+    m1 = i
+    m2 = dist - i
+    x = (m1 * x2 + m2 * x1)/(m1 + m2)
+    y = (m1 * y2 + m2 * y1)/(m1 + m2)
+    table.insert points, {x, y}
+  points
+
+extractRGB = (color) ->
+  b, g, r = color\match "&H(..)(..)(..)&"
+  tonumber(b, 16), tonumber(g, 16), tonumber(r, 16)
+
+colorsAreAlmostSame = (color1, color2) ->
+  return false unless color1
+  return false unless color2
+  b1, g1, r1 = extractRGB color1
+  b2, g2, r2 = extractRGB color2
+  bdiff, gdiff, rdiff = math.abs(b1-b2), math.abs(g1-g2), math.abs(r1-r2)
+  tolerance = 2
+  if bdiff < tolerance and gdiff < tolerance and rdiff < tolerance
+    return true
+  return false
+
 main = (mode) ->
   (sub, sel) ->
 
@@ -38,7 +67,7 @@ main = (mode) ->
       aegisub.cancel!
 
     local bounds
-    clipTable= {start: {}, end:{}}
+    clipTable = {}
     currentFrame = aegisub.project_properties!.video_position
     lines\runCallback (lines, line, i) ->
       aegisub.cancel! if aegisub.progress.is_cancelled!
@@ -48,36 +77,59 @@ main = (mode) ->
       return if  #clip == 0
       data\removeTags "clip_vect"
 
-      -- Get line bounds for later use
-      bounds = data\getLineBounds!
+      bounds = data\getLineBounds!  -- Get line bounds for later use
 
-      for index, cnt in ipairs clip[1].contours[1].commands          -- Is this the best way to loop through co-ordinate?
+      for index, cnt in ipairs clip[1].contours[1].commands  -- Is this the best way to loop through co-ordinate?
         break if index == 3
         x, y = cnt\get!
-        if index == 1
-          clipTable.start.x = x
-          clipTable.start.y = y
-        else
-          clipTable.end.x = x
-          clipTable.end.y = y
+        table.insert clipTable, {x, y}
       data\commit!
-
-    colorTable = {}
-    if mode == "vertical"
-      x = clipTable.start.x
-      step = clipTable.start.y > clipTable.end.y and -1 or 1
-      for y = clipTable.start.y, clipTable.end.y, step
-        table.insert colorTable, getColor(currentFrame, x, y)
-    else
-      y = clipTable.start.y
-      step = clipTable.start.x > clipTable.end.x and -1 or 1
-      for x = clipTable.start.x, clipTable.end.x, step
-        table.insert colorTable, getColor(currentFrame, x, y)
-
-    collectgarbage!
 
     x1, y1 = bounds[1].x, bounds[1].y
     x2, y2 = bounds[2].x, bounds[2].y
+
+    clipTable = getPointsBetweenCoordinates(clipTable[1], clipTable[2])
+    clipCnt = #clipTable
+
+    gradientTable = {}
+    local prevColor
+    if mode == "vertical"
+      for j = y1, y2
+        currPercent = (j - y1) / (y2 - y1)
+        index = math.floor(round(currPercent * clipCnt))
+        index = math.max(index, 1)
+        x, y = table.unpack clipTable[index]
+        color = getColor currentFrame, x, y
+
+        if colorsAreAlmostSame(prevColor, color)
+          gradientTable[#gradientTable][4] = j+1
+        else
+          table.insert gradientTable, {x1, j, x2, j+1, color}
+        prevColor = color
+    else
+      for j = x1, x2
+        currPercent = (j - x1) / (x2 - x1)
+        index = math.floor(round(currPercent * clipCnt))
+        index = math.max(index, 1)
+        x, y = table.unpack clipTable[index]
+        color = getColor currentFrame, x, y
+
+        if colorsAreAlmostSame(prevColor, color)
+          gradientTable[#gradientTable][3] = j+1
+        else
+          table.insert gradientTable, {j, y1, j+1, y2, color}
+        prevColor = color
+
+    x1 = nil
+    y1 = nil
+    mode = nil
+    bounds = nil
+    clipCnt = nil
+    clipTable = nil
+    prevColor = nil
+    colorTable = nil
+    currentFrame = nil
+    collectgarbage!
 
     to_delete = {}
     lines\runCallback (lines, line, i) ->
@@ -85,36 +137,19 @@ main = (mode) ->
       table.insert to_delete, line
 
       data = ASS\parse line
-      if mode == "vertical"
-        for j = y1, y2
-          currPercent = (j - y1) / (y2 - y1)
-          index = math.floor(round(currPercent * #colorTable))
-          index = math.max(index, 1)
-          color = colorTable[index]
-          r, g, b = util.extract_color(color)
-          data\replaceTags {ASS\createTag "clip_rect", x1, j, x2, j + 1}
-          data\replaceTags {ASS\createTag "color1", b, g, r}
-          lines\addLine ASS\createLine {line}
-      else
-        for j = x1, x2
-          currPercent = (j - x1) / (x2 - x1)
-          index = math.floor(round(currPercent * #colorTable))
-          index = math.max(index, 1)
-          color = colorTable[index]
-          r, g, b = util.extract_color(color)
-          data\replaceTags {ASS\createTag "clip_rect", j, y1, j+1, y2}
-          data\replaceTags {ASS\createTag "color1", b, g, r}
-          lines\addLine ASS\createLine {line}
+      for item in *gradientTable
+        leftX, leftY, rightX, rightY, color = table.unpack item
+        b, g, r = extractRGB(color)
+        data\replaceTags {ASS\createTag "clip_rect", leftX, leftY, rightX, rightY}
+        data\replaceTags {ASS\createTag "color1", b, g, r}
+        lines\addLine ASS\createLine {line}
 
     lines\insertLines!
     lines\deleteLines to_delete
 
-    mode = nil
     lines = nil
-    bounds = nil
-    clipTable = nil
     to_delete = nil
-    colorTable = nil
+    gradientTable = nil
     collectgarbage!
 
 depctrl\registerMacros({
