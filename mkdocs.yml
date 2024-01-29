@@ -26,6 +26,8 @@ nav:
       - KFX: KFX.md
   - QC:
       - Quality Report: Quality Report.md
+  - Module:
+      - AegiGUI: AegiGUI.md
   - Others:
       - ASSFoundation: ASSFoundation.md
 
