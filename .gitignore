@@ -4,6 +4,7 @@
 !.github/**
 !macros/*.lua
 !macros/*.moon
+!modules/phos/*.moon
 !DependencyControl.json
 !/assets/*
 !test/*.ass
