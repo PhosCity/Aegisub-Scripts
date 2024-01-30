@@ -1,6 +1,6 @@
 export script_name = "Auto Gradient"
 export script_description = "Automatically attemp to gradient the line."
-export script_version = "0.0.2"
+export script_version = "0.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoGradient"
 
@@ -15,19 +15,21 @@ depctrl = DependencyControl{
   },
 }
 LineCollection, ASS = depctrl\requireModules!
-logger = depctrl\getLogger!
 
-getColor = (curFrame, x, y) ->
-  frame = aegisub.get_frame(curFrame, false)
+
+getColor = (frame, x, y) ->
   color = frame\getPixelFormatted(x, y)
   color
+
 
 round = (num, idp = 0) ->
   return num if idp == math.huge
   fac = 10^idp
   return math.floor(num * fac + 0.5) / fac
 
+
 distance = (x1, y1, x2, y2) -> math.sqrt (x2-x1)^2 + (y2-y1)^2
+
 
 getPointsBetweenCoordinates = (startCoord, endCoord) ->
   x1, y1 = table.unpack startCoord
@@ -42,9 +44,11 @@ getPointsBetweenCoordinates = (startCoord, endCoord) ->
     table.insert points, {x, y}
   points
 
+
 extractRGB = (color) ->
   b, g, r = color\match "&H(..)(..)(..)&"
   tonumber(b, 16), tonumber(g, 16), tonumber(r, 16)
+
 
 colorsAreAlmostSame = (color1, color2) ->
   return false unless color1
@@ -57,86 +61,75 @@ colorsAreAlmostSame = (color1, color2) ->
     return true
   return false
 
+
 main = (mode) ->
   (sub, sel) ->
-
     lines = LineCollection sub, sel
     return if #lines.lines == 0
-    if #lines.lines > 1
-      logger\log "This script really works in one line only for now. Bug me if you want it to work in multilines."
-      aegisub.cancel!
 
+    -- Initialize some variables
     local bounds
-    clipTable = {}
-    currentFrame = aegisub.project_properties!.video_position
-    lines\runCallback (lines, line, i) ->
-      aegisub.cancel! if aegisub.progress.is_cancelled!
-
-      data = ASS\parse line
-      clip = data\getTags "clip_vect"
-      return if  #clip == 0
-      data\removeTags "clip_vect"
-
-      bounds = data\getLineBounds!  -- Get line bounds for later use
-
-      for index, cnt in ipairs clip[1].contours[1].commands  -- Is this the best way to loop through co-ordinate?
-        break if index == 3
-        x, y = cnt\get!
-        table.insert clipTable, {x, y}
-      data\commit!
-
-    x1, y1 = bounds[1].x, bounds[1].y
-    x2, y2 = bounds[2].x, bounds[2].y
-
-    clipTable = getPointsBetweenCoordinates(clipTable[1], clipTable[2])
-    clipCnt = #clipTable
-
-    gradientTable = {}
-    local prevColor
-    if mode == "vertical"
-      for j = y1, y2
-        currPercent = (j - y1) / (y2 - y1)
-        index = math.floor(round(currPercent * clipCnt))
-        index = math.max(index, 1)
-        x, y = table.unpack clipTable[index]
-        color = getColor currentFrame, x, y
-
-        if colorsAreAlmostSame(prevColor, color)
-          gradientTable[#gradientTable][4] = j+1
-        else
-          table.insert gradientTable, {x1, j, x2, j+1, color}
-        prevColor = color
-    else
-      for j = x1, x2
-        currPercent = (j - x1) / (x2 - x1)
-        index = math.floor(round(currPercent * clipCnt))
-        index = math.max(index, 1)
-        x, y = table.unpack clipTable[index]
-        color = getColor currentFrame, x, y
-
-        if colorsAreAlmostSame(prevColor, color)
-          gradientTable[#gradientTable][3] = j+1
-        else
-          table.insert gradientTable, {j, y1, j+1, y2, color}
-        prevColor = color
-
-    x1 = nil
-    y1 = nil
-    mode = nil
-    bounds = nil
-    clipCnt = nil
-    clipTable = nil
-    prevColor = nil
-    colorTable = nil
-    currentFrame = nil
-    collectgarbage!
-
     to_delete = {}
+    currentFrame = aegisub.project_properties!.video_position
+    frame = aegisub.get_frame(currentFrame, false)
+
     lines\runCallback (lines, line, i) ->
       aegisub.cancel! if aegisub.progress.is_cancelled!
       table.insert to_delete, line
 
       data = ASS\parse line
+
+      -- Collect vector clip
+      clipTable = {}
+      clip = data\getTags "clip_vect"
+      return if  #clip == 0
+      data\removeTags "clip_vect"
+
+      for index, cnt in ipairs clip[1].contours[1].commands  -- Is this the best way to loop through co-ordinate?
+        break if index == 3
+        x, y = cnt\get!
+        table.insert clipTable, {x, y}
+
+      -- Collect bounding box of the line
+      bounds = data\getLineBounds!
+      x1, y1 = bounds[1].x, bounds[1].y
+      x2, y2 = bounds[2].x, bounds[2].y
+
+      -- Find all the points between two points of clip
+      clipTable = getPointsBetweenCoordinates(clipTable[1], clipTable[2])
+      clipCnt = #clipTable
+
+      -- Find colors for intermediate points
+      gradientTable = {}
+      local prevColor
+      if mode == "vertical"
+        for j = y1, y2
+          currPercent = (j - y1) / (y2 - y1)
+          index = math.floor(round(currPercent * clipCnt))
+          index = math.max(index, 1)
+          x, y = table.unpack clipTable[index]
+          color = getColor frame, x, y
+
+          if colorsAreAlmostSame(prevColor, color)
+            gradientTable[#gradientTable][4] = j+1
+          else
+            table.insert gradientTable, {x1, j, x2, j+1, color}
+          prevColor = color
+      else
+        for j = x1, x2
+          currPercent = (j - x1) / (x2 - x1)
+          index = math.floor(round(currPercent * clipCnt))
+          index = math.max(index, 1)
+          x, y = table.unpack clipTable[index]
+          color = getColor frame, x, y
+
+          if colorsAreAlmostSame(prevColor, color)
+            gradientTable[#gradientTable][3] = j+1
+          else
+            table.insert gradientTable, {j, y1, j+1, y2, color}
+          prevColor = color
+
+      -- Finally create new lines
       for item in *gradientTable
         leftX, leftY, rightX, rightY, color = table.unpack item
         b, g, r = extractRGB(color)
@@ -144,13 +137,12 @@ main = (mode) ->
         data\replaceTags {ASS\createTag "color1", b, g, r}
         lines\addLine ASS\createLine {line}
 
+    frame = nil
+    collectgarbage!
+
     lines\insertLines!
     lines\deleteLines to_delete
 
-    lines = nil
-    to_delete = nil
-    gradientTable = nil
-    collectgarbage!
 
 depctrl\registerMacros({
   {"Horizontal", "Horizontal Gradient", main "horizontal"},
