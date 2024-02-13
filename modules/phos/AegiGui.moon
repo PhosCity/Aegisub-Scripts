@@ -3,7 +3,7 @@ local Functional
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AegiGui",
-        version: "0.0.2",
+        version: "0.0.3",
         description: "Create GUI for Aegisub macros.",
         author: "PhosCity",
         moduleName: "phos.AegiGui",
@@ -128,7 +128,8 @@ sanitize = (errorMsg, errorLevel, tbl, x , y, nameTable) ->
             tempTbl = string.split item, "::"
             initialCount = #tempTbl
             tempTbl, finalCount = list.uniq tempTbl
-            tbl[i] = tempTbl
+            -- Since the each item in table is still string, we need to convert them back in case, they were escaped.
+            tbl[i] = [j\gsub("<<comma>>", ",")\gsub("<<linebreak>>", "\n")\gsub("<<delimiter>>", "|") for j in *tempTbl]
 
             unless initialCount == finalCount
                 tempErrorMsg ..= "INFO: There were duplicate items in table. Deduplicated them. If this shouldn't happen, please fix them.\n"
