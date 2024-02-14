@@ -3,7 +3,7 @@ local Functional
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AegiGui",
-        version: "0.0.3",
+        version: "0.0.4",
         description: "Create GUI for Aegisub macros.",
         author: "PhosCity",
         moduleName: "phos.AegiGui",
@@ -129,7 +129,7 @@ sanitize = (errorMsg, errorLevel, tbl, x , y, nameTable) ->
             initialCount = #tempTbl
             tempTbl, finalCount = list.uniq tempTbl
             -- Since the each item in table is still string, we need to convert them back in case, they were escaped.
-            tbl[i] = [j\gsub("<<comma>>", ",")\gsub("<<linebreak>>", "\n")\gsub("<<delimiter>>", "|") for j in *tempTbl]
+            tbl[i] = [j\gsub("<<comma>>", ",")\gsub("<<linebreak>>", "\n")\gsub("<<delimiter>>", "|")\gsub("<<space>>", " ") for j in *tempTbl]
 
             unless initialCount == finalCount
                 tempErrorMsg ..= "INFO: There were duplicate items in table. Deduplicated them. If this shouldn't happen, please fix them.\n"
@@ -153,7 +153,7 @@ sanitize = (errorMsg, errorLevel, tbl, x , y, nameTable) ->
                 tempErrorMsg ..= "WARNING: Argument #{i} for class \"#{_class}\" should be a string. Got \"#{_type}\" instead.\n"
                 errorLevel = 1
             else
-                tbl[i] = item\gsub("<<comma>>", ",")\gsub("<<linebreak>>", "\n")\gsub("<<delimiter>>", "|")
+                tbl[i] = item\gsub("<<comma>>", ",")\gsub("<<linebreak>>", "\n")\gsub("<<delimiter>>", "|")\gsub("<<space>>", " ")
 
         else
             tempErrorMsg ..= "WARNING: You shouldn't even be seeing this. There is error in _class_info in module.\n"
@@ -229,7 +229,7 @@ create = (str, btn = nil) ->
     -- Handle things that must be escaped before processing the string
     for item in str\gmatch "(%[%[[^%]]+%]%])"
         str = str\gsub (string.escLuaExp(item)), (a) ->
-            a\gsub("^%[%[","")\gsub("%]%]$","")\gsub(",", "<<comma>>")\gsub("\n","<<linebreak>>")\gsub("|","<<delimiter>>")
+            a\gsub("^%[%[","")\gsub("%]%]$","")\gsub(",", "<<comma>>")\gsub("\n","<<linebreak>>")\gsub("|","<<delimiter>>")\gsub(" ","<<space>>")
 
     -- Now we begin looping through the string
     for row in *string.split(str, "\n")
