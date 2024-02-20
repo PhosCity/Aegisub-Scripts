@@ -131,6 +131,32 @@ pressed, result = AegiGUI.open str
 pressed, result = AegiGUI.open str, btn
 ```
 
+## AegiGUI.merge
+
+This method converts the string you pass to tables that can be understood by Aegisub to create GUIs.
+
+| Arguments           | Description                                                                  |
+| :------------------ | :--------------------------------------------------------------------------- |
+| `Source GUI string` | The gui string that you want another gui string be appended to               |
+| `Target GUI string` | The gui string that you want to appended to another gui string               |
+| `BUTTON string`     | String that has all the button info                                          |
+| `x Offset`          | All elements in target GUI string will be ofset by this amount (Default = 0) |
+| `y Offset`          | All elements in target GUI string will be ofset by this amount (Default = 0) |
+| `open`              | Boolen if you want to open the merged gui(Default = false)                   |
+
+| Returns        | Description                                                     |
+| :------------- | :-------------------------------------------------------------- |
+| `GUI table`    | Table that can be fed to aegisub.dialog to create GUI           |
+| `BUTTON table` | Table that can be fed to aegisub.dialog to create buttons       |
+| `BUTTON ids`   | Table that can be fed to aegisub.dialog to assign ID to buttons |
+
+```moon
+gui  = AegiGUI.merge str1, str2, "Apply, Cancel:cancel", 1, 1
+aegisub.dialog.display(gui)
+
+pressed, res = AegiGUI.merge str1, str2, _, 25, 0, true
+```
+
 # Formatting the GUI string
 
 There are a few rules that the GUI string follows:
@@ -138,7 +164,7 @@ There are a few rules that the GUI string follows:
 1. Every class will be enclosed by `|` character. A space between two `|` is called a cell like a spreadsheet cell.
 1. One cell has an width of 1 and height of 1 in GUI table.
 1. There will be equal number of cells in each line of GUI string. This effectively means there will be equal number of `|` in each line.
-1. `null` is a special keyword that tells the module to leave that cell or that whole row alone.
+1. `null` is a special keyword that tells the module to leave that cell or that whole row alone. If all cells in a row is empty, it is equivalent to a `null` row.
 1. An empty cell means the width of this cell will be added to whatever non-empty cell it finds before it in its row. (Unless it encounters a `null` cell before it finds a non-empty cell.)
 1. If there is a text (for textbox or label class for example) that has characters like `\n`, `,` or `|`, the whole text must be enclosed inside `[[...]]` to escape them. Naturally you cant use `[[]]` in any text. Hopefully you never have its need.
 
@@ -150,8 +176,8 @@ There are a few rules that the GUI string follows:
 | edit       | -     | name       | text (opt)       | hint (opt) | -          | -          | -          | -              |
 | textbox    | text  | name       | height           | text(opt)  | hint(opt)  | -          | -          | -              |
 | checkbox   | check | name       | label            | value(opt) | hint(opt)  | -          | -          | -              |
-| intedit    | int   | name       | value            | min(opt)   | max(opt)   | hint(opt)  | -          | -              |
-| floatedit  | float | name       | value            | min(opt)   | max(opt)   | step(opt)  | hint(opt)  | -              |
+| intedit    | int   | name       | value(opt)       | min(opt)   | max(opt)   | hint(opt)  | -          | -              |
+| floatedit  | float | name       | value(opt)       | min(opt)   | max(opt)   | step(opt)  | hint(opt)  | -              |
 | dropdown   | drop  | name       | items            | value(opt) | hint(opt)  | -          | -          | -              |
 | color      | -     | name       | colorstring(opt) | hint(opt)  | -          | -          | -          | -              |
 | coloralpha | -     | name       | colorstring(opt) | hint(opt)  | -          | -          | -          | -              |
@@ -283,7 +309,7 @@ str = "
 
 ## textbox
 
-This is the point where you will feel like this module is held with nothing but a duct tape and for good reason. `textbox` is notoriously hard to work with in complex GUIs. When I tell Aegisub to make a textbox that is one has width 1, how wide is that? Nobody knows. That width is in fact equal to the longest width of other items in that column. What if there are no other items in that column. Well then your textbox has no width. Because of this nature of textbox where its width depends on dimensions of other elements in that row, there is no deterministic way to make textbox. Textbox is always hard to get right without some trial and error and unfortunately, this module does not solve this issue.
+This is the point where you will feel like this module is held with nothing but a duct tape and for good reason. `textbox` is notoriously hard to work with in complex GUIs. When I tell Aegisub to make a textbox that is one has width 1, how wide is that? Nobody knows. That width is in fact equal to the longest width of other items in that column. What if there are no other items in that column. Well then your textbox has no width. Lets say your textbox has a certain width and I set its width to two. Does that mean its width has been doubled? No again. Its width is sum of longest element of each column. Because of this nature of textbox where its width depends on dimensions of other elements in that row, there is no deterministic way to make textbox. Textbox is always hard to get right without some trial and error and unfortunately, this module does not solve this issue.
 
 This module does provide a class called `pad` which can force a cell to be a certain characters wide which will help use maintain the width of a textbox.
 
@@ -300,7 +326,7 @@ str = "
 "
 ```
 
-Notice that textbox is as wide as the label above it. If the label was shorter, the text would be less wide as well. Also notice that since I gave it the height of 5, I have to add five empty cells (counting itself) below it.I could also add `null` to get the same effect instead of empty cells.
+Notice that textbox is as wide as the label above it. If the label was shorter, the textbox would be less wide as well. Also notice that since I gave it the height of 5, I have to add five empty cells (counting itself) below it.I could also add `null` to get the same effect instead of empty cells.
 
 ![image](./assets/AegiGUI_textbox_2.png){ align=right }
 
@@ -418,7 +444,7 @@ This will make `Button3` return boolean false and every other button returns but
 
 # Some Tips
 
-- You can use a spreadsheet tool like **Excel** or **LibreCalc** to create the basic structure of the GUI string. Pop in the values in the cells like you want to see them in the GUI and save it as csv file with `|` as a delimeter. This will do most of the work for you. You can now clean up the text and fix anything if necessary.
+- You can use a spreadsheet tool like **Excel** or **LibreCalc** to create the basic structure of the GUI string. Pop in the values in the cells like you want to see them in the GUI and save it as csv file with `|` as a delimiter. This will do most of the work for you. You can now clean up the text and fix anything if necessary.
 
 - There is actually no need for any formatting as long as the rules of GUI strings are followed. You don't need to align the cells like I did in examples. You don't need to strip spaces around the cell as well. However doing so will give you a better picture of how the GUI will look by looking at the code itself which will only benefit you. I personally use neovim and use [this plugin](https://github.com/junegunn/vim-easy-align) to automagically format them. You could also pop the string in a markdown file and use formatter like prettier to format it as markdown tables. Alternately, format it manually with bunch of spaces.
 
