@@ -3,7 +3,7 @@ local Functional
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AegiGui",
-        version: "0.0.5",
+        version: "0.0.6",
         description: "Create GUI for Aegisub macros.",
         author: "PhosCity",
         moduleName: "phos.AegiGui",
@@ -349,7 +349,10 @@ merge = (source, target, btn = nil, xOffset = 0, yOffset = 0, open = false) ->
 
     for item in *guiSource
         for coord in *coordinateTable
-            if coord[1] == item.x and coord[2] == item.y
+            x = coord[1]
+            y = coord[2]
+            continue unless x and y
+            if x == item.x and y == item.y
                 errorMsg ..= "Row #{y-yOffset} Column #{x-xOffset} in target string causes conflicts.\n"
                 errorLevel = 1
 

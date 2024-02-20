@@ -133,7 +133,7 @@ pressed, result = AegiGUI.open str, btn
 
 ## AegiGUI.merge
 
-This method converts the string you pass to tables that can be understood by Aegisub to create GUIs.
+This method allows you to merge two gui strings. It can directly open the gui and return pressed button and gui result or it can just return the combined gui table that can be fed to aegisub.dialog.
 
 | Arguments           | Description                                                                  |
 | :------------------ | :--------------------------------------------------------------------------- |
