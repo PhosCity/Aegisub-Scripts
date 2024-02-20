@@ -3,7 +3,7 @@ local Functional
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AegiGui",
-        version: "0.0.4",
+        version: "0.0.5",
         description: "Create GUI for Aegisub macros.",
         author: "PhosCity",
         moduleName: "phos.AegiGui",
@@ -334,10 +334,43 @@ open = (str, btn = nil) ->
     pressed, res
 
 
+merge = (source, target, btn = nil, xOffset = 0, yOffset = 0, open = false) ->
+    errorMsg = ""
+    errorLevel = 0
+
+    guiSource, button, buttonID = create source, btn
+    guiTarget = create target
+
+    coordinateTable = {}
+    for item in *guiTarget
+        item.x += xOffset
+        item.y += yOffset
+        table.insert coordinateTable, {item.x, item.y}
+
+    for item in *guiSource
+        for coord in *coordinateTable
+            if coord[1] == item.x and coord[2] == item.y
+                errorMsg ..= "Row #{y-yOffset} Column #{x-xOffset} in target string causes conflicts.\n"
+                errorLevel = 1
+
+    if errorLevel == 1
+        aegisub.log errorMsg
+        aegisub.cancel!
+
+    guiString = list.join guiSource, guiTarget
+    if open
+        pressed,res = aegisub.dialog.display(guiString, button, buttonID)
+        return pressed, res
+    else
+        return guiString, button, buttonID
+
+
+
 lib = {
     :create
     :debug
     :open
+    :merge
 }
 
 if haveDepCtrl
