@@ -9,10 +9,10 @@
 	},
 	"baseUrl": "https://github.com/PhosCity/Aegisub-Scripts",
 	"url": "@{baseUrl}",
-	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts",
+	"fileBaseUrl": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main",
 	"macros": {
 		"phos.wave": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Wave",
@@ -38,7 +38,7 @@
 			}
 		},
 		"phos.wobble": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Wobble",
@@ -97,7 +97,7 @@
 			}
 		},
 		"phos.snap": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Bidirectional Snapping",
@@ -123,7 +123,7 @@
 			}
 		},
 		"phos.svg2ass": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "svg2ass",
@@ -180,7 +180,7 @@
 			}
 		},
 		"phos.AddGrain": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Add Grain",
@@ -236,7 +236,7 @@
 			}
 		},
 		"phos.RotateGradient": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Rotate Gradient",
@@ -295,7 +295,7 @@
 			}
 		},
 		"phos.TimingAssistant": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Timing Assistant",
@@ -321,7 +321,7 @@
 			}
 		},
 		"phos.RemoveTags": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Remove Tags",
@@ -370,7 +370,7 @@
 			}
 		},
 		"phos.FoldOperations": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Fold Operations",
@@ -412,7 +412,7 @@
 			}
 		},
 		"phos.AutoFade": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Auto Fade",
@@ -461,7 +461,7 @@
 			}
 		},
 		"phos.ExtrapolateTracking": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/macros/@{namespace}",
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "Extrapolate Tracking",
@@ -526,7 +526,7 @@
 	},
 	"modules": {
 		"phos.AegiGui": {
-			"fileBaseUrl": "@{fileBaseUrl}/@{channel}/modules/@{namespacePath}",
+			"fileBaseUrl": "@{fileBaseUrl}/modules/@{namespacePath}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "AegiGui",
