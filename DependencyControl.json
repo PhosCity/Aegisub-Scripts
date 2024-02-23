@@ -528,7 +528,7 @@
 					"files": [
 						{
 							"name": ".moon",
-							"url": "@{fileBaseUrl}@{fileName}",
+							"url": "@{baseUrl}@{fileName}",
 							"sha1": "5a4fff65e539120edbb36e3ba720ecda4b04af21"
 						}
 					],
