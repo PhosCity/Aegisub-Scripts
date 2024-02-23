@@ -10,3 +10,4 @@
 !test/*.ass
 !docs/**
 !mkdocs.yml
+!source/*.norg

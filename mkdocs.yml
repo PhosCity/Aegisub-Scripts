@@ -9,6 +9,7 @@ nav:
   - Typesetting:
       - Add Grain: Add Grain.md
       - Auto Fade: Auto Fade.md
+      - Edit Tags: Edit Tags.md
       - Extrapolate Tracking: Extrapolate Tracking.md
       - Fold Operations: Fold Operations.md
       - Remove Tags: Remove Tags.md
@@ -16,7 +17,6 @@ nav:
       - svg2ass: svg2ass.md
       - Wave: Wave.md
       - Wobble: Wobble.md
-      - Edit Tags: Edit Tags.md
       - Fit Text in Clip: Fit Text in Clip.md
       - Vector Gradient: Vector Gradient.md
   - Timing:
