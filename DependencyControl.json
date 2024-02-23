@@ -515,7 +515,7 @@
 	},
 	"modules": {
 		"phos.AegiGui": {
-			"fileBaseUrl": "@{fileBaseUrl}/modules/@{namespacePath}",
+			"fileBaseUrl": "@{baseUrl}/modules/@{namespacePath}",
 			"url": "@{baseUrl}#@{namespace}",
 			"author": "PhosCity",
 			"name": "AegiGui",
