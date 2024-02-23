@@ -1,5 +1,5 @@
 export script_name = "Edit Tags"
-export script_description = "Edit Tags"
+export script_description = "Edit tags of current line."
 export script_version = "1.0.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.EditTags"

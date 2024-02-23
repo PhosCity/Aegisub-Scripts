@@ -1,0 +1,1190 @@
+@document.meta
+title: phos.EditTags
+description: 
+authors: phos
+categories: 
+created: 2024-01-05T19:03:34+0530
+updated: 2024-02-23T13:16:39+0530
+version: 1.1.1
+tangle: {
+  languages: {
+        moon: ~/Git/Aegisub-Scripts/macros/phos.EditTags.moon
+  }
+  scope: all
+}
+@end
+
+* Script Details
+    @code moon
+    export script_name = "Edit Tags"
+    export script_description = "Edit tags of current line."
+    export script_version = "1.0.0"
+    export script_author = "PhosCity"
+    export script_namespace = "phos.EditTags"
+    @end
+
+* Dependency Control
+    @code moon
+    DependencyControl = require "l0.DependencyControl"
+    depctrl = DependencyControl{
+        feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+        {
+            {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
+                feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
+            {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
+                feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+            {"phos.AegiGui", version: "0.0.3", url: "https://github.com/PhosCity/Aegisub-Scripts",
+                feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"},
+            {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
+                feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
+            "Yutils"
+        }
+    }
+    LineCollection, ASS, AegiGUI, Functional, Yutils = depctrl\requireModules!
+    {:list, :table, :util, :math, :string} = Functional
+
+    @end
+
+* Helper Functions
+
+** Get base GUI String
+
+   @code moon
+   -----------------
+   getGUIstring = ->
+   -----------------
+       str = "
+       | label,EDIT TAGS #{script_version} |                          | check,outline,\\bord  | float,outlinevalue    | check,outline_x,\\xbord | float,outline_xvalue | check,alpha,\\alpha | float,alphavalue    |
+       | check,tagSection,SECTION          |                          | check,shadow,\\shad   | float,shadowvalue     | check,outline_y,\\ybord | float,outline_yvalue | check,alpha1,\\1a   | float,alpha1value   |
+       | check,color1,Primary              | color,color1value        | check,fontsize,\\fs   | float,fontsizevalue   | check,shadow_x,\\xshad  | float,shadow_xvalue  | check,alpha3,\\3a   | float,alpha3value   |
+       | check,color3,Border               | color,color3value        | check,spacing,\\fsp   | float,spacingvalue    | check,shadow_y,\\yshad  | float,shadow_yvalue  | check,alpha4,\\4a   | float,alpha4value   |
+       | check,color4,Shadow               | color,color4value        | check,blur,\\blur     | float,blurvalue       | check,shear_x,\\fax     | float,shear_xvalue   | check,align,\\an    | drop,alignvalue     |
+       | check,bold,Bold                   | float,boldvalue          | check,blur_edges,\\be | float,blur_edgesvalue | check,shear_y,\\fay     | float,shear_yvalue   | check,wrapstyle,\\q | drop,wrapstylevalue |
+       | check,italic,Italic               | drop,italicvalue,0::1    | check,scale_x,\\fscx  | float,scale_xvalue    | check,angle_x,\\frx     | float,angle_xvalue   | check,drawing,\\p   | float,drawingvalue  |
+       | check,underline,Underline         | drop,underlinevalue,0::1 | check,scale_y,\\fscy  | float,scale_yvalue    | check,angle_y,\\fry     | float,angle_yvalue   | null                |                     |
+       | check,strikeout,Strike            | drop,strikeoutvalue,0::1 | check,scale,\\fsc     | float,scalevalue      | check,angle,\\frz       | float,anglevalue     | null                |                     |
+       | check,fade_simple,\\fad           | float,fade_simple_x      | float,fade_simple_y   |                       | check,fontname,\\fn     | drop,fontnamevalue   |                     |                     |
+       | check,position,\\pos              | float,position_x         | float,position_y      |                       | check,origin,\\org      | float,origin_x       | float,origin_y      |                     |
+       "
+       str
+
+   @end
+
+** Parse Transform Tags
+
+   @code moon
+   --------------------------------------------
+   parseTransformTags = (str, transformTags) ->
+   --------------------------------------------
+   @end
+
+   @code moon
+       local scale_x, scale_y
+       for tag in *transformTags
+           tagName = tag.__tag.name
+           str = str\gsub "(check,#{tagName},[^%s|]+)", "%1,true"
+
+           switch tagName
+   @end
+
+   @code moon
+               when "color1", "color2", "color3", "color4"
+                   b, g, r = tag\getTagParams!
+                   colorString = util.ass_color r, g, b
+                   str = str\gsub "#{tagName}value", "#{tagName}value,#{colorString}"
+   @end
+
+   @code moon
+               when "alpha", "alpha1", "alpha2", "alpha3", "alpha4"
+                   tagValue = tag\getTagParams!
+                   tagValueinPercent = math.round (tagValue / 255) * 100
+                   str = str\gsub "#{tagName}value", "#{tagName}value,#{tagValueinPercent},0,100,,0 (Opaque) -> 100 (Transparent)"
+   @end
+
+   @code moon
+               when "scale_x"
+                   scale_x = tag\getTagParams!
+                   str = str\gsub "#{tagName}value", "#{tagName}value,#{scale_x}"
+   
+               when "scale_y"
+                   scale_y = tag\getTagParams!
+                   str = str\gsub "#{tagName}value", "#{tagName}value,#{scale_y}"
+   @end
+
+   @code moon
+               when "clip_rect", "iclip_rect"
+                   xTopLeft, yTopLeft, xBottomRight, yBottomRight = tag\getTagParams!
+                   str ..= "\n| check,#{tagName},\\#{tagName\gsub("_rect", "")},true | float,#{tagName}_x1,#{xTopLeft},,,,x1 | float,#{tagName}_y1,#{yTopLeft},,,,y1 | float,#{tagName}_x2,#{xBottomRight},,,,x2 | float,#{tagName}_y2,#{yBottomRight},,,,y2 ||"
+   @end
+
+   @code moon
+               else
+                   tagValue = tag\getTagParams!
+                   str = str\gsub "#{tagName}value", "#{tagName}value,#{tagValue}"
+   @end
+
+   @code moon
+       str = str\gsub "scalevalue", "scalevalue,#{scale_x == scale_y and scale_x or 100}"
+       str
+
+   @end
+
+
+** Apply transform GUI to the line
+   @code moon
+   ----------------------------------------------------------
+   applyTransformGUItoLine = (res, existingTags, transform)->
+   ----------------------------------------------------------
+   @end
+
+*** Get tags that are available in transforms
+    @code moon
+        transformTagTable = {}
+        for tag in *transform.tags\getTags!
+            tagName = tag.__tag.name
+            transformTagTable[tagName] = tag
+    @end
+
+*** When fsc is ticked in GUI
+    @code moon
+        if res["scale"]
+            res["scale_x"] = true
+            res["scale_y"] = true
+            res["scale_xvalue"] = res["scalevalue"]
+            res["scale_yvalue"] = res["scalevalue"]
+    @end
+
+*** Loop through each tranformable tag
+    @code moon
+        for tagName in *ASS\getTagsNamesFromProps transformable: true
+            tag = transformTagTable[tagName]
+
+            unless res[tagName]
+                if existingTags[tagName]
+                    transform.tags\removeTags tagName
+                continue
+
+            local paramTable
+            switch tagName
+    @end
+
+**** Color
+     @code moon
+                 when "color1", "color2", "color3", "color4"
+                     r, g, b = util.extract_color res[tagName .. "value"]
+                     paramTable = existingTags[tagName] and {r, g, b} or {b, g, r}
+     @end
+
+**** Alpha
+     @code moon
+                 when "alpha", "alpha1", "alpha2", "alpha3", "alpha4"
+                     tagValueinPercent = res[tagName .. "value"]
+                     paramTable = {(tagValueinPercent * 255 ) / 100}
+     @end
+
+**** Rectangular Clip
+     @code moon
+                 when "clip_rect", "iclip_rect"
+                     xTopLeft, yTopLeft = res[tagName .. "_x1"], res[tagName .. "_y1"]
+                     xBottomRight, yBottomRight = res[tagName .. "_x2"], res[tagName .. "_y2"]
+                     paramTable = {xTopLeft, yTopLeft, xBottomRight, yBottomRight}
+     @end
+
+**** Everything else
+     @code moon
+                 else
+                     paramTable = {res[tagName.."value"]}
+     @end
+
+*** Make changes to tags in line
+    @code moon
+            if existingTags[tagName]
+                tag\set table.unpack(paramTable)
+            else
+                transform.tags\insertTags {ASS\createTag tagName, table.unpack(paramTable)}
+    @end
+
+*** Make changes to the transform parmameters
+    @code moon
+        transform.startTime\set res["startTime"]
+        transform.endTime\set res["endTime"]
+        transform.accel\set res["accel"]
+    @end
+
+** Generate GUI for transforms
+   @code moon
+   ----------------------------------------------------------------
+   generateTransformGUI = (transform, count, transformSelection) ->
+   ----------------------------------------------------------------
+   @end
+
+*** GUI String
+    @code moon
+        str = "
+        | label,EDIT TAGS #{script_version} |                   | check,outline,\\bord  | float,outlinevalue    | check,outline_x,\\xbord | float,outline_xvalue |
+        | check,transform,Transform Index:  |                   | check,shadow,\\shad   | float,shadowvalue     | check,outline_y,\\ybord | float,outline_yvalue |
+        | check,color1,Primary              | color,color1value | check,fontsize,\\fs   | float,fontsizevalue   | check,shadow_x,\\xshad  | float,shadow_xvalue  |
+        | check,color3,Border               | color,color3value | check,spacing,\\fsp   | float,spacingvalue    | check,shadow_y,\\yshad  | float,shadow_yvalue  |
+        | check,color4,Shadow               | color,color4value | check,blur,\\blur     | float,blurvalue       | check,shear_x,\\fax     | float,shear_xvalue   |
+        | check,alpha,\\alpha               | float,alphavalue  | check,blur_edges,\\be | float,blur_edgesvalue | check,shear_y,\\fay     | float,shear_yvalue   |
+        | check,alpha1,\\1a                 | float,alpha1value | check,scale_x,\\fscx  | float,scale_xvalue    | check,angle_x,\\frx     | float,angle_xvalue   |
+        | check,alpha3,\\3a                 | float,alpha3value | check,scale_y,\\fscy  | float,scale_yvalue    | check,angle_y,\\fry     | float,angle_yvalue   |
+        | check,alpha4,\\4a                 | float,alpha4value | check,scale,\\fsc     | float,scalevalue      | check,angle,\\frz       | float,anglevalue     |
+        "
+    @end
+
+*** Get transform parameters
+    @code moon
+        existingTags = transformSelection[count]["existingTags"] or {}
+        startTime = transform.startTime\get!
+        endTime = transform.endTime\get!
+        accel = transform.accel\get!
+    @end
+
+*** GUI string manipulation
+**** Transform Removal
+     @code moon
+         str = str\gsub "Transform Index:", "Transform Index: #{count}/#{#transformSelection},#{tostring(not transformSelection[count]["toRemove"])}"
+     @end
+
+**** Add tags to GUI string
+     @code moon
+         str = parseTransformTags str, transform.tags\getTags!
+     @end
+
+**** Add start time, end time and accel of current transform to GUI string
+     @code moon
+         str ..= "\n| label,t1 | float,startTime,#{startTime} | label,t2 | float,endTime,#{endTime} | label,accel | float,accel,#{accel} |"
+     @end
+
+**** Transform Switching
+     If multiple transforms are found, then we provide an option to switch between them.
+     @code moon
+         if #transformSelection > 1
+             nextCount = count + 1 > #transformSelection and 1 or count + 1
+             transformSelectionConcat = ["#{index}:#{#item.text > 57 and string.sub(item.text, 1, 54).." ..." or item.text}" for index, item in ipairs transformSelection]
+             str ..= "\n| label,Transform | drop,transformSelection,[[#{table.concat transformSelectionConcat, "::"}]],[[#{transformSelectionConcat[nextCount]}]]|||||"
+     @end
+
+*** Button String
+    @code moon
+        btnString = "Apply"
+        btnString ..= ",Switch" if #transformSelection > 1
+        btnString ..= ",Cancel:cancel"
+    @end
+
+*** Initiate GUI using the gui string and button string
+    @code moon
+        pressed, res = AegiGUI.open str, btnString
+        aegisub.cancel! unless pressed
+    @end
+
+*** Apply GUI to lines
+    If transform is ticked, we apply the changes of gui to line but if transform is unticked, we will just tag it for removal. There is no need to make changes for the transform we want to remove.
+    @code moon
+        if res["transform"]
+            transformSelection[count]["toRemove"] = false
+            applyTransformGUItoLine res, existingTags, transform
+        else
+            transformSelection[count]["toRemove"] = true
+    @end
+
+*** Transform Switching
+    If user has selected a new transform to switch to, we basically tell the *handleTransform* funciton to not exit out of loop and then recreate the GUI for new selected transform.
+    @code moon
+        exitLoop = true
+        if pressed == "Switch"
+            count = res.transformSelection\gsub("^([^:]+):.*", "%1")
+            count = tonumber(count)
+            exitLoop = false
+    @end
+
+*** Returns
+    @code moon
+        count, exitLoop, transformSelection
+
+    @end
+
+** Main function that handles transform
+
+   @code moon
+   ---------------------------------
+   handleTransform = (transforms) ->
+   ---------------------------------
+   @end
+
+*** Tag collection inside transform
+    @code moon
+        transformSelection = {}
+        for tr in *transforms
+            existingTags = {}
+            for tag in *tr.tags\getTags!
+                existingTags[tag.__tag.name] = true
+            transformSelection[#transformSelection + 1] = text: tr\toString!, existingTags: existingTags, toRemove: false
+    @end
+
+*** Start main loop
+    We continue this loop until we want to switch between different transforms. We can switch as many times as we want and make changes as we switch.
+    @code moon
+        count = 1
+        while true
+            tr = transforms[count]
+            count, exitLoop, transformSelection = generateTransformGUI tr, count, transformSelection
+            break if exitLoop
+    @end
+
+*** If any transform is marked for removal, we remove them here.
+    @code moon
+        for index, item in pairs transformSelection
+            if item["toRemove"]
+                transforms[index].tags\removeTags!
+
+    @end
+
+** Parse effective tags of a line
+
+   @code moon
+   -----------------------------------------------------
+   parseEffectiveTags = (str, tags, existingTagTable) ->
+   -----------------------------------------------------
+   @end
+
+*** Start looping through tags
+    The reason why I set up scale_x and scale_y as variables here is because we also have an item in gui called *fsc* which lets you edit both *fscx* and *fscy* at once. So I initiated these variables here to store the value of *fscx* and *fscy* as we loop through tags and we will work with it after the loop is over.
+
+    We also begin looping through the tags. As we do that, I thought I could also set the checkbox value to true if that tag is found in *existingTags* table.
+    @code moon
+        local scale_x, scale_y
+        for tagName, value in pairs tags
+            if existingTagTable[tagName]
+                str = str\gsub "(check,#{tagName},[^%s|]+)", "%1,true"
+
+            switch tagName
+    @end
+
+**** Italic, Underline and Strikeout
+     The reason why bold is not here even though it feels it should be is because bold is not only boolean but it can take any font weights. So it is treated differently.
+     @code moon
+                 when "italic", "underline", "strikeout"
+                     tagValue = value\getTagParams!
+                     str = str\gsub "#{tagName}value,0::1", "#{tagName}value,0::1,#{tagValue}"
+     @end
+
+**** Align
+     @code moon
+                 when "align"
+                     tagValue = value\getTagParams!
+                     str = str\gsub "alignvalue", "alignvalue,#{table.concat([j for j = 1, 9], "::")},#{tagValue}"
+     @end
+
+**** Wrapstyle
+     @code moon
+                 when "wrapstyle"
+                     tagValue = value\getTagParams!
+                     str = str\gsub "wrapstylevalue", "wrapstylevalue,#{table.concat([j for j = 0, 3], "::")},#{tagValue}"
+     @end
+
+**** Tags with two parameters
+     @code moon
+                 when "position", "origin", "fade_simple"
+                     firstParam, secondParam = value\getTagParams!
+                     str = str\gsub("#{tagName}_x", "#{tagName}_x,#{firstParam}")\gsub("#{tagName}_y", "#{tagName}_y,#{secondParam}")
+     @end
+
+**** Colors
+     @code moon
+                 when "color1", "color2", "color3", "color4"
+                     b, g, r = value\getTagParams!
+                     colorString = util.ass_color r, g, b
+                     str = str\gsub "#{tagName}value", "#{tagName}value,#{colorString}"
+     @end
+
+**** Alphas
+     @code moon
+                 when "alpha", "alpha1", "alpha2", "alpha3", "alpha4"
+                     tagValue = value\getTagParams!
+                     tagValueinPercent = math.round (tagValue / 255) * 100
+                     str = str\gsub "#{tagName}value", "#{tagName}value,#{tagValueinPercent},0,100,,0 (Opaque) -> 100 (Transparent)"
+     @end
+
+**** Scale
+     *fscx* and *fscy* is handled here and their value is added to variable *scale_x* and *scale_y* that we initiated earlier.
+     @code moon
+                 when "scale_x"
+                     scale_x = value\getTagParams!
+                     str = str\gsub "#{tagName}value", "#{tagName}value,#{scale_x}"
+
+                 when "scale_y"
+                     scale_y = value\getTagParams!
+                     str = str\gsub "#{tagName}value", "#{tagName}value,#{scale_y}"
+     @end
+
+**** Fontname
+     @code moon
+                 when "fontname"
+                     font = value\getTagParams!
+                     fontTable = [family.name for family in *Yutils.decode.list_fonts!]
+                     index = 1
+                     while index <= #fontTable and fontTable[index] < font
+                         index += 1
+
+                     if fontTable[index] ~= font
+                         table.insert fontTable, index, font
+
+                     str = str\gsub "fontnamevalue", "fontnamevalue,#{table.concat(fontTable, "::")},#{font}"
+     @end
+
+**** Optional Tags
+     Now comes the turn of optional tags. These tags are only added to GUI if they are available in the line.
+
+***** Move
+      @code moon
+                  when "move"
+                      if existingTagTable[tagName]
+                          x1, y1, x2, y2, t1, t2 = value\getTagParams!
+                          str = str .. "| check,move,\\move,true | float,move_x1,#{x1},,,,x1 | float,move_y1,#{y1},,,,y1 | float,move_x2,#{x2},,,,x2 | float,move_y2,#{y2},,,,y2 || float,move_t1,#{t1},,,,t1 | float,move_t2,#{t2},,,,t2 |"
+      @end
+
+***** Fade
+      @code moon
+                  when "fade"
+                      if existingTagTable[tagName]
+                          a1, a2, a3, t1, t2, t3, t4 = value\getTagParams!
+                          str = str .. "| check,fade,\\fade,true | float,fade_a1,#{a1},,,,a1 | float,fade_a2,#{a2},,,,a2 | float,fade_a3,#{a3},,,,a3 | float,fade_t1,#{t1},,,,t1 | float,fade_t2,#{t2},,,,t2 | float,fade_t3,#{t3},,,,t3 | float,fade_t4,#{t4},,,,t4 |"
+      @end
+
+***** Rectangular clip
+      @code moon
+                  when "clip_rect", "iclip_rect"
+                      if existingTagTable[tagName]
+                          xTopLeft, yTopLeft, xBottomRight, yBottomRight = value\getTagParams!
+                          str = str .. "\n| check,#{tagName},\\#{tagName\gsub("_rect", "")},true | float,#{tagName}_x1,#{xTopLeft},,,,x1 | float,#{tagName}_y1,#{yTopLeft},,,,y1 || float,#{tagName}_x2,#{xBottomRight},,,,x2 || float,#{tagName}_y2,#{yBottomRight},,,,y2 ||"
+      @end
+
+**** Everything else
+     Any remaning tags are all handled here.
+     @code moon
+                 else
+                     tagValue = value\getTagParams!
+                     str = str\gsub "#{tagName}value", "#{tagName}value,#{tagValue}"
+     @end
+
+*** Returns
+    @code moon
+        str = str\gsub "scalevalue", "scalevalue,#{scale_x == scale_y and scale_x or 100}"
+        str
+
+    @end
+
+** Apply the items of gui to line
+
+   @code moon
+   ------------------------------------------------------------------------------------------------------------
+   applyGUItoLine = (res, data, existingTagTable, sectionTable, count, tagSection, textSection, defaultTags) ->
+   ------------------------------------------------------------------------------------------------------------
+   @end
+
+*** Make changes to text of current section
+    @code moon
+        res["textvalue"] = "" unless res["text"]
+        if defaultTags or not textSection
+            data\insertSections(ASS.Section.Text res["textvalue"])
+        else
+            textSection.value = res["textvalue"]
+    @end
+
+*** When fsc is ticked in GUI
+    @code moon
+        if res["scale"]
+            res["scale_x"] = true
+            res["scale_y"] = true
+            res["scale_xvalue"] = res["scalevalue"]
+            res["scale_yvalue"] = res["scalevalue"]
+    @end
+
+*** Now we start changing tags
+    clip_vect, iclip_vect, k_bord, k_fill, k_sweep, reset, transform are the tags that we ignore.
+    @code moon
+        for tagName in *list.diff(ASS.tagNames.all, { "clip_vect", "iclip_vect", "k_bord", "k_fill", "k_sweep", "reset", "transform" })
+
+            unless res[tagName]
+                tagSection\removeTags tagName if existingTagTable[tagName]
+                continue
+
+            local paramTable
+            switch tagName
+    @end
+
+**** Position
+     @code moon
+                 when "position", "origin", "fade_simple"
+                     firstParam = res[tagName.."_x"]
+                     secondParam = res[tagName.."_y"]
+                     paramTable = {firstParam, secondParam}
+     @end
+
+**** Color
+     @code moon
+                 when "color1", "color2", "color3", "color4"
+                     r, g, b = util.extract_color res[tagName .. "value"]
+                     paramTable = {b, g, r}
+     @end
+
+**** Alpha
+     @code moon
+                 when "alpha", "alpha1", "alpha2", "alpha3", "alpha4"
+                     tagValueinPercent = res[tagName .. "value"]
+                     paramTable = {(tagValueinPercent * 255 ) / 100}
+     @end
+
+**** Move
+     @code moon
+                 when "move"
+                     x1, y1 = res["move_x1"], res["move_y1"]
+                     x2, y2 = res["move_x2"], res["move_y2"]
+                     t1, t2 = res["move_t1"], res["move_t2"]
+                     if t1 == 0 and t2 == 0
+                         t1 = nil
+                         t2 = nil
+                     paramTable = {x1, y1, x2, y2, t1, t2}
+     @end
+
+**** Fade
+     @code moon
+                 when "fade"
+                     a1, a2, a3 = res["fade_a1"], res["fade_a2"], res["fade_a3"]
+                     t1, t2, t3, t4 = res["fade_t1"], res["fade_t2"], res["fade_t3"], res["fade_t4"]
+                     paramTable = {t2, t4 - t3, t1, t3, a1, a2, a3}
+     @end
+
+**** Rectangular Clip
+     @code moon
+                 when "clip_rect", "iclip_rect"
+                     xTopLeft, yTopLeft = res[tagName .. "_x1"], res[tagName .. "_y1"]
+                     xBottomRight, yBottomRight = res[tagName .. "_x2"], res[tagName .. "_y2"]
+                     paramTable = {xTopLeft, yTopLeft, xBottomRight, yBottomRight}
+     @end
+
+**** Everything else
+     @code moon
+                 else
+                     paramTable = {res[tagName.."value"]}
+     @end
+
+*** Here's where we make changes to the line
+**** Default Tags
+     If defaultTags is true, then it means the line is empty or there are only comments in line. So we can simply insert tags without caring for any indexes of where we want to insert tags.
+     @code moon
+             if defaultTags
+                 data\insertTags {ASS\createTag tagName, table.unpack(paramTable)}
+     @end
+
+**** If text section does not have preceeding tag section
+     In this case we insert a tag section with all the tags we collected from GUI. Since we insert a section, we will have to now update the section Table where all the indexes will be increased by 1.
+
+     Since a text section without preceeding tag section can only exist in the start of a line, we can insert tagIndex to the first element of sectionTable as well.
+     @code moon
+             elseif textSection and not tagSection
+                 data\insertSections(ASS.Section.Tag!, 1)
+                 data\insertTags {ASS\createTag tagName, table.unpack(paramTable)}
+
+                 sectionTable[1]["tagIndex"] = 1
+                 sectionTable[1]["textIndex"] = 2
+                 for index, item in pairs sectionTable
+                     continue unless index > count
+                     item["tagIndex"] += 1
+                     item["textIndex"] += 1
+     @end
+
+**** If tag section is present
+     Well if tag sectin is present, then we'll just have to replace tags in that section which just so happens to be *count*.
+     @code moon
+             else
+                 data\replaceTags {ASS\createTag tagName, table.unpack(paramTable)}, count, count, true
+     @end
+
+*** Returns
+    @code moon
+        sectionTable
+    @end
+
+** Generate gui for each section
+   First lets start with creating the base GUI for the script. This is the GUI that will be shown for any lines. There are some tags like fade, move, clip_rect, iclip_rect that we will only add if they're present in the line.
+
+   @code moon
+   --------------------------------------------------------
+   generateGUI = (data, sectionTable, count, transforms) ->
+   --------------------------------------------------------
+       str = getGUIstring!
+   @end
+
+*** Get different sections
+    Some implications:
+    - If textSection is present and tagSection is not present, it indicates that the text section is the first section.
+    - If both tagSection and textSection is not present, it indicates the line is either empty or there is only comment section. In this case, defaultTags is used where defaultTags gets the effective values of tags from style.
+
+    @code moon
+        local tagSection, textSection, defaultTags
+        sectionPair = sectionTable[count]
+        if sectionPair
+            tagIndex = sectionPair.tagIndex
+            textIndex = sectionPair.textIndex
+            tagSection = data.sections[tagIndex]
+            textSection = data.sections[textIndex]
+        else
+            defaultTags = data\getDefaultTags!
+    @end
+
+*** Get existing tags
+    We now gather tags that actually exist in the line. Those tags will be ticked in the gui so you know which tags are present in the lines and which tags are only effective on the line.
+    @code moon
+        existingTagTable = {}
+        if tagSection
+            existingTagTable[key] = true for key in pairs (tagSection\getEffectiveTags false, false, true).tags
+    @end
+
+*** Get effective tags
+    We gather effective tags for this tag section here.
+    - If there are default tags, then it means there are not tag or text section in the line. So we collect the style tags from *defaultTags*
+    - If there are both tagSections and textSection, then we can just collect effective tags from the tag section.
+    - If there is only text section, then it means there was no tag section before this text section. So we collect effective tags from the text section.
+    @code moon
+        local tags
+        if defaultTags
+            tags = defaultTags.tags
+        elseif tagSection and textSection
+            tags = (tagSection\getEffectiveTags true).tags
+        else
+            tags = (textSection\getEffectiveTags true, true, false).tags
+    @end
+
+*** Parse effective tags
+    @code moon
+        str = parseEffectiveTags str, tags, existingTagTable
+        str = str\gsub "SECTION", "SECTION #{count}/#{#sectionTable},#{tostring(tagSection and not sectionPair["toRemove"] or true)}"
+    @end
+
+*** Parse text of current section
+    @code moon
+        text = ""
+        if textSection
+            text = "[[" .. sectionTable[count].text .. "]]"
+        str ..= "\n| check,text,Text,#{text != "" and true} | text,textvalue,1,#{text} |||||||"
+    @end
+
+*** Section Selection
+    If there are multiple tag sections in current line, we provide a dropdown menu so that user can select that particular section and edit it.
+    @code moon
+        if #sectionTable > 1
+            nextCount = count + 1 > #sectionTable and 1 or count + 1
+            sectionTableConcat = [index .. ": " ..item.text  for index, item in pairs sectionTable]
+            str ..= "\n| label,Sections | drop,sectionDropdown,[[#{table.concat(sectionTableConcat, "::")}]],[[#{sectionTableConcat[nextCount]}]] |||||||"
+    @end
+
+*** Create Button String
+    @code moon
+        btnString = "Apply"
+        btnString ..= ",Switch" if #sectionTable > 1
+        btnString ..= ",Transform" if #transforms > 0
+        btnString ..= ",Text Mode,Cancel:cancel"
+    @end
+
+*** Initiate GUI using the gui string and button string
+    @code moon
+        pressed, res = AegiGUI.open str, btnString
+        aegisub.cancel! unless pressed
+    @end
+
+*** Bail out early if text mode is slected.
+    Ignores all the changes made in the gui if text mode is selected.
+    @code moon
+        if pressed == "Text Mode"
+            return nil, true, nil, true
+    @end
+
+*** Apply GUI to Lines
+    If tag section is ticked, we apply the changes of gui to line but if tag section is unticked, we will just tag it for removal. There is no need to make changes for the tag section we want to remove.
+    @code moon
+        if res["tagSection"]
+            sectionTable[count]["toRemove"] = false if tagSection
+            sectionTable = applyGUItoLine res, data, existingTagTable, sectionTable, count, tagSection, textSection, defaultTags
+        else
+            sectionTable[count]["toRemove"] = true if tagSection
+    @end
+
+*** Section Switching
+    If user has selected a new section to switch to, we basically tell the singleLineMain funciton to not exit out of loop and then recreate the GUI for new selected section.
+    @code moon
+        exitLoop = true
+        if pressed == "Switch"
+            count = res.sectionDropdown\gsub("^([^:]+):.*", "%1")
+            count = tonumber(count)
+            exitLoop = false
+    @end
+
+*** Transforms
+    If the user has selected transform button, then we go to the main function that handles transform.
+    @code moon
+        if pressed == "Transform"
+            handleTransform transforms
+    @end
+
+*** Returns
+    @code moon
+        count, exitLoop, sectionTable, textMode
+
+    @end
+
+* Text Mode Function
+
+  @code moon
+  -----------------------------------
+  textModeMain = (sub, sel, lines) ->
+  -----------------------------------
+  @end
+
+** A sub function that groups tags together according to their tag name
+   @code moon
+       -----------------------------------------------------
+       collectTags = (tagName, tag, colorTable, tagTable) ->
+       -----------------------------------------------------
+           tagGroup = {blur: "Blur", blur_edges: "Blur",
+               fade_simple: "Fade",  fade: "Fade",
+               shear_x: "Shear",     shear_y: "Shear",
+               clip_rect: "Clip",    iclip_rect: "Clip"
+               position: "Position", origin: "Position",  move: "Position",
+               outline: "Border",    outline_x: "Border", outline_y: "Border",
+               shadow: "Shadow",     shadow_x: "Shadow",  shadow_y: "Shadow",
+               angle: "Rotation",    angle_x: "Rotation", angle_y: "Rotation",
+               fontsize: "Scale",    spacing: "Scale",    scale_x: "Scale",    scale_y: "Scale",
+               alpha: "Alpha",       alpha1: "Alpha",     alpha2: "Alpha",     alpha3: "Alpha",  alpha4: "Alpha"
+               clip_vect: "None",    iclip_vect: "None",  k_bord: "None",      k_fill: "None",   k_sweep: "None", junk: "None", unknown: "None"
+           }
+           switch tagName
+               when "color1", "color2", "color3", "color4"
+                   colorTable[tagName] or= {}
+                   table.insert colorTable[tagName], tag\toString!
+               else
+                   key = tagGroup[tagName]
+                   key or= "General"
+                   unless key == "None"
+                       tagTable[key] or= {}
+                       table.insert tagTable[key], tag\toString!
+           colorTable, tagTable
+   @end
+
+** Loop through the line and collect tags
+   @code moon
+       tagTable, colorTable = {}, {}
+       lines\runCallback (lines, line, i) ->
+           aegisub.cancel! if aegisub.progress.is_cancelled!
+           data = ASS\parse line
+           for tag in *data\getTags!
+               tagName = tag.__tag.name
+               switch tagName
+                   when "transform"
+                       for trTags in *tag.tags\getTags!
+                           colorTable, tagTable = collectTags trTags.__tag.name, trTags, colorTable, tagTable
+                   else
+                       colorTable, tagTable = collectTags tagName, tag, colorTable, tagTable
+   @end
+
+** Sort and deduplicate collected tags
+   @code moon
+       for item in *{tagTable, colorTable}
+           for key, value in pairs item
+               sorted = table.values value, true
+               item[key] = list.uniq sorted
+   @end
+
+** Find the number of columns of textboxes
+   @code moon
+       totalTagGroups = table.length tagTable
+       column = math.ceil math.sqrt totalTagGroups
+   @end
+
+** Create GUI string for left portion
+   @code moon
+       str = ""
+       sectionHeader = [j for j in *{"Blur","Scale","Position","Alpha","Border","Shadow","Shear","Rotation","Fade","Clip","Transform","General"} when tagTable[j]]
+       sectionHeader = list.chunk sectionHeader, column
+       for tbl in *sectionHeader
+           str ..= "|label,#{section}|pad,50|" for section in *tbl
+           str ..= "|null||" for _ = 1, column - #tbl when #tbl < column
+           str ..= "\n"
+
+           str ..= "|text,#{section},9,[[#{table.concat tagTable[section], "\n"}]]||" for section in *tbl
+           str ..= "|null||" for _ = 1, column - #tbl when #tbl < column
+           str ..= "\n"
+
+           str ..= "null\n" for _ = 1, 8
+   @end
+
+** Create GUI string for colors (right portion)
+   @code moon
+       str2 = ""
+       maxLength = 0
+       for color in *{"color1", "color3", "color4"}
+           maxLength = math.max(#colorTable[color], maxLength) if colorTable[color]
+
+       if maxLength > 0
+           str2 ..= "|label, Primary Color |" if colorTable["color1"]
+           str2 ..= "|label, Border Color |" if colorTable["color3"]
+           str2 ..= "|label, Shadow Color |" if colorTable["color4"]
+           str2 ..= "\n"
+
+           for j = 1, maxLength
+               for item in *{"color1", "color3", "color4"}
+                   continue unless colorTable[item]
+                   col = colorTable[item][j]
+                   if col
+                       col = col\gsub "^\\[1234]?c", ""
+                       str2 ..= "|color,#{item}_#{j},#{col},#{col}|"
+                   else
+                       str2 ..= "|null|"
+               str2 ..= "\n"
+       str2 = str2\gsub "||", "|"
+   @end
+
+** Open GUI
+   @code moon
+       if str == ""
+           aegisub.log "There are no tags in the selected lines."
+           aegisub.cancel!
+   
+       local pressed, res
+       if str2 == ""
+           pressed, res = AegiGUI.open str, "Modify, Cancel:cancel"
+       else
+           pressed, res = AegiGUI.merge str, str2, "Modify, Cancel:cancel", column + 7, 0, true
+       aegisub.cancel! unless pressed
+   @end
+
+** Collect all the changes to tags from GUI
+   @code moon
+       change = {}
+       for section in *{"Blur","Scale","Position","Alpha","Border","Shadow","Shear","Rotation","Fade","Clip","Transform","General"}
+           continue unless res[section]
+           original = tagTable[section]
+           final = string.split res[section], "\n"
+           for j = 1, #original
+               originalValue = original[j]
+               finalValue = final[j]
+               if originalValue != finalValue
+                   table.insert change, {originalValue, finalValue}
+   @end
+
+** Collect all the changes to color tags from GUI
+   @code moon
+       for j = 1, maxLength
+           for item in *{"color1", "color3", "color4"}
+               continue unless colorTable[item]
+               originalValue = colorTable[item][j]
+               continue unless originalValue
+               colorType = originalValue\gsub "(\\[1234]?c).*", "%1"
+
+               r,g,b=res["#{item}_#{j}"]\match "#(%x%x)(%x%x)(%x%x)"
+               finalValue = "#{colorType}" .. "&H" ..b .. g .. r .. "&"
+
+               if originalValue != finalValue
+                   table.insert change, {originalValue, finalValue}
+  @end
+
+** Apply those changes back to line
+   There is no checking if the change made is valid. Garbage in, Garbage out.
+   @code moon
+       for line in *lines
+           for item in *change
+               line.text = line.text\gsub string.escLuaExp(item[1]), item[2]
+       lines\replaceLines!
+
+   @end
+
+* Single Line Function
+
+  @code moon
+  -------------------------------------
+  singleLineMain = (sub, sel, lines) ->
+  -------------------------------------
+      local textMode
+      line = lines[1]
+   @end
+
+** Collect line data using ASSFoundation
+   @code moon
+       data = ASS\parse line
+   @end
+
+** Gather transforms
+
+   It's kinda easier to get transform this way than get their values from effective tags. Actually effective tags don't provide transforms at tll. So we're doing this here now while we get all other tags later.
+   @code moon
+       transforms = data\getTags "transform"
+   @end
+
+** Clean Tags
+
+   Here we don't want to change tags willy nilly. We only want to merge consecutive tag sections so that we have clear distinction of tag, text and drawing sections.
+   @code moon
+       data\cleanTags 0
+   @end
+
+** Loop through all the sections of a line
+   We loop through all the sections of a line and collect all the information we need from the line.
+
+   The first thing we do is we ignore the comment sections. We aren't touching it in this script. Our goal here is to find effective tags of text or drawing section which we can do but at the same time I also want to find out which tags actually exist in the line itself. These tags will be checked in the GUI so that user can easily differentiate which tags are coming from the line and which tags are effectively applied.
+
+   I do not know any way to find existing tags in text and drawing section currently which is why when we find a tag section, we collect all the tags that we find in that tag section and save it in a variable called *tempExistingTable*. Since we merged consecutive tag sections, these tags will apply to the next text or drawing sections we find which means when we find any text or drawing section, we save these existing tags as the tags that applies to that section. Then we clear the variable *tempExistingTable* for next tag section.
+
+   After this loop is finished, here's what we get:
+   - *tagTable* is table of tables where key is the index of that text or drawing section and its value is table of effective tags for that section.
+   - *existingtagTable* is table just like *tagTable* but in this case only the tags that already exist in the line are available.
+   - *textTable* is table of tables where key is the index of that text/drawing section and its value is the text of that section.
+
+   The indexes are important because they are assigned by ASSFoundation to those sections. So, whatever changes the user makes on the GUI will be applied on the basis of those indexes.
+
+   Resource: {https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L174-L203}[Fansubbing Wiki]
+
+   @code moon
+       sectionTable = {}
+       local tagIndex
+       data\callback (section, _, j) ->
+           return if section.class == ASS.Section.Comment
+           if section.class == ASS.Section.Tag
+               tagIndex = j
+           else
+               local text
+               if section.class == ASS.Section.Text
+                   text = section\getString!
+               else
+                   text = section\toString!
+               sectionTable[#sectionTable + 1] = tagIndex: tagIndex, textIndex: j, text: text, toRemove: false
+               tagIndex = nil
+   @end
+
+** Parse the information we collected to use in GUI
+   @code moon
+       count = 1
+       while true
+           count, exitLoop, sectionTable, textMode = generateGUI data, sectionTable, count, transforms
+           break if exitLoop
+   @end
+
+** Bail early if text mode is chosen.
+   No change made by the user in the GUI is applied to the line.
+   @code moon
+       if textMode
+           textModeMain sub, sel, lines
+           return
+   @end
+
+** Remove any tagSection that needs to be removed
+   @code moon
+       for index, item in pairs sectionTable
+           if item["toRemove"]
+               tagIndex = item.tagIndex
+               tagSection = data.sections[tagIndex]
+               tagSection\remove!
+   @end
+
+** Commit changes made to the line data
+   @code moon
+       data\cleanTags!
+       data\commit!
+   @end
+
+** Replace the lines
+   @code moon
+       lines\replaceLines!
+
+   @end
+
+* Multi Line Function
+  Function that handles the editing of tags when multiple lines are selected.
+
+  @code moon
+  ---------------------------------------
+  multipleLineMain = (sub, sel, lines) ->
+  ---------------------------------------
+  @end
+
+** GUI string creation
+   We use the base gui string and then we make some changes to it to make it work for multi line editing.
+
+   @code moon
+       str = getGUIstring!
+       str ..= "
+   |check,clip_rect,\\clip|float,clip_x1,0,,,,x1|float,clip_y1,0,,,,y1|                     |float,clip_x2,0,,,,x2||float,clip_y2,0,,,,y2|                      |
+   |check,move,\\move     |float,move_x1,0,,,,x1|float,move_y1,0,,,,y1|float,move_x2,0,,,,x2|float,move_y2,0,,,,y2||float,move_t1,0,,,,t1| float,move_t2,0,,,,t2|
+   "
+   @end
+
+   I'm really not sure if I should add complex fade to the gui. I've never used it in my life. So I've removed it for now. If I want to add it in the future, I can just add the bottom line to code block above. Oh and make sure to parse the complex fade from the gui below as well. It can be copied from the single line parsing above.
+
+   | check,fade,\\fade | float,fade_a1,0,,,,a1 | float,fade_a2,0,,,,a2 | float,fade_a3,0,,,,a3 | float,fade_t1,0,,,,t1 | float,fade_t2,0,,,,t2 | float,fade_t3,0,,,,t3 | float,fade_t4,0,,,,t4 |
+
+   @code moon
+       str = str\gsub "0::1", "0::1,0"
+       str = str\gsub "alignvalue", "alignvalue,#{table.concat([j for j = 1, 9], "::")},5"
+       str = str\gsub "wrapstylevalue", "wrapstylevalue,#{table.concat([j for j = 0, 3], "::")},2"
+       str = str\gsub "check,tagSection,SECTION", "label,Total Lines #{#lines.lines}"
+   @end
+
+   So here we collect layers and the style from all the selected lines so that we can add it to gui. We will collect duplicate layers and styles but the reason why I'm not deduplicaing them here is because AegiGUI actually deduplicates all the table items in dropdown class. I'm sorting them here though.
+   @code moon
+       layer, style = {}, {}
+       for line in *lines
+           table.insert layer, line.layer
+           table.insert style, line.style
+       table.sort layer
+       table.sort style
+       table.insert layer, 1, "All Layers"
+       table.insert style, 1, "All Styles"
+
+       drop_layer = table.concat(layer, "::") ..",All Layers"
+       drop_style = table.concat(style, "::") ..",All Styles"
+   @end
+
+   And now we're adding the collected styles and layer to the gui.
+   @code moon
+       patternStart, patternEnd = str\find("|%s+null%s+|%s+|")
+       str = str\sub(1, patternStart - 1) .. "| label,[[        Apply to]]|drop,layer,#{drop_layer}|" .. str\sub(patternEnd + 1)
+       str = str\gsub "|%s+null%s+|%s+|", "| drop,applyTo,All Sections::Start Tags::Inline Tags,Start Tags | drop, style, #{drop_style} |"
+   @end
+
+   Adding font list to gui.
+   @code moon
+       fontTable = [family.name for family in *Yutils.decode.list_fonts!]
+       str = str\gsub "fontnamevalue", "fontnamevalue,#{table.concat(fontTable, "::")},#{fontTable[1]}"
+   @end
+
+   @code moon
+       pressed, res = AegiGUI.open str, "Apply, Text Mode, Cancel:cancel"
+       aegisub.cancel! unless pressed
+   @end
+
+   Bail early if text mode is used. No changes made in the gui is applied to the line if text mode is selected.
+   @code moon
+       if pressed == "Text Mode"
+           textModeMain sub, sel, lines
+           return
+   @end
+
+   @code moon
+       if res["scale"]
+           res["scale_x"] = true
+           res["scale_y"] = true
+           res["scale_xvalue"] = res["scalevalue"]
+           res["scale_yvalue"] = res["scalevalue"]
+   @end
+
+   @code moon
+       layer = res.layer != "All Layers" and tonumber(res.layer) or nil
+       style = res.style != "All Styles" and res.style or nil
+   @end
+
+   @code moon
+       lines\runCallback (lines, line, i) ->
+           if layer and line.layer != layer
+               return
+           if style and line.style != style
+               return
+           data = ASS\parse line
+   @end
+
+   @code moon
+           local firstSectionIsTag
+           for section in *data.sections
+               continue if section.class == ASS.Section.Comment
+               firstSectionIsTag = true if section.class == ASS.Section.Tag
+               break
+   @end
+
+   @code moon
+           for tagName in *ASS.tagNames.all
+               continue unless res[tagName]
+
+               local paramTable
+               switch tagName
+   @end
+
+   @code moon
+                   when "color1", "color2", "color3", "color4"
+                       r, g, b = util.extract_color res[tagName .. "value"]
+                       paramTable = {b, g, r}
+   @end
+
+   @code moon
+                   when "alpha", "alpha1", "alpha2", "alpha3", "alpha4"
+                       tagValueinPercent = res[tagName .. "value"]
+                       paramTable = {(tagValueinPercent * 255 ) / 100}
+   @end
+
+   @code moon
+                   when "clip_rect", "iclip_rect"
+                       name = tagName\gsub "_rect", ""
+                       xTopLeft, yTopLeft = res[name .. "_x1"], res[name .. "_y1"]
+                       xBottomRight, yBottomRight = res[name .. "_x2"], res[name .. "_y2"]
+                       paramTable = {xTopLeft, yTopLeft, xBottomRight, yBottomRight}
+   @end
+
+   @code moon
+                   when "position", "origin", "fade_simple"
+                       firstParam = res[tagName.."_x"]
+                       secondParam = res[tagName.."_y"]
+                       paramTable = {firstParam, secondParam}
+   @end
+
+   @code moon
+                   else
+                       paramTable = {res[tagName.."value"]}
+   @end
+
+   @code moon
+               startIndex = 1
+               endIndex = #data.sections
+               switch res["applyTo"]
+                   when "Start Tags"
+                       data\insertSections(ASS.Section.Tag!, 1) unless firstSectionIsTag
+                       endIndex = 1
+                   when "Inline Tags"
+                       startIndex = firstSectionIsTag and 2 or 1
+   @end
+
+   @code moon
+               data\replaceTags {ASS\createTag tagName, table.unpack(paramTable)}, startIndex, endIndex, true
+   @end
+
+   @code moon
+           data\commit!
+       lines\replaceLines!
+
+   @end
+
+* Main Function
+
+  @code moon
+  --------------------
+  main = (sub, sel) ->
+  --------------------
+  @end
+
+  Currently the line collection does not load any line that has been commented.
+  In the future this should probably be changed to include commented lines as well. More info {https://fansubbers.miraheze.org/wiki/User:PhosCity/Assf#Loop_through_all_lines_using_LineCollection}[here.]
+
+  @code moon
+      lines = LineCollection sub, sel
+      if #lines.lines == 0
+          return
+      elseif #lines.lines == 1
+          singleLineMain sub, sel, lines
+      else
+          multipleLineMain sub, sel, lines
+
+  @end
+
+* Register the macro to Aegisub
+
+  @code moon
+  depctrl\registerMacro main
+  @end
