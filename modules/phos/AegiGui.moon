@@ -10,7 +10,7 @@ if haveDepCtrl
         url: "https://github.com/PhosCity/Aegisub-Scripts",
         feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
         {
-            { "l0.Functional", version: "0.5.0", url: "https://github.com/TypesettingTools/Functional",
+            { "l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
             feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json" },
         }
     }
