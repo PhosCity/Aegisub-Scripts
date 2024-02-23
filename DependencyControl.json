@@ -512,5 +512,42 @@
 				]
 			}
 		}
+	},
+	"modules": {
+		"phos.AegiGui": {
+			"fileBaseUrl": "@{fileBaseUrl}/modules/@{namespacePath}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "AegiGui",
+			"description": "Create GUI for Aegisub macros.",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2024-02-23",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "2dbf5a839678ba7a3e569f13dcbe04c20567fda7"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "l0.Functional",
+							"name": "(Almost) Functional Suite",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.6.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Add to DependencyControl"
+				]
+			}
+		}
 	}
 }

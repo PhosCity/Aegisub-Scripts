@@ -3,7 +3,7 @@ local Functional
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AegiGui",
-        version: "0.0.6",
+        version: "1.0.0",
         description: "Create GUI for Aegisub macros.",
         author: "PhosCity",
         moduleName: "phos.AegiGui",
