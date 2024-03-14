@@ -1,0 +1,154 @@
+@document.meta
+title: assfPlus
+description: A aegisub module that adds additional feature to AssFoundation.
+authors: phos
+categories: 
+created: 2024-02-24T17:44:44+0530
+updated: 2024-03-14T15:56:46+0530
+version: 1.1.1
+tangle: {
+    languages: {
+        moon: ./AssfPlus.moon
+    }
+    scope: all
+}
+@end
+
+
+* Module Details
+  @code moon
+  haveDepCtrl, DependencyControl, depctrl = pcall require, 'l0.DependencyControl'
+  local Functional, ASS, Yutils, Math, Perspective
+  if haveDepCtrl
+      depctrl = DependencyControl{
+          name: "AssfPlus",
+          version: "0.0.1",
+          description: "Adds more features to ASSFoundation.",
+          author: "PhosCity",
+          moduleName: "phos.AssfPlus",
+          url: "https://github.com/PhosCity/Aegisub-Scripts",
+          feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+          {
+              {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
+              feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+              { "l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
+              feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json" },
+              {"arch.Math", version: "0.1.8", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+              feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
+              {"arch.Perspective", version: "1.0.0", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+              feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
+              "Yutils"
+          }
+      }
+      ASS, Functional, Math, Perspective, Yutils = depctrl\requireModules!
+  else
+      ASS = require "l0.ASSFoundation"
+      Functional = require "l0.Functional"
+      Yutils = require "Yutils"
+      Perspective = require "arch.Perspective"
+      Math = require "arch.Math"
+
+  logger = depctrl\getLogger!
+  {:string, :list} = Functional
+  @end
+
+* Introduction
+  This is a module that will contain a lot of extensions for ASSFoundation.
+  Given how the development in ASSFoundation has not progressed for years, this is the only way for me to add more features to it.
+  This will either fix things in ASSFoundation or add a feature that does not exist at all.
+
+* Initiate all list names
+  @code moon
+  local lineData
+  @end
+
+* Functions
+** Assert Line Contents
+   @code moon
+   assertLineContent = (data) ->
+       logger\assert type(data) == "table", " Expected ASSFoundation line data. Got something else."
+       logger\assert data.class == ASS.LineContents, " Expected ASSFoundation line data. Got something else."
+
+   @end
+
+** Assert Text Sections
+   @code moon
+   assertTextSection = (section) ->
+       logger\assert type(data) == "table", " Expected a text section. Got something else."
+       logger\assert section.class == ASS.Section.Text, " Expected a text section. Got something else."
+
+   @end
+
+
+* Text Section Start
+  @code moon
+  lineData = {
+  @end
+
+** Get line bounds
+   While assf will give you bounding box, I constantly find myself needing to find bounding box for the text itself.
+   But borders, shadows, clips and blur will give you wrong line bounds. So this can be used to get line bounds for them.
+   @code moon
+       getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false) ->
+           assertLineContent data
+
+           local bound
+
+           unless noBordShad or noClip or noBlur
+               bound = data\getLineBounds!
+           else
+               dataCopy = data\copy!
+               if noBordShad
+                   for tag in *{"outline", "outline_x", "outline_y", "shadow", "shadow_x", "shadow_y"}
+                       dataCopy\replaceTags {ASS\createTag tag, 0}
+
+               if noClip
+                   for tag in *ASS.tagNames.clips
+                       dataCopy\removeTags tag
+
+               if noBlur
+                   for tag in *{"blur", "blur_edges"}
+                       dataCopy\removeTags tag
+
+               bound = dataCopy\getLineBounds!
+
+           bound
+
+   @end
+
+** Get bounding box
+   This will give me the coordinates for the line bounds only.
+   All the parameters for this is the same as the parameters for {** Get line bounds}[this.]
+   @code moon
+       getBoundingBox: (data, noBordShad = false, noClip = false, noBlur = false) ->
+           bound = lineData.getLineBounds data, noBordShad, noClip, noBlur
+
+           x1, y1 = bound[1].x, bound[1].y
+           x2, y2 = bound[2].x, bound[2].y
+
+           x1, y1, x2, y2
+
+   @end
+ 
+* Text Section End
+  @code moon
+  }
+
+  @end
+
+* Main module table
+  @code moon
+  lib = {
+      :lineData
+  }
+
+  @end
+
+* Register
+  @code moon
+  if haveDepCtrl
+      lib.version = depctrl
+      return depctrl\register lib
+  else
+      return lib
+  @end
