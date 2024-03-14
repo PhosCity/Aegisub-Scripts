@@ -1,4 +1,4 @@
-<font color="red">**Not Available in Dependency Control**</font>
+<font color="green">**Available in Dependency Control**</font>
 
 !!! warning "Warning"
 
