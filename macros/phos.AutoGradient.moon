@@ -1,6 +1,6 @@
 export script_name = "Auto Gradient"
 export script_description = "Automatically attemp to gradient the line."
-export script_version = "0.0.3"
+export script_version = "0.0.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoGradient"
 
@@ -12,9 +12,12 @@ depctrl = DependencyControl{
       feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
     {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
       feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+    {"phos.AssfPlus", version: "0.0.1", url: "https://github.com/PhosCity/Aegisub-Scripts",
+      feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"},
   },
 }
-LineCollection, ASS = depctrl\requireModules!
+LineCollection, ASS, AssfPlus = depctrl\requireModules!
+{:lineData} = AssfPlus
 
 
 getColor = (frame, x, y) ->
@@ -81,9 +84,8 @@ main = (mode) ->
 
       -- Collect vector clip
       clipTable = {}
-      clip = data\getTags "clip_vect"
+      clip = data\removeTags "clip_vect"
       return if  #clip == 0
-      data\removeTags "clip_vect"
 
       for index, cnt in ipairs clip[1].contours[1].commands  -- Is this the best way to loop through co-ordinate?
         break if index == 3
@@ -91,9 +93,7 @@ main = (mode) ->
         table.insert clipTable, {x, y}
 
       -- Collect bounding box of the line
-      bounds = data\getLineBounds!
-      x1, y1 = bounds[1].x, bounds[1].y
-      x2, y2 = bounds[2].x, bounds[2].y
+      x1, y1, x2, y2 = lineData.getBoundingBox data, true, _, true
 
       -- Find all the points between two points of clip
       clipTable = getPointsBetweenCoordinates(clipTable[1], clipTable[2])
