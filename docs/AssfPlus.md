@@ -1,5 +1,7 @@
 <font color="red">**Not Available in Dependency Control**</font>
 
+[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AssfPlus.moon)
+
 # Introduction
 
 This is a module that will contain a lot of extensions for ASSFoundation.
@@ -17,12 +19,12 @@ the line bounds after removing border, shadows, clip and blur. All of these
 tags affect the line bounds. So when I need to find the line bounds of fill of
 text only for example, I can disable them and get actual line bounds.
 
-| Arguments  | Meaning                | Type              | Default Value |
-| ---------- | ---------------------- | ----------------- | ------------- |
-| data       | duration of line in ms | Assf Line Conents | -             |
-| noBordShad | start frame of a line  | boolean           | false         |
-| noClip     | end frame of a line    | boolean           | false         |
-| noBlur     | style table            | boolean           | false         |
+| Arguments  | Meaning                          | Type    | Default Value |
+| ---------- | -------------------------------- | ------- | ------------- |
+| data       | Assf Line Contents               | -       | -             |
+| noBordShad | bounds without border and shadow | boolean | false         |
+| noClip     | bounds without clips             | boolean | false         |
+| noBlur     | bounds without blur              | boolean | false         |
 
 | Returns | Description              | Type  |
 | ------- | ------------------------ | ----- |

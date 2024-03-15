@@ -1,5 +1,7 @@
 <font color="green">**Available in Dependency Control**</font>
 
+[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AegiGui.moon)
+
 !!! warning "Warning"
 
     This is an experimental module which is still in production. This is not ready for use in any shape or form in actual scripts. Its functionality could change at any time and it could ultimately be scrapped if deemed unfit for use.
