@@ -401,6 +401,13 @@
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "phos.AegiGui",
+							"name": "AegiGui",
+							"url": "https://github.com/PhosCity/Aegisub-Scripts",
+							"version": "1.0.0",
+							"feed": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
 						}
 					]
 				}
@@ -567,7 +574,7 @@
 							"moduleName": "phos.AegiGui",
 							"name": "AegiGui",
 							"url": "https://github.com/PhosCity/Aegisub-Scripts",
-							"version": "0.6.0",
+							"version": "1.0.0",
 							"feed": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
 						},
 						{
