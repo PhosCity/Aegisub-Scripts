@@ -58,6 +58,71 @@ you the co-ordinates of the bounding box. It's just a convenience function.
 x1, y1, x2, y2 = lineData.getBoundingBox data, true
 ```
 
+# Tags
+
+## Color
+
+### getDeltaE
+
+This will compare 2 colors to check how similar they are.
+The similarity is based on human perception.
+If delta E value is less than 1, then they appear the same
+for human eyes. If they're 1 - 2, then they need to be observed
+carefully to find difference.
+
+| Arguments | Type                                       |
+| --------- | ------------------------------------------ |
+| color1    | colorString or {r, g, b} or assf color tag |
+| color2    | colorString or {r, g, b} or assf color tag |
+
+| Returns       | Type   |
+| ------------- | ------ |
+| delta E value | Number |
+
+```moon
+deltaEValue = _tag.color.getDeltaE "&H1010CF&", "&H1515A9&"
+deltaEValue = _tag.color.getDeltaE {73, 201, 37}, {169, 21, 21}
+deltaEValue = _tag.color.getDeltaE {ASS\createTag "color1", 73, 201, 37}, {ASS\createTag "color1", 169, 21, 21}
+
+```
+
+### getXYZ
+
+Converts RGB to XYZ. I needed to convert the color from RGB to XYZ to LAB for delta E calculation.
+That's the only reason why this exists.
+
+| Arguments | Type                                       |
+| --------- | ------------------------------------------ |
+| color     | colorString or {r, g, b} or assf color tag |
+
+| Returns | Type   |
+| ------- | ------ |
+| X, Y, Z | Number |
+
+```moon
+X, Y, Z = _tag.color.getXYZ "&H1010CF&"
+X, Y, Z = _tag.color.getXYZ {73, 201, 37}
+X, Y, Z = _tag.color.getXYZ {ASS\createTag "color1", 73, 201, 37}
+```
+
+### getLAB
+
+Converts RGB to LAB.
+
+| Arguments | Type                                       |
+| --------- | ------------------------------------------ |
+| color     | colorString or {r, g, b} or assf color tag |
+
+| Returns | Type   |
+| ------- | ------ |
+| L, A, B | Number |
+
+```moon
+L, A, B = _tag.color.getLAB "&H1010CF&"
+L, A, B = _tag.color.getLAB {73, 201, 37}
+L, A, B = _tag.color.getLAB {ASS\createTag "color1", 73, 201, 37}
+```
+
 # Text Section
 
 # Shapes
