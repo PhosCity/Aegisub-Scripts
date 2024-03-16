@@ -1,6 +1,6 @@
 export script_name = "Auto Gradient"
 export script_description = "Automatically attemp to gradient the line."
-export script_version = "0.0.4"
+export script_version = "0.0.5"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoGradient"
 
@@ -17,7 +17,7 @@ depctrl = DependencyControl{
   },
 }
 LineCollection, ASS, AssfPlus = depctrl\requireModules!
-{:lineData} = AssfPlus
+{:lineData, :_tag} = AssfPlus
 
 
 getColor = (frame, x, y) ->
@@ -56,12 +56,8 @@ extractRGB = (color) ->
 colorsAreAlmostSame = (color1, color2) ->
   return false unless color1
   return false unless color2
-  b1, g1, r1 = extractRGB color1
-  b2, g2, r2 = extractRGB color2
-  bdiff, gdiff, rdiff = math.abs(b1-b2), math.abs(g1-g2), math.abs(r1-r2)
-  tolerance = 2
-  if bdiff < tolerance and gdiff < tolerance and rdiff < tolerance
-    return true
+  deltaEValue = _tag.color.getDeltaE color1, color2
+  return true if deltaEValue < 0.6
   return false
 
 
