@@ -4,7 +4,7 @@ description: A aegisub module that adds additional feature to AssFoundation.
 authors: phos
 categories: 
 created: 2024-02-24T17:44:44+0530
-updated: 2024-03-16T21:24:48+0530
+updated: 2024-03-23T17:03:54+0530
 version: 1.1.1
 tangle: {
     languages: {
@@ -71,7 +71,6 @@ tangle: {
 ** Assert Line Contents
    @code moon
    assertLineContent = (data) ->
-       logger\assert type(data) == "table", " Expected ASSFoundation line data. Got something else."
        logger\assert data.class == ASS.LineContents, " Expected ASSFoundation line data. Got something else."
 
    @end
@@ -79,26 +78,23 @@ tangle: {
 ** Assert Text Sections
    @code moon
    assertTextSection = (section) ->
-       logger\assert type(data) == "table", " Expected a text section. Got something else."
        logger\assert section.class == ASS.Section.Text, " Expected a text section. Got something else."
-
+   
    @end
 
-
-* Text Section Start
+* Line Content
   @code moon
   lineData = {
   @end
-
 ** Get line bounds
    While assf will give you bounding box, I constantly find myself needing to find bounding box for the text itself.
    But borders, shadows, clips and blur will give you wrong line bounds. So this can be used to get line bounds for them.
    @code moon
-       getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false) ->
+       getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false, noPerspective = false) ->
            assertLineContent data
-
+   
            local bound
-
+   
            unless noBordShad or noClip or noBlur
                bound = data\getLineBounds!
            else
@@ -106,35 +102,89 @@ tangle: {
                if noBordShad
                    for tag in *{"outline", "outline_x", "outline_y", "shadow", "shadow_x", "shadow_y"}
                        dataCopy\replaceTags {ASS\createTag tag, 0}
-
+   
                if noClip
                    for tag in *ASS.tagNames.clips
                        dataCopy\removeTags tag
-
+   
                if noBlur
                    for tag in *{"blur", "blur_edges"}
                        dataCopy\removeTags tag
-
+   
+               if noPerspective
+                   for tag in *{"shear_x", "shear_y", "angle", "angle_x", "angle_y"}
+                       dataCopy\replaceTags {ASS\createTag tag, 0}
+   
                bound = dataCopy\getLineBounds!
-
+   
            bound
-
+   
    @end
 
 ** Get bounding box
    This will give me the coordinates for the line bounds only.
    All the parameters for this is the same as the parameters for {** Get line bounds}[this.]
    @code moon
-       getBoundingBox: (data, noBordShad = false, noClip = false, noBlur = false) ->
-           bound = lineData.getLineBounds data, noBordShad, noClip, noBlur
-
+       getBoundingBox: (data, noBordShad = false, noClip = false, noBlur = false, noPerspective = false) ->
+           bound = lineData.getLineBounds data, noBordShad, noClip, noBlur, noPerspective
+   
            x1, y1 = bound[1].x, bound[1].y
            x2, y2 = bound[2].x, bound[2].y
-
+   
            x1, y1, x2, y2
-
+   
    @end
- 
+
+** Get first tag section
+   While ignoring comment sections, it finds out if the first section is a tag section or not.
+   @code moon
+       firstSectionIsTag: (data) ->
+           assertLineContent data
+   
+           local firstSectionIsTag
+           for section in *data.sections
+               continue if section.class == ASS.Section.Comment
+               firstSectionIsTag = true if section.class == ASS.Section.Tag
+               break
+           firstSectionIsTag
+   @end
+* Line Content End
+  @code moon
+  }
+
+  @end
+* Text Section
+  @code moon
+  textSection = {
+  @end
+** Get Tags in text section
+   Assf does not allow you to get tags in tag section. This one does. Normally,
+   there shouldn't be any need for finding tags from a text section but when
+   I'm looping through text section and I want to do something if a tag is
+   present, this is nice to have.
+
+   listOnly is useful when you only need names of the existing tags and not the whole tag.
+   @code moon
+       getTags: (data, section, listOnly = false) ->
+           assertLineContent data
+           assertTextSection section
+   
+           index = section.index
+           local tags
+           for i = index - 1, 0, -1
+               break if i == 0
+               sec = data.sections[i]
+               continue if sec.class == ASS.Section.Comment 
+               tags = (sec\getEffectiveTags false, false, true).tags
+               break
+   
+           tagList
+           if listOnly and tags
+               tagList = [key for key in pairs tags]
+               return tagList
+   
+           tags
+   @end
 * Text Section End
   @code moon
   }
@@ -147,6 +197,7 @@ tangle: {
   @end
 
 ** Color
+   `getHSV` is already present in assf so this module will only add `getXYZ` and `getLAB`.
    @code moon
        color: {
    
@@ -162,6 +213,7 @@ tangle: {
                return r, g, b
    @end
 
+*** Get XYZ from RBG
    @code moon
            getXYZ: (tag) ->
                r, g, b = _tag.color.extractColor tag
@@ -183,7 +235,7 @@ tangle: {
                x, y, z
 
    @end
-
+*** Get LAB from RBG
    @code moon
            getLAB: (tag) ->
                xyz2lab = (x, y, z) ->
@@ -211,21 +263,70 @@ tangle: {
                l, a, b
 
    @end
+*** Get Detla E for two colors
 
+    Delta-E (dE) is a single number that represents the 'distance' between two colors.
+    The idea is that a dE of 1.0 is the smallest color difference the human eye can see.
+    However that does not mean that 1 is acceptable tolerance.
+    You can go higher or lower depending on what you are doing.
+    There are 3 dE formulas and the one used here is *CIEDE2000*
+
+    Resources:
+    - {https://en.wikipedia.org/wiki/Color_difference}[Wikipedia]
+
+    Formula:
+    Given a reference color $(L^*_1, a^*_1, b^*_1)$ and another color $(L^*_2, a_2^*, b_2^*)$, the difference is
+   @code latex
+   $\Delta E^*_{00} = \sqrt{\left(\frac{\Delta L'}{k_LS_L}\right)^2 +\left(\frac{\Delta C'}{k_CS_C}\right)^2 +\left(\frac{\Delta H'}{k_HS_H}\right)^2 +R_T\frac{\Delta C'}{k_CS_C}\frac{\Delta H'}{k_HS_H}}$
+
+   Note: The formulae below should use degress rather than radians; the issue is significant for $R_T$. The $k_L$, $k_C$, and $k_H$ are usually unity.
+
+   $\Delta L' = L*_2 - L*_1$
+
+   $\overline{L} = \frac{L*_1 + L*_2}{2}, \overline{C} = \frac{C*_1 + C*_2}{2}$
+
+   where $C*_1 = \sqrt{a*_1^2 + b*_1^2}$ and $C*_2 = \sqrt{a*_2^2 + b*_2^2}$
+
+   $a'_1 = a*_1 + \frac{a*_1}{2}\left(1 - \sqrt(\frac{\overline{C}^7}{\overline{C}^7 + 25^7})\right)$
+
+   $a'_2 = a*_2 + \frac{a*_2}{2}\left(1 - \sqrt(\frac{\overline{C}^7}{\overline{C}^7 + 25^7})\right)$
+
+   $\overline{C}' = \frac{C'_1+C'_2}{2}$
+
+   $\Delta C' = C'_2-C'_1$
+
+   where $C^'_1 = \sqrt{a'_1^2+b*_1^2}$ and $C'_2 = \sqrt{a'_2^2+b*_2^2}$
+
+   $h'_1 = a\tan2(b*_1,a'_1) \mod 360\circ$
+   $h'_2 = a\tan2(b*_2,a'_2) \mod 360\circ$
+
+
+   $\left.\Delta h'=\left\{\begin{array}{ll}h'_2-h'_1&|h'_1-h'_2|\le180^\circ\\h'_2-h'_1+360^\circ&|h'_1-h'_2|>180^\circ,h'_2\le h'_1\\h'_2-h'_1-360^\circ&|h'_1-h'_2|>180^\circ,h'_2>h'_1\end{array}\right.\right.$
+
+   Note: When either $C'1$ or $C'2$ is zero, then $\Delta h'$ is irrelevant and may be set to zero.
+
+   $\left.\Delta H'=2\sqrt{C_1'C_2'}\sin(\Delta h'/2),\quad\bar{H}'=\left\{\begin{array}{ll}(h'_1+h'_2)/2&|h'_1-h'_2|\leq180^\circ\\(h'_1+h'_2+360^\circ)/2&|h'_1-h'_2|>180^\circ,h'_1+h'_2<360^\circ\\(h'_1+h'_2-360^\circ)/2&|h'_1-h'_2|>180^\circ,h'_1+h'_2\geq360^\circ\end{array}\right.\right.$
+
+   $T=1-0.17\cos(\bar{H}^{\prime}-30^{\circ})+0.24\cos(2\bar{H}^{\prime})+0.32\cos(3\bar{H}^{\prime}+6^{\circ})-0.20\cos(4\bar{H}^{\prime}-63^{\circ})$
+
+   $S_L=1+\frac{0.015{\left(\bar{L}-50\right)}^2}{\sqrt{20+\left(\bar{L}-50\right)^2}}\quad S_C=1+0.045\bar{C}^\prime\quad S_H=1+0.015\bar{C}^\prime T$
+
+   $R_T=-2\sqrt{\frac{\bar{C}^{\prime7}}{\bar{C}^{\prime7}+25^7}}\sin\left[60^\circ\cdot\exp\left(-\left[\frac{\bar{H}^{\prime}-275^\circ}{25^\circ}\right]^2\right)\right]$
+   @end
    @code moon
            getDeltaE: (color1, color2, weights = {}) ->
                l1, a1, b1 = _tag.color.getLAB color1
                l2, a2, b2 = _tag.color.getLAB color2
-
+   
                x1 = {L: l1, A: a1, B: b1}
                x2 = {L: l2, A: a2, B: b2}
-
+   
                radiansToDegrees = (rad) ->
                    rad * 180/math.pi
-
+   
                degreesToRadians = (deg) ->
                    deg * math.pi/180
-
+   
                gethPrimeFn = (x, y) ->
                    if x == 0 and y == 0
                        return 0
@@ -234,32 +335,32 @@ tangle: {
                        return hueAngle
                    else
                        return hueAngle + 360
-
+   
                getDeltahPrime = (c1, c2, hPrime1, hPrime2) ->
                    -- If either C'1 or C'2 is 0, then Δh' is irrelevant and may be set to 0
                    if c1 == 0 or c2 == 0
                        return 0
-
+   
                    if math.abs(hPrime1 - hPrime2) <= 180
                        return hPrime2 - hPrime1
-
+   
                    if hPrime2 <= hPrime1
                        return hPrime2 - hPrime1 + 360
                    else
                        return hPrime2 - hPrime1 - 360
-
+   
                gethBarPrime = (hPrime1, hPrime2) ->
                    if math.abs(hPrime1 - hPrime2) > 180
                        return (hPrime1 + hPrime2 + 360) / 2
                    return (hPrime1 + hPrime2) / 2
-
+   
                getT = (hBarPrime) ->
                    return 1 -
                        0.17 * math.cos(degreesToRadians(hBarPrime - 30)) +
                        0.24 * math.cos(degreesToRadians(2 * hBarPrime)) +
                        0.32 * math.cos(degreesToRadians(3 * hBarPrime + 6)) -
                        0.20 * math.cos(degreesToRadians(4 * hBarPrime - 63))
-
+   
                getRsubT = (cBarPrime, hBarPrime) ->
                    return -2 *
                        math.sqrt(
@@ -275,55 +376,55 @@ tangle: {
                                    )
                                )
                            )
-
+   
                deltaPrime = x2.L - x1.L
-
+   
                ksubL = weights.lightness or 1
                ksubC = weights.chroma or 1
                ksubH = weights.hue or 1
-
+   
                deltaLPrime = x2.L - x1.L
-
+   
                lBar = (x1.L + x2.L) / 2
-
+   
                c1 = math.sqrt(x1.A^2 + x1.B^2)
                c2 = math.sqrt(x2.A^2 + x2.B^2)
-
+   
                cBar = (c1 + c2) / 2
-
+   
                aPrime1 = x1.A +
                    (x1.A / 2) *
                    (1 - math.sqrt(
                        cBar^7 /
                        (cBar^7 + 25^7)
                    ))
-
+   
                aPrime2 = x2.A +
                    (x2.A / 2) *
                    (1 - math.sqrt(
                        cBar^7 /
                        (cBar^7 + 25^7)
                    ))
-
+   
                cPrime1 = math.sqrt(
                    aPrime1^2 + x1.B^2
                )
-
+   
                cPrime2 = math.sqrt(
                    aPrime2^2 + x2.B^2
                )
-
+   
                cBarPrime = (cPrime1 + cPrime2) / 2
-
+   
                deltaCPrime = cPrime2 - cPrime1
-
+   
                sSubL = 1 + (
                    (0.015 * (lBar - 50)^2) /
                    math.sqrt(20 + (lBar - 50)^2)
                )
-
+   
                sSubC = 1 + 0.045 * cBarPrime
-
+   
                hPrime1 = gethPrimeFn(x1.B, aPrime1)
                hPrime2 = gethPrimeFn(x2.B, aPrime2)
                deltahPrime = getDeltahPrime(c1, c2, hPrime1, hPrime2)
@@ -332,12 +433,12 @@ tangle: {
                t = getT(hBarPrime)
                sSubH = 1 + 0.015 * cBarPrime * t
                rSubT = getRsubT(cBarPrime, hBarPrime)
-
+   
                -- Put it all together
                lightness = deltaLPrime / (ksubL * sSubL)
                chroma = deltaCPrime / (ksubC * sSubC)
                hue = deltaHPrime / (ksubH * sSubH)
-
+   
                return math.sqrt(
                    lightness^2 +
                    chroma^2 +
@@ -345,7 +446,6 @@ tangle: {
                    rSubT * chroma * hue
                )
    @end
-
    @code moon
        }
    @end
@@ -356,12 +456,11 @@ tangle: {
 
   @end
 
-
-
 * Main module table
   @code moon
   lib = {
       :lineData
+      :textSection
       :_tag
   }
   

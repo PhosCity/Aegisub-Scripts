@@ -37,18 +37,16 @@ local lineData
 local _tag
 
 assertLineContent = (data) ->
-    logger\assert type(data) == "table", " Expected ASSFoundation line data. Got something else."
     logger\assert data.class == ASS.LineContents, " Expected ASSFoundation line data. Got something else."
 
 
 assertTextSection = (section) ->
-    logger\assert type(data) == "table", " Expected a text section. Got something else."
     logger\assert section.class == ASS.Section.Text, " Expected a text section. Got something else."
 
 
 lineData = {
 
-    getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false) ->
+    getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false, noPerspective = false) ->
         assertLineContent data
 
         local bound
@@ -69,19 +67,58 @@ lineData = {
                 for tag in *{"blur", "blur_edges"}
                     dataCopy\removeTags tag
 
+            if noPerspective
+                for tag in *{"shear_x", "shear_y", "angle", "angle_x", "angle_y"}
+                    dataCopy\replaceTags {ASS\createTag tag, 0}
+
             bound = dataCopy\getLineBounds!
 
         bound
 
 
-    getBoundingBox: (data, noBordShad = false, noClip = false, noBlur = false) ->
-        bound = lineData.getLineBounds data, noBordShad, noClip, noBlur
+    getBoundingBox: (data, noBordShad = false, noClip = false, noBlur = false, noPerspective = false) ->
+        bound = lineData.getLineBounds data, noBordShad, noClip, noBlur, noPerspective
 
         x1, y1 = bound[1].x, bound[1].y
         x2, y2 = bound[2].x, bound[2].y
 
         x1, y1, x2, y2
 
+
+    firstSectionIsTag: (data) ->
+        assertLineContent data
+
+        local firstSectionIsTag
+        for section in *data.sections
+            continue if section.class == ASS.Section.Comment
+            firstSectionIsTag = true if section.class == ASS.Section.Tag
+            break
+        firstSectionIsTag
+
+}
+
+
+textSection = {
+
+    getTags: (data, section, listOnly = false) ->
+        assertLineContent data
+        assertTextSection section
+
+        index = section.index
+        local tags
+        for i = index - 1, 0, -1
+            break if i == 0
+            sec = data.sections[i]
+            continue if sec.class == ASS.Section.Comment 
+            tags = (sec\getEffectiveTags false, false, true).tags
+            break
+
+        tagList
+        if listOnly and tags
+            tagList = [key for key in pairs tags]
+            return tagList
+
+        tags
 
 }
 
@@ -286,6 +323,7 @@ _tag = {
 
 lib = {
     :lineData
+    :textSection
     :_tag
 }
 
