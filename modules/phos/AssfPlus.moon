@@ -95,6 +95,31 @@ lineData = {
             break
         firstSectionIsTag
 
+    trim: (data) ->
+        assertLineContent data
+        trimLeft, trimRight, t = {}, {}, 0
+        data\callback ((section, _, _, j) ->
+            t = j
+            value = section\getString!
+            value = value\gsub "%s*\\N%s*", "\\N"
+            if value\match "^\\N"
+                table.insert trimRight, j - 1
+            if value\match "\\N$"
+                table.insert trimLeft, j + 1
+            section.value = value
+        ), ASS.Section.Text
+
+        return if t == 0
+        table.insert trimLeft, 1, 1
+        table.insert trimRight, t
+
+        data\callback ((section, _, _, j) ->
+            for item in *trimLeft
+                section\trimLeft! if item == j
+            for item in *trimRight
+                section\trimRight! if item == j
+        ), ASS.Section.Text
+
 }
 
 
@@ -113,7 +138,6 @@ textSection = {
             tags = (sec\getEffectiveTags false, false, true).tags
             break
 
-        tagList
         if listOnly and tags
             tagList = [key for key in pairs tags]
             return tagList

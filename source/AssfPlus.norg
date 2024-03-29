@@ -4,7 +4,7 @@ description: A aegisub module that adds additional feature to AssFoundation.
 authors: phos
 categories: 
 created: 2024-02-24T17:44:44+0530
-updated: 2024-03-23T17:03:54+0530
+updated: 2024-03-29T12:34:34+0530
 version: 1.1.1
 tangle: {
     languages: {
@@ -148,6 +148,39 @@ tangle: {
                break
            firstSectionIsTag
    @end
+** Trim unnecessary spaces
+   While assf does have a trim method, it only trims the spaces from the
+   beginning and the end of the line but it does not trim spaces around line
+   breaks. These spaces really mess up calculation of text extents.
+
+   Edge case that does not work currently is `\N \N` creates 3 lines but `\N\N`
+   only creates 2 lines. We ignore spaces between line breaks for now.
+   @code moon
+       trim: (data) ->
+           assertLineContent data
+           trimLeft, trimRight, t = {}, {}, 0
+           data\callback ((section, _, _, j) ->
+               t = j
+               value = section\getString!
+               value = value\gsub "%s*\\N%s*", "\\N"
+               if value\match "^\\N"
+                   table.insert trimRight, j - 1
+               if value\match "\\N$"
+                   table.insert trimLeft, j + 1
+               section.value = value
+           ), ASS.Section.Text
+   
+           return if t == 0
+           table.insert trimLeft, 1, 1
+           table.insert trimRight, t
+   
+           data\callback ((section, _, _, j) ->
+               for item in *trimLeft
+                   section\trimLeft! if item == j
+               for item in *trimRight
+                   section\trimRight! if item == j
+           ), ASS.Section.Text
+   @end
 * Line Content End
   @code moon
   }
@@ -178,7 +211,6 @@ tangle: {
                tags = (sec\getEffectiveTags false, false, true).tags
                break
    
-           tagList
            if listOnly and tags
                tagList = [key for key in pairs tags]
                return tagList

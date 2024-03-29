@@ -71,6 +71,24 @@ Find out if there is a tag section before text section or drawing section.
 | ----------------------------------------------- |
 | true if there is a tag section in the beginning |
 
+## trim
+
+While assf does have a trim method, it only trims the spaces from the
+beginning and the end of the line but it does not trim spaces around line
+breaks. These spaces can mess up calculation of text extents.
+
+| Arguments | Meaning            | Type | Default Value |
+| --------- | ------------------ | ---- | ------------- |
+| data      | Assf Line Contents | -    | -             |
+
+| Returns |
+| ------- |
+| Nothing |
+
+```moon
+lineData.trim(data)
+```
+
 # Text Section
 
 ## getTags
