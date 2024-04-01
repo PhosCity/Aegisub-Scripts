@@ -311,6 +311,15 @@
 							"url": "@{fileBaseUrl}@{fileName}",
 							"sha1": "59370df2317f39de71ff801695d4a75a853082e9"
 						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "phos.AegiGui",
+							"name": "AegiGui",
+							"url": "https://github.com/PhosCity/Aegisub-Scripts",
+							"version": "1.0.0",
+							"feed": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
+						}
 					]
 				}
 			},
