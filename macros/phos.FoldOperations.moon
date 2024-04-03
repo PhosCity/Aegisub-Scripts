@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "1.3.0"
+export script_version = "1.3.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -21,7 +21,7 @@ LineCollection, Functional, AegiGui, clipboard = depctrl\requireModules!
 {:list, :string, :table, :util} = Functional
 
 logger = depctrl\getLogger!
-config = depctrl\getConfigHandler {commentAroundFold: false, foldmarker: ">"}
+config = depctrl\getConfigHandler {commentAroundFold: false, foldmarker: ">", markFolds: true}
 config\load!
 opt = config.c
 
@@ -390,14 +390,15 @@ createNamedFold = (sub, sel, act) ->
     foldLevel = getFoldLevel sub, act
 
     str = "
-    | label,Enter name of the fold | edit,name                         |
-    | label,Fold Marker            | edit,foldmarker,#{opt.foldmarker} |
+    | label,Enter name of the fold                 | edit,name                         |
+    | check,markFolds,Fold Marker,#{opt.markFolds} | edit,foldmarker,#{opt.foldmarker} |
     "
     btn, res = AegiGui.open str
     aegisub.cancel! unless btn
     logger\assert res.name != "", "Fold name cannot be empty!"
 
     opt.foldmarker = res.foldmarker
+    opt.markFolds = res.markFolds
     config\write!
 
     for i in *{sel[1], sel[#sel]}
@@ -408,8 +409,8 @@ createNamedFold = (sub, sel, act) ->
         line.extra["_aegi_folddata"] = nil
 
         addFold = (foldType) ->
-            line.text = string.rep(res.foldmarker, foldLevel)
-            line.text ..= " " .. (res.name)\gsub(".", string.upper)
+            line.text = res.markFolds and string.rep(res.foldmarker, foldLevel) .." " or ""
+            line.text ..= (res.name)\gsub(".", string.upper)
             line.text ..= foldType == "END" and " END" or ""
             line.extra["_aegi_folddata"] = "#{foldType == "START" and 0 or 1};1;#{id}"
             sub.insert foldType == "START" and i or i+2, line
