@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "1.2.0"
+export script_version = "1.3.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -390,8 +390,8 @@ createNamedFold = (sub, sel, act) ->
     foldLevel = getFoldLevel sub, act
 
     str = "
-    | label,Fold Marker            | edit,foldmarker,#{opt.foldmarker} |
     | label,Enter name of the fold | edit,name                         |
+    | label,Fold Marker            | edit,foldmarker,#{opt.foldmarker} |
     "
     btn, res = AegiGui.open str
     aegisub.cancel! unless btn
@@ -424,6 +424,42 @@ createNamedFold = (sub, sel, act) ->
             addFold "END"
 
 
+-- jump around a fold
+jump = (sub, sel, act, mode) ->
+    local order
+    if mode == "Start" or mode == "Previous"
+        order = "reverse"
+
+    _start, _end, _iter = 1, #sub, 1
+    if order == "reverse"
+        _start, _end, _iter = #sub, 1, -1
+
+    count = 0
+    for i = _start, _end, _iter
+        if order == "reverse"
+            continue if i > act
+        else
+            continue if i < act
+
+        line = sub[i]
+        foldData = parseLineFold line
+        continue unless foldData
+
+        if mode == "End"
+            return {i} if foldData.side == "1"
+
+        elseif mode == "Start"
+            return {i} if foldData.side == "0"
+
+        elseif mode == "Next"
+            return {i} if foldData.side == "0"
+
+        elseif mode == "Previous"
+            if foldData.side == "0"
+                count += 1
+                return {i} if count == 2
+
+
 -- GUI that has all the functions this script provides.
 gui = (sub, sel, act) ->
     hint = {
@@ -454,6 +490,10 @@ gui = (sub, sel, act) ->
 |                                                                                  |                                                     |                                         |
 | label,-Cut-Copy-Paste-----                                                       |                                                     |                                         |
 | check,cutFold,Cut fold,,#{hint[8]}                                               | check,copyFold,Copy fold,,#{hint[9]}                | check,pasteFold,Paste fold,,#{hint[10]} |
+|                                                                                  |                                                     |                                         |
+| label,-Jump-----                                                                 |                                                     |                                         |
+| check,jumpStart,Start of Fold                                                    | check,jumpEnd,End of Fold                           |                                         |
+| check,jumpNext,Next Fold                                                         | check,jumpPrevious,Previous Fold                    |                                         |
 |                                                                                  |                                                     |                                         |
 | label,-Others-----                                                               |                                                     |                                         |
 | check,createNamedFold,Create a new named fold around selected lines,,#{hint[11]} |                                                     |                                         |
@@ -497,6 +537,18 @@ gui = (sub, sel, act) ->
 
     elseif res.createNamedFold
         createNamedFold sub, sel, act
+
+    elseif res.jumpStart
+        return jump(sub, sel, act, "Start")
+    
+    elseif res.jumpEnd
+        return jump(sub, sel, act, "End")
+
+    elseif res.jumpNext
+        return jump(sub, sel, act, "Next")
+
+    elseif res.jumpPrevious
+        return jump(sub, sel, act, "Previous")
 
 
 depctrl\registerMacros({
