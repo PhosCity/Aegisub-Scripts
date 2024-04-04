@@ -1,6 +1,6 @@
 export script_name = "Fold Operations"
 export script_description = "Different operations on folds"
-export script_version = "1.3.1"
+export script_version = "1.3.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.FoldOperations"
 
@@ -51,19 +51,21 @@ highestID = (sub) ->
 
 -- returns the fold nested level
 getFoldLevel = (sub, act) ->
-    foldLevel = 0
+    openFolds, closedFolds = {}, {}
     for i = 1, #sub
         continue unless sub[i].class == "dialogue"
         line = sub[i]
         foldData = parseLineFold line
         if foldData and foldData.side == "0"
-            foldLevel += 1
+            table.insert openFolds, foldData.id
         elseif foldData and foldData.side == "1"
-            foldLevel -= 1
+            table.insert closedFolds, foldData.id
         break if i == act
-    logger\assert foldLevel >= 0, "There is something wrong with folds in this file."
-    foldLevel + 1
-
+    openFolds = list.uniq openFolds
+    closedFolds = list.uniq closedFolds
+    
+    openFolds = list.diff openFolds, closedFolds
+    #openFolds + 1
 
 
 -- If you have commented lines around actual lines as fold markers, remove them from selection
