@@ -1,5 +1,5 @@
 haveDepCtrl, DependencyControl, depctrl = pcall require, 'l0.DependencyControl'
-local Functional, ASS, Yutils, AMath, Perspective
+local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
@@ -11,27 +11,25 @@ if haveDepCtrl
         feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
         {
             {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
-            feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+                feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
             { "l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
-            feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json" },
-            {"arch.Math", version: "0.1.8", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
-            feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
+                feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json" },
             {"arch.Perspective", version: "1.0.0", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
-            feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
+                feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
             "Yutils"
         }
     }
-    ASS, Functional, AMath, Perspective, Yutils = depctrl\requireModules!
+    ASS, Functional, APerspective, Yutils = depctrl\requireModules!
 else
     ASS = require "l0.ASSFoundation"
     Functional = require "l0.Functional"
     Yutils = require "Yutils"
-    Perspective = require "arch.Perspective"
-    AMath = require "arch.Math"
+    APerspective = require "arch.Perspective"
 
 logger = depctrl\getLogger!
-{:string, :list, :util} = Functional
-{:Matrix} = AMath
+{:string, :list, :util, :math} = Functional
+{:transformPoints, :an_xshift, :an_yshift} = APerspective
+import Path   from require "ILL.ILL.Ass.Shape.Path"
 
 local lineData
 local _tag
@@ -42,6 +40,111 @@ assertLineContent = (data) ->
 
 assertTextSection = (section) ->
     logger\assert section.class == ASS.Section.Text, " Expected a text section. Got something else."
+
+
+perspective = (tagList, width, height, shape) ->
+    shape = Path(shape)\flatten!
+
+    finalShape = ""
+    for sh in *shape.path
+        points = {}
+        for coord in *sh
+            table.insert points, {coord.x, coord.y}
+
+        finalPoints = transformPoints(tagList, width, height, points)
+        for index, item in ipairs finalPoints
+
+            x = math.round(item[1], 3)
+            y = math.round(item[2], 3)
+            if index == 1
+                finalShape ..= " m #{x} #{y}"
+            elseif index == 2
+                finalShape ..= " l #{x} #{y}"
+            else
+                finalShape ..= " #{x} #{y}"
+
+    finalShape = Path(finalShape)\simplify(0.5, false, false, 170)\export!
+    finalShape
+
+
+getYutilsShape = (text, fontObj) ->
+
+    splitString = (str) ->
+        return {str} if #str <= 15
+
+        result = {}
+        startIndex = 1
+        while startIndex <= #str do
+           endIndex = startIndex + 14
+           substring = str\sub startIndex, endIndex
+           table.insert result, substring
+           startIndex = endIndex + 1
+        result
+
+    shape = ""
+    width, height = 0, 0
+    for index, item in ipairs splitString(text)
+        currShape = fontObj.text_to_shape item
+        currShape = currShape\gsub " c", ""
+
+        currShape = Yutils.shape.filter currShape, (x, y) -> x + width, y
+
+        extents = fontObj.text_extents item
+        height = tonumber(extents.height)
+        width += tonumber(extents.width)
+
+        shape ..= currShape .. " "
+
+    string.trim(shape), height
+
+getTextDrawingScale = (data, text, tagList, shape, spaceWidth) ->
+    prevSpace = text\match("^%s*")\len! * spaceWidth
+    text = string.trim text
+
+    dataTemp = data\copy!
+    dataTemp\removeSections 1, #dataTemp.sections
+    dataTemp\insertSections ASS.Section.Tag!
+    dataTemp\insertTags {
+        ASS\createTag "align", 7
+        ASS\createTag "shadow", 0
+        ASS\createTag "outline", 0
+        ASS\createTag "position", 0, 0
+        ASS\createTag "scale_x", tagList.scale_x.value
+        ASS\createTag "scale_y", tagList.scale_y.value
+        ASS\createTag "spacing", tagList.spacing.value
+        ASS\createTag "fontsize", tagList.fontsize.value
+        ASS\createTag "fontname", tagList.fontname.value
+        ASS\createTag "bold", tagList.bold\getTagParams!
+        ASS\createTag "italic", tagList.italic\getTagParams!
+        ASS\createTag "underline", tagList.underline\getTagParams!
+        ASS\createTag "strikeout", tagList.strikeout\getTagParams!
+    }
+    dataTemp\insertSections ASS.Section.Text text
+
+    oldBounds = dataTemp\getLineBounds!
+    old_x1, old_y1 = oldBounds[1].x or 0, oldBounds[1].y or 0
+    old_x2, old_y2 = oldBounds[2].x or 0, oldBounds[2].y or 0
+    oldWidth = old_x2 - old_x1
+    oldHeight = old_y2 - old_y1
+
+    bounds = {Yutils.shape.bounding shape}
+    new_x1, new_y1 = bounds[1] or 0, bounds[2] or 0
+    new_x2, new_y2 = bounds[3] or 0, bounds[4] or 0
+    newWidth = new_x2 - new_x1
+    newHeight = new_y2 - new_y1
+
+    widthRatio = oldWidth/newWidth
+    heightRatio = oldHeight/newHeight
+
+    if math.abs(widthRatio - 1) <= 0.01 and math.abs(heightRatio - 1) <= 0.01
+        return shape, 1, 1
+
+    xOffset = old_x1 - (new_x1 * widthRatio)
+    yOffset = old_y1 - (new_y1 * heightRatio)
+    shape = Yutils.shape.filter shape, (x, y) ->
+        (x * widthRatio) + xOffset + (prevSpace * widthRatio), y * heightRatio + yOffset
+
+    shape, widthRatio, heightRatio
 
 
 lineData = {
@@ -95,6 +198,7 @@ lineData = {
             break
         firstSectionIsTag
 
+
     trim: (data) ->
         assertLineContent data
         trimLeft, trimRight, t = {}, {}, 0
@@ -119,6 +223,89 @@ lineData = {
             for item in *trimRight
                 section\trimRight! if item == j
         ), ASS.Section.Text
+
+    getShape: (data) ->
+        assertLineContent data
+
+        dataCopy = data\copy!
+        pos, align, org = dataCopy\getPosition!
+        alignIs = align\getSet!
+
+        lineData.trim dataCopy
+        tbl = {{}}
+
+        dataCopy\callback ((section) ->
+            value = section\getString!
+            fontObj, tagList = section\getYutilsFont!
+            tagList = tagList.tags
+            spaceWidth = aegisub.text_extents section\getStyleTable!, " "
+            for index, split in ipairs (string.split value, "\\N")
+                continue if split == ""
+
+                shape = getYutilsShape split, fontObj
+                width, height, descent = aegisub.text_extents section\getStyleTable!, split
+                if jit.os != "Windows"
+                    shape, widthRatio, heightRatio = getTextDrawingScale data, split, tagList, shape, spaceWidth
+                    width *= widthRatio
+                extents = {width: width, height: height, ascent: height - descent, descent: descent}
+
+                if index > 1
+                    table.insert tbl, {}
+                table.insert tbl[#tbl], {tagList: tagList, extents: extents, shape: shape}
+        ), ASS.Section.Text
+
+        -- Get maximum width, maximum height, maximum ascent of all lines and offsetTable for each line break
+        maxWidth, totalHeight = 0, 0
+        maxExtents, offsetTable = {}, {0}
+        for index, item in ipairs tbl
+            currMaxHeight, currMaxAscent, currMaxDescent, currMaxWidth = 0, 0, 0, 0
+            for sec in *item
+                currMaxWidth += sec.extents.width
+                currMaxHeight = math.max(currMaxHeight, sec.extents.height)
+                currMaxAscent = math.max(currMaxAscent, sec.extents.ascent)
+                currMaxDescent = math.max(currMaxDescent, sec.extents.descent)
+
+            maxWidth = math.max(maxWidth, currMaxWidth)
+            totalHeight += currMaxHeight
+            table.insert offsetTable, totalHeight
+            table.insert maxExtents, {maxAscent: currMaxAscent, maxDescent: currMaxDescent, maxWidth: currMaxWidth}
+
+        drawing = ""
+        for index, item in ipairs tbl
+            xOffset = 0
+            for sec in *item
+                {:tagList, :extents, :shape} = sec
+
+                -- Get y-offset
+                local lineBreakOffset, heightDifferenceOffset
+                if alignIs.bottom
+                    lineBreakOffset = offsetTable[#tbl - index + 1]
+                    heightDifferenceOffset = -(maxExtents[index].maxDescent - extents.descent)
+                elseif alignIs.top
+                    lineBreakOffset = offsetTable[index] * (-1)
+                    heightDifferenceOffset = maxExtents[index].maxAscent - extents.ascent
+                else
+                    lineBreakOffset = (offsetTable[#tbl - index + 1] - offsetTable[index]) / 2
+                    heightDifferenceOffset = ((maxExtents[index].maxAscent - maxExtents[index].maxDescent) - (extents.ascent - extents.descent)) / 2
+                yOffset = heightDifferenceOffset - lineBreakOffset
+
+                -- Get x-offset
+                xalignShift = ((maxWidth - maxExtents[index].maxWidth) * an_xshift[align.value])
+
+                shape = Yutils.shape.filter shape, (x, y) -> x + xOffset + xalignShift, y + yOffset
+
+                tagList.scale_x.value = 100
+                tagList.scale_y.value = 100
+                tagList.position.x = pos.x
+                tagList.position.y = pos.y
+                tagList.origin.x = org.x
+                tagList.origin.y = org.y
+
+                shape = perspective tagList, maxWidth, extents.height, shape
+
+                xOffset += extents.width
+                drawing ..= "#{shape} "
+        return drawing
 
 }
 

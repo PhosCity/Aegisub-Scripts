@@ -89,6 +89,33 @@ breaks. These spaces can mess up calculation of text extents.
 lineData.trim(data)
 ```
 
+## getShape (WIP)
+
+This is the reason why I first started working in this module in the first place.
+There is really no way to convert text to shape in Linux reliably (not even ILL at the time of this writing)
+and there is no way to use Assf to convert text to shape in any OS at all.
+All in all it is a mess of a situation. This is just a workaround for all those issues that
+probably is not enough to fix them but here's my attempt nonetheless.
+
+There were two main problems that I faced:
+
+- Any text that is more than 18 characters are truncated when converted to shapes. I fixed this by splitting the text into chunks of 15 characters, converting them to shape and then appending them together.
+- There were many fonts where the aegisub.text_extents and pangocairo gave wrong font extents and metrics. This caused the converted shape to be scaled incorrectly. I tried to fix it by using SubInspector which correctly returns bounds of the actual generated bitmaps.
+
+I do not promise that this will work. In fact this might not work beyond the dozen or so cases I tested.
+
+| Arguments | Meaning            | Type | Default Value |
+| --------- | ------------------ | ---- | ------------- |
+| data      | Assf Line Contents | -    | -             |
+
+| Returns | Type   |
+| ------- | ------ |
+| Shape   | String |
+
+```moon
+shape = lineData.getShape data
+```
+
 # Text Section
 
 ## getTags
