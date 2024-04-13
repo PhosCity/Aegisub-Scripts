@@ -240,6 +240,7 @@ lineData = {
             tagList = tagList.tags
             spaceWidth = aegisub.text_extents section\getStyleTable!, " "
             for index, split in ipairs (string.split value, "\\N")
+                table.insert tbl, {} if index > 1
                 continue if split == ""
 
                 shape = getYutilsShape split, fontObj
@@ -249,8 +250,6 @@ lineData = {
                     width *= widthRatio
                 extents = {width: width, height: height, ascent: height - descent, descent: descent}
 
-                if index > 1
-                    table.insert tbl, {}
                 table.insert tbl[#tbl], {tagList: tagList, extents: extents, shape: shape}
         ), ASS.Section.Text
 

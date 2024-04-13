@@ -4,7 +4,7 @@ description: A aegisub module that adds additional feature to AssFoundation.
 authors: phos
 categories: 
 created: 2024-02-24T17:44:44+0530
-updated: 2024-04-13T10:27:36+0530
+updated: 2024-04-13T18:29:26+0530
 version: 1.1.1
 tangle: {
     languages: {
@@ -321,6 +321,7 @@ tangle: {
                tagList = tagList.tags
                spaceWidth = aegisub.text_extents section\getStyleTable!, " "
                for index, split in ipairs (string.split value, "\\N")
+                   table.insert tbl, {} if index > 1
                    continue if split == ""
    
                    shape = getYutilsShape split, fontObj
@@ -330,8 +331,6 @@ tangle: {
                        width *= widthRatio
                    extents = {width: width, height: height, ascent: height - descent, descent: descent}
    
-                   if index > 1
-                       table.insert tbl, {}
                    table.insert tbl[#tbl], {tagList: tagList, extents: extents, shape: shape}
            ), ASS.Section.Text
    
