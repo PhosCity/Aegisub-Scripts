@@ -142,10 +142,24 @@ getTextDrawingScale = (data, text, tagList, shape, spaceWidth) ->
     xOffset = old_x1 - (new_x1 * widthRatio)
     yOffset = old_y1 - (new_y1 * heightRatio)
     shape = Yutils.shape.filter shape, (x, y) ->
-        (x * widthRatio) + xOffset + (prevSpace * widthRatio), y * heightRatio + yOffset
+        (x * widthRatio) + xOffset + prevSpace, y * heightRatio + yOffset
 
     shape, widthRatio, heightRatio
 
+
+getShapeWidth = (data, section, fontObj, tagList) ->
+    if jit.os == "Windows"
+        return aegisub.text_extents section\getStyleTable!, " "
+
+    fn = (text) ->
+        shape = getYutilsShape text, fontObj
+        width = aegisub.text_extents section\getStyleTable!, text
+        _, widthRatio = getTextDrawingScale data, text, tagList, shape, 0
+        width * widthRatio
+
+    width1 = fn ". ."
+    width2 = fn ".."
+    width1 - width2
 
 lineData = {
 
@@ -154,7 +168,7 @@ lineData = {
 
         local bound
 
-        unless noBordShad or noClip or noBlur
+        unless noBordShad or noClip or noBlur or noPerspective
             bound = data\getLineBounds!
         else
             dataCopy = data\copy!
@@ -238,14 +252,30 @@ lineData = {
             value = section\getString!
             fontObj, tagList = section\getYutilsFont!
             tagList = tagList.tags
-            spaceWidth = aegisub.text_extents section\getStyleTable!, " "
-            for index, split in ipairs (string.split value, "\\N")
-                table.insert tbl, {} if index > 1
-                continue if split == ""
 
-                shape = getYutilsShape split, fontObj
+            -- Get width of space
+            spaceWidth = getShapeWidth data, section, fontObj, tagList
+
+            splitTable, splitNos = string.split value, "\\N"
+            for index, split in ipairs splitTable
+                table.insert tbl, {} if index > 1
                 width, height, descent = aegisub.text_extents section\getStyleTable!, split
-                if jit.os != "Windows"
+                shape = getYutilsShape split, fontObj
+
+                if split == ""
+                    if index == 1 and #tbl > 1
+                        continue
+                    elseif index == splitNos
+                        continue
+                    else
+                        width, height, descent = aegisub.text_extents section\getStyleTable!, " "
+                        height /= 2
+                        width = 0
+                        shape = nil
+                elseif split\match "^%s*$"
+                    width = split\match("^%s*")\len! * spaceWidth
+                    shape = nil
+                elseif jit.os != "Windows"
                     shape, widthRatio, heightRatio = getTextDrawingScale data, split, tagList, shape, spaceWidth
                     width *= widthRatio
                 extents = {width: width, height: height, ascent: height - descent, descent: descent}
@@ -254,8 +284,7 @@ lineData = {
         ), ASS.Section.Text
 
         -- Get maximum width, maximum height, maximum ascent of all lines and offsetTable for each line break
-        maxWidth, totalHeight = 0, 0
-        maxExtents, offsetTable = {}, {0}
+        maxWidth, maxExtents, heightTable = 0, {}, {}
         for index, item in ipairs tbl
             currMaxHeight, currMaxAscent, currMaxDescent, currMaxWidth = 0, 0, 0, 0
             for sec in *item
@@ -265,26 +294,40 @@ lineData = {
                 currMaxDescent = math.max(currMaxDescent, sec.extents.descent)
 
             maxWidth = math.max(maxWidth, currMaxWidth)
-            totalHeight += currMaxHeight
-            table.insert offsetTable, totalHeight
             table.insert maxExtents, {maxAscent: currMaxAscent, maxDescent: currMaxDescent, maxWidth: currMaxWidth}
+            table.insert heightTable, currMaxHeight
+
+        -- Shamelessly stolen from ILL
+        offsetHeightA, heightA = {}, 0
+        offsetHeightB, heightB = {}, 0
+        for i = 1, #heightTable
+            j = #heightTable - i + 1
+            -- adds the value of the current line break height value
+            offsetHeightA[i] = heightA
+            offsetHeightB[j] = heightB
+            -- gets the value of the height of the next line break 
+            heightA += heightTable[i]
+            heightB += heightTable[j]
 
         drawing = ""
         for index, item in ipairs tbl
             xOffset = 0
             for sec in *item
                 {:tagList, :extents, :shape} = sec
+                if not shape
+                    xOffset += extents.width
+                    continue
 
                 -- Get y-offset
                 local lineBreakOffset, heightDifferenceOffset
                 if alignIs.bottom
-                    lineBreakOffset = offsetTable[#tbl - index + 1]
+                    lineBreakOffset = offsetHeightB[index]
                     heightDifferenceOffset = -(maxExtents[index].maxDescent - extents.descent)
                 elseif alignIs.top
-                    lineBreakOffset = offsetTable[index] * (-1)
+                    lineBreakOffset = -offsetHeightA[index]
                     heightDifferenceOffset = maxExtents[index].maxAscent - extents.ascent
                 else
-                    lineBreakOffset = (offsetTable[#tbl - index + 1] - offsetTable[index]) / 2
+                    lineBreakOffset = (offsetHeightB[index] - offsetHeightA[index]) / 2
                     heightDifferenceOffset = ((maxExtents[index].maxAscent - maxExtents[index].maxDescent) - (extents.ascent - extents.descent)) / 2
                 yOffset = heightDifferenceOffset - lineBreakOffset
 

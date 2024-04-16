@@ -102,7 +102,10 @@ There were two main problems that I faced:
 - Any text that is more than 18 characters are truncated when converted to shapes. I fixed this by splitting the text into chunks of 15 characters, converting them to shape and then appending them together.
 - There were many fonts where the aegisub.text_extents and pangocairo gave wrong font extents and metrics. This caused the converted shape to be scaled incorrectly. I tried to fix it by using SubInspector which correctly returns bounds of the actual generated bitmaps.
 
-I do not promise that this will work. In fact this might not work beyond the dozen or so cases I tested.
+Known cases where it does not work
+
+- Gradient by character.
+- Negative spacing.
 
 | Arguments | Meaning            | Type | Default Value |
 | --------- | ------------------ | ---- | ------------- |
@@ -216,3 +219,13 @@ L, A, B = _tag.color.getLAB {ASS\createTag "color1", 73, 201, 37}
 # Shapes
 
 # Logging
+
+# Credits
+
+This module stands on the shoulders of giants that did most of the work.
+
+- ASSFoundation (Obviously)
+- Perspective by Arch (For things related to perspective)
+- ILL (For things related to shapes)
+- Yutils
+- SubInspector
