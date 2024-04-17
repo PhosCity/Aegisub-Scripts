@@ -634,6 +634,65 @@
 					"Add to DependencyControl"
 				]
 			}
+		},
+		"phos.AssfPlus": {
+			"fileBaseUrl": "@{fileBaseUrl}/modules/@{namespacePath}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "AssfPlus",
+			"description": "Adds more features to ASSFoundation",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2024-04-17",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "033f8086065e62067e028d16526d2b637530fb76"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "l0.ASSFoundation",
+							"name": "ASSFoundation",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.5.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.Functional",
+							"name": "(Almost) Functional Suite",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.6.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "arch.Perspective",
+							"name": "Perspective",
+							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+							"version": "1.1.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"
+						},
+						{
+							"moduleName": "ILL.ILL",
+							"name": "ILL Library",
+							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+							"version": "1.4.6",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
+						},
+						{
+							"moduleName": "Yutils"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Add to DependencyControl"
+				]
+			}
 		}
 	}
 }
