@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "0.0.2",
+        version: "1.0.0",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -238,7 +238,7 @@ lineData = {
                 section\trimRight! if item == j
         ), ASS.Section.Text
 
-    getShape: (data) ->
+    getTextShape: (data) ->
         assertLineContent data
 
         dataCopy = data\copy!

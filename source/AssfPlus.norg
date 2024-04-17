@@ -4,7 +4,7 @@ description: A aegisub module that adds additional feature to AssFoundation.
 authors: phos
 categories: 
 created: 2024-02-24T17:44:44+0530
-updated: 2024-04-16T19:02:24+0530
+updated: 2024-04-17T09:38:02+0530
 version: 1.1.1
 tangle: {
     languages: {
@@ -28,7 +28,7 @@ tangle: {
   if haveDepCtrl
       depctrl = DependencyControl{
           name: "AssfPlus",
-          version: "0.0.2",
+          version: "1.0.0",
           description: "Adds more features to ASSFoundation.",
           author: "PhosCity",
           moduleName: "phos.AssfPlus",
@@ -322,7 +322,7 @@ tangle: {
    I do not promise that this will work. In fact this might not work beyond the dozen or so cases I tested.
 
    @code moon
-       getShape: (data) ->
+       getTextShape: (data) ->
            assertLineContent data
    
            dataCopy = data\copy!

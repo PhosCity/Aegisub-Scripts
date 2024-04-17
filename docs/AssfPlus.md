@@ -1,4 +1,4 @@
-<font color="red">**Not Available in Dependency Control**</font>
+<font color="green">**Available in Dependency Control**</font>
 
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AssfPlus.moon)
 
@@ -89,23 +89,21 @@ breaks. These spaces can mess up calculation of text extents.
 lineData.trim(data)
 ```
 
-## getShape (WIP)
+## getTextShape
 
-This is the reason why I first started working in this module in the first place.
 There is really no way to convert text to shape in Linux reliably (not even ILL at the time of this writing)
 and there is no way to use Assf to convert text to shape in any OS at all.
-All in all it is a mess of a situation. This is just a workaround for all those issues that
-probably is not enough to fix them but here's my attempt nonetheless.
+This is just a temporary workaround until a proper fix for it is made.
 
 There were two main problems that I faced:
 
 - Any text that is more than 18 characters are truncated when converted to shapes. I fixed this by splitting the text into chunks of 15 characters, converting them to shape and then appending them together.
 - There were many fonts where the aegisub.text_extents and pangocairo gave wrong font extents and metrics. This caused the converted shape to be scaled incorrectly. I tried to fix it by using SubInspector which correctly returns bounds of the actual generated bitmaps.
 
-Known cases where it does not work
+Known cases where it may not work:
 
-- Gradient by character.
-- Negative spacing.
+- Gradient by character
+- Negative spacing
 
 | Arguments | Meaning            | Type | Default Value |
 | --------- | ------------------ | ---- | ------------- |
@@ -116,7 +114,7 @@ Known cases where it does not work
 | Shape   | String |
 
 ```moon
-shape = lineData.getShape data
+shape = lineData.getTextShape data
 ```
 
 # Text Section
