@@ -122,9 +122,10 @@ shape = lineData.getTextShape data
 ## convertTextToShape
 
 Convert and replace the text in current line to shape.
-| Arguments | Meaning | Type | Default Value |
+
+| Arguments | Meaning            | Type | Default Value |
 | --------- | ------------------ | ---- | ------------- |
-| data | Assf Line Contents | -- | -- |
+| data      | Assf Line Contents | -    | -             |
 
 | Returns |
 | ------- |
@@ -132,6 +133,25 @@ Convert and replace the text in current line to shape.
 
 ```moon
 lineData.convertTextToShape data
+```
+
+## changeAlignment
+
+Change alignment of a line while maintaining its position.
+
+| Arguments | Meaning                | Type   | Default Value |
+| --------- | ---------------------- | ------ | ------------- |
+| data      | Assf Line Contents     | -      | -             |
+| alignment | Alignment to change to | number | 7             |
+
+| Returns |
+| ------- |
+| nil     |
+
+```moon
+data = ASS\parse line
+lineData.changeAlignment data, 5
+data\commit!
 ```
 
 # Text Section

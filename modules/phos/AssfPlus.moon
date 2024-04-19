@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "1.0.1",
+        version: "1.0.2",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -251,7 +251,7 @@ lineData = {
         dataCopy\callback ((section) ->
             value = section\getString!
             fontObj, tagList = section\getYutilsFont!
-            tagList = tagList.tags
+            tagList = (tagList\copy!).tags
 
             -- Get width of space
             spaceWidth = getSpaceWidth data, section, fontObj, tagList
@@ -284,7 +284,7 @@ lineData = {
         ), ASS.Section.Text
 
         -- Get maximum width, maximum height, maximum ascent of all lines and offsetTable for each line break
-        maxWidth, maxExtents, heightTable = 0, {}, {}
+        maxHeight, maxWidth, maxExtents, heightTable = 0, 0, {}, {}
         for index, item in ipairs tbl
             currMaxHeight, currMaxAscent, currMaxDescent, currMaxWidth = 0, 0, 0, 0
             for sec in *item
@@ -293,6 +293,7 @@ lineData = {
                 currMaxAscent = math.max(currMaxAscent, sec.extents.ascent)
                 currMaxDescent = math.max(currMaxDescent, sec.extents.descent)
 
+            maxHeight += currMaxHeight
             maxWidth = math.max(maxWidth, currMaxWidth)
             table.insert maxExtents, {maxAscent: currMaxAscent, maxDescent: currMaxDescent, maxWidth: currMaxWidth}
             table.insert heightTable, currMaxHeight
@@ -347,7 +348,7 @@ lineData = {
 
                 xOffset += extents.width
                 drawing ..= "#{shape} "
-        return drawing
+        return drawing, maxWidth, maxHeight
 
 convertTextToShape: (data) ->
     shape = lineData.getTextShape data
@@ -372,6 +373,35 @@ convertTextToShape: (data) ->
         ASS\createTag "scale_y", 100
     }
     data\cleanTags!
+
+changeAlignment: (data, targetAlignment = 7) ->
+    assertLineContent data
+    target = ASS\createTag("align", targetAlignment)
+    pos, align, org = data\getPosition!
+    return if target\equal align
+
+    drawingSectionCount = data\getSectionCount ASS.Section.Drawing
+
+    if drawingSectionCount > 0
+
+        data\callback ((section) ->
+            ex = section\getExtremePoints true
+            section\add target\getPositionOffset ex.w, ex.h, align
+            data\replaceTags {target}
+        ), ASS.Section.Drawing
+
+    else
+
+        _, width, height = lineData.getTextShape data
+        pos\add target\getPositionOffset width, height, align
+
+        -- https://github.com/TypesettingTools/line0-Aegisub-Scripts/blob/b6deb78511a0a96fd6fd074d2337cc8a687c9655/l0.Nudge.moon#L222
+        effTags = data\getEffectiveTags -1, true, true, false
+        trans, tags = effTags\checkTransformed!, effTags.tags
+        if tags.angle\modEq(0, 360) and tags.angle_x\modEq(0, 360) and tags.angle_y\modEq(0, 360) and not (trans.angle or trans.angle_x or trans.angle_y)
+            data\replaceTags {target, pos}
+        else
+            data\replaceTags {target, pos, org}
 
 }
 
