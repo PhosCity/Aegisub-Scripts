@@ -4,7 +4,7 @@ description: A aegisub module that adds additional feature to AssFoundation.
 authors: phos
 categories: 
 created: 2024-02-24T17:44:44+0530
-updated: 2024-04-17T09:38:02+0530
+updated: 2024-04-19T12:03:09+0530
 version: 1.1.1
 tangle: {
     languages: {
@@ -28,7 +28,7 @@ tangle: {
   if haveDepCtrl
       depctrl = DependencyControl{
           name: "AssfPlus",
-          version: "1.0.0",
+          version: "1.0.1",
           description: "Adds more features to ASSFoundation.",
           author: "PhosCity",
           moduleName: "phos.AssfPlus",
@@ -192,7 +192,7 @@ tangle: {
    @end
 ** Get space width
    @code moon
-   getShapeWidth = (data, section, fontObj, tagList) ->
+   getSpaceWidth = (data, section, fontObj, tagList) ->
        if jit.os == "Windows"
            return aegisub.text_extents section\getStyleTable!, " "
    
@@ -338,7 +338,7 @@ tangle: {
                tagList = tagList.tags
    
                -- Get width of space
-               spaceWidth = getShapeWidth data, section, fontObj, tagList
+               spaceWidth = getSpaceWidth data, section, fontObj, tagList
    
                splitTable, splitNos = string.split value, "\\N"
                for index, split in ipairs splitTable
@@ -432,6 +432,33 @@ tangle: {
                    xOffset += extents.width
                    drawing ..= "#{shape} "
            return drawing
+   @end
+
+** Convert text to shape
+   @code moon
+   convertTextToShape: (data) ->
+       shape = lineData.getTextShape data
+       if shape == nil or shape == ""
+           logger\log "Text shape not found."
+           aegisub.cancel!
+   
+       drawing = ASS.Draw.DrawingBase {str: shape}
+       data\removeSections 2, #data.sections
+   
+       pos, align = data\getPosition!
+       drawing\sub pos.x, pos.y
+   
+       drawing = data\insertSections ASS.Section.Drawing {drawing}
+   
+       align\set 7
+       data\insertTags align
+   
+       data\removeTags {"angle", "angle_x", "angle_y", "origin", "shear_x", "shear_y", "bold", "italic", "underline", "strikeout", "spacing", "fontsize", "fontname"}
+       data\replaceTags {
+           ASS\createTag "scale_x", 100
+           ASS\createTag "scale_y", 100
+       }
+       data\cleanTags!
    @end
 * Line Content End
   @code moon

@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "1.0.0",
+        version: "1.0.1",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -147,7 +147,7 @@ getTextDrawingScale = (data, text, tagList, shape, spaceWidth) ->
     shape, widthRatio, heightRatio
 
 
-getShapeWidth = (data, section, fontObj, tagList) ->
+getSpaceWidth = (data, section, fontObj, tagList) ->
     if jit.os == "Windows"
         return aegisub.text_extents section\getStyleTable!, " "
 
@@ -254,7 +254,7 @@ lineData = {
             tagList = tagList.tags
 
             -- Get width of space
-            spaceWidth = getShapeWidth data, section, fontObj, tagList
+            spaceWidth = getSpaceWidth data, section, fontObj, tagList
 
             splitTable, splitNos = string.split value, "\\N"
             for index, split in ipairs splitTable
@@ -348,6 +348,30 @@ lineData = {
                 xOffset += extents.width
                 drawing ..= "#{shape} "
         return drawing
+
+convertTextToShape: (data) ->
+    shape = lineData.getTextShape data
+    if shape == nil or shape == ""
+        logger\log "Text shape not found."
+        aegisub.cancel!
+
+    drawing = ASS.Draw.DrawingBase {str: shape}
+    data\removeSections 2, #data.sections
+
+    pos, align = data\getPosition!
+    drawing\sub pos.x, pos.y
+
+    drawing = data\insertSections ASS.Section.Drawing {drawing}
+
+    align\set 7
+    data\insertTags align
+
+    data\removeTags {"angle", "angle_x", "angle_y", "origin", "shear_x", "shear_y", "bold", "italic", "underline", "strikeout", "spacing", "fontsize", "fontname"}
+    data\replaceTags {
+        ASS\createTag "scale_x", 100
+        ASS\createTag "scale_y", 100
+    }
+    data\cleanTags!
 
 }
 

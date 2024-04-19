@@ -100,6 +100,8 @@ There were two main problems that I faced:
 - Any text that is more than 18 characters are truncated when converted to shapes. I fixed this by splitting the text into chunks of 15 characters, converting them to shape and then appending them together.
 - There were many fonts where the aegisub.text_extents and pangocairo gave wrong font extents and metrics. This caused the converted shape to be scaled incorrectly. I tried to fix it by using SubInspector which correctly returns bounds of the actual generated bitmaps.
 
+The resulting shape has an alignment of 7, scale of 100 and is anchored to position (0,0).
+
 Known cases where it may not work:
 
 - Gradient by character
@@ -115,6 +117,21 @@ Known cases where it may not work:
 
 ```moon
 shape = lineData.getTextShape data
+```
+
+## convertTextToShape
+
+Convert and replace the text in current line to shape.
+| Arguments | Meaning | Type | Default Value |
+| --------- | ------------------ | ---- | ------------- |
+| data | Assf Line Contents | -- | -- |
+
+| Returns |
+| ------- |
+| nil     |
+
+```moon
+lineData.convertTextToShape data
 ```
 
 # Text Section
