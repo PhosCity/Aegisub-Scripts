@@ -3,8 +3,10 @@ name: depctrl
 on:
   push:
     paths:
-      - 'macros/*.lua'
-      - 'macros/*.moon'
+      - "macros/*.lua"
+      - "macros/*.moon"
+      - "modules/**/*.lua"
+      - "modules/**/*.moon"
     branches:
       - main
 
@@ -12,16 +14,16 @@ jobs:
   depctrl:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Get-changed-files
         id: changed-files-comma
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v44
         with:
-          since_last_remote_commit: 'true'
-          separator: ','
+          since_last_remote_commit: "true"
+          separator: ","
 
       - name: Update sha1 and version
         run: |
@@ -39,13 +41,21 @@ jobs:
             # Get the full filename of the Aegisub-scripts
             FULL_FILE=$(echo "${CHKSUM}" | awk -F'/' '{print $NF}')
 
+            # Get the folder of Aegisub-scripts or modules
+            FOLDER=$(echo "${file}" | rev | cut -d/ -f2- | rev | cut -d/ -f2-)
+
             # Namespace is the filename stripped of their extension.
             # This same should be the first field in DependencyControl.json inside macros field for the sake of automation.
             # For example: My script is named phos.wave.lua. Therefore, the first level key is phos.wave
             NAMESPACE=$(echo "${FULL_FILE}" | sed "s|.moon||g;s|.lua||g")
 
-            # Get version of the script (Provided that `script_version = "version"` is in the scripts - Spaces around '=' or lack of it is accounted for)
-            VERSION=$(grep -E 'script_version\s?=' "macros/${FULL_FILE}" | cut -d '"' -f2)
+            # Get version of the script or module
+            if [[ ${FOLDER} == "macros" ]]; then
+              # Provided that `script_version = "version"` is in the scripts - Spaces around '=' or lack of it is accounted for
+              VERSION=$(grep -E 'script_version\s?=' "${FOLDER}/${FULL_FILE}" | cut -d '"' -f2)
+            else
+              VERSION=$(grep -E '^\s*version: ".+",\s*$' "${FOLDER}/${FULL_FILE}" | cut -d '"' -f2)
+            fi
 
             # Check if the file is added to DependencyControl or not and if version could be found or not
             if grep -q "${NAMESPACE}" DependencyControl.json && [[ -n "${VERSION}" ]]; then
@@ -54,8 +64,13 @@ jobs:
               MODIFIED=$(echo ${{ steps.changed-files-comma.outputs.all_changed_files }})
 
               # Change sha1, date and version if the file was modified in last commit
-              if grep -q "${FULL_FILE}" <<< "$MODIFIED"; then
-                jq --tab ".macros.\"${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.main.version=\"${VERSION}\" | .macros.\"${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+              if grep -q "${FULL_FILE}" <<< "${MODIFIED}"; then
+
+                if [[ ${FOLDER} == "macros" ]]; then
+                  jq --tab ".macros.\"${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .macros.\"${NAMESPACE}\".channels.main.version=\"${VERSION}\" | .macros.\"${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+                else
+                  jq --tab ".modules.\"phos.${NAMESPACE}\".channels.main.files[].sha1=\"${SHA}\" | .modules.\"phos.${NAMESPACE}\".channels.main.version=\"${VERSION}\" | .modules.\"phos.${NAMESPACE}\".channels.main.released=\"${DATE}\"" DependencyControl.json >"${output_file}"
+                fi
 
                 # If something goes wrong with jq operation, it outputs empty file. We don't want to commit it so a condition to check it.
                 if [[ -s "${output_file}" ]]; then
@@ -68,7 +83,7 @@ jobs:
             else
               echo "Either the file ${FULL_FILE} is not added to Dependency Control or version could not be found in the script. Skipping changing hashes."
             fi
-          done < <(find ./macros -name "*lua" -o -name "*.moon" -type f)
+          done < <(find ./macros ./modules/** -name "*lua" -o -name "*.moon" -type f)
       - name: Commit changes
         env:
           COMMIT_MSG: |
