@@ -2,10 +2,6 @@
 
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AegiGui.moon)
 
-!!! warning "Warning"
-
-    This is an experimental module which is still in production. This is not ready for use in any shape or form in actual scripts. Its functionality could change at any time and it could ultimately be scrapped if deemed unfit for use.
-
 # Introduction
 
 I hate making GUIs for Aegisub macros and you do too. This module helps you to create and more importantly modify the GUIs easily and quickly. It was designed to take a single string and convert it to a GUI table that Aegisub accepts. Additionally, the GUI string looks similar to how it will look in Aegisub so you can look at the code itself to get the general idea of how to create and modify the string to get corresponding look in Aegisub.

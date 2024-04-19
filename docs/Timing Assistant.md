@@ -16,8 +16,8 @@ The first thing to do after you install the script is to assign a hotkey for
 the script in Aegisub. When you do add a hotkey, make sure you add it in the
 Audio section.
 
-In order to time a line, you first exact time a line (sutitle starts and ends
-exactly with audio) and then press the hoteky. The script will make the
+In order to time a line, you first exact time a line (subtitle starts and ends
+exactly with audio) and then press the hotkey. The script will make the
 decision for you whether it should add lead in, snap to keyframe, link the
 lines together or add lead out. You then move to the next line by pressing `g`
 and repeat. _Exact time, hotkey. Exact time, hotkey. That's it._
@@ -92,4 +92,4 @@ This renames the preset.
 
 #### Set Current
 
-This sets the preset and the current preset and its value will be used whenver you press the hotkey.
+This sets the preset and the current preset and its value will be used whenever you press the hotkey.
