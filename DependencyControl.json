@@ -676,14 +676,14 @@
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"
 						},
 						{
+							"moduleName": "Yutils"
+						},
+						{
 							"moduleName": "ILL.ILL",
 							"name": "ILL Library",
 							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
 							"version": "1.4.6",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
-						},
-						{
-							"moduleName": "Yutils"
 						}
 					]
 				}
