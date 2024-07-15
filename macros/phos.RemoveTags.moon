@@ -183,7 +183,6 @@ removeTags = (data, tags, start, end_, transforms, transformOnly) ->
 main = (sub, sel) ->
     collection = collectTags sub, sel
     dialog, collection = createGui collection
-    logger\dump collection.buttons
     btn, res = aegisub.dialog.display dialog, collection.buttons, {"cancel": "Cancel"}
     aegisub.cancel! unless btn
 
