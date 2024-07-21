@@ -299,7 +299,7 @@ applyGUItoLine = (res, data, existingTagTable, sectionTable, count, tagSection, 
     else
         if textSection.class == ASS.Section.Text
             textSection.value = res["textvalue"] if res["text"] or ""
-        elseif textSection.class == ASS.Section.Drawing
+        elseif textSection.class == ASS.Section.Drawing and res["textvalue"] != ""
             shape = ASS.Draw.DrawingBase {str: res["textvalue"]}
             textSection.contours = shape.contours
 
