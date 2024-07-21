@@ -4,7 +4,7 @@ description:
 authors: phos
 categories: 
 created: 2024-01-05T19:03:34+0530
-updated: 2024-02-23T13:16:39+0530
+updated: 2024-03-14T12:43:59+0530
 version: 1.1.1
 tangle: {
   languages: {
@@ -18,7 +18,7 @@ tangle: {
     @code moon
     export script_name = "Edit Tags"
     export script_description = "Edit tags of current line."
-    export script_version = "1.0.0"
+    export script_version = "1.0.1"
     export script_author = "PhosCity"
     export script_namespace = "phos.EditTags"
     @end
@@ -280,7 +280,11 @@ tangle: {
     @end
 
 *** Apply GUI to lines
-    If transform is ticked, we apply the changes of gui to line but if transform is unticked, we will just tag it for removal. There is no need to make changes for the transform we want to remove.
+    If transform is ticked, we apply the changes of gui to line but if transform is unticked,
+    we will just tag it for removal.
+
+    There is no need to make changes for the transform we want to remove.
+
     @code moon
         if res["transform"]
             transformSelection[count]["toRemove"] = false
@@ -290,7 +294,10 @@ tangle: {
     @end
 
 *** Transform Switching
-    If user has selected a new transform to switch to, we basically tell the *handleTransform* funciton to not exit out of loop and then recreate the GUI for new selected transform.
+    If user has selected a new transform to switch to, we basically tell the
+    *handleTransform* funciton to not exit out of loop and then recreate the GUI
+    for new selected transform.
+
     @code moon
         exitLoop = true
         if pressed == "Switch"
@@ -484,13 +491,16 @@ tangle: {
    ------------------------------------------------------------------------------------------------------------
    @end
 
-*** Make changes to text of current section
+*** Make changes to text/drawing of current section
     @code moon
-        res["textvalue"] = "" unless res["text"]
         if defaultTags or not textSection
             data\insertSections(ASS.Section.Text res["textvalue"])
         else
-            textSection.value = res["textvalue"]
+            if textSection.class == ASS.Section.Text
+                textSection.value = res["textvalue"] if res["text"] or ""
+            elseif textSection.class == ASS.Section.Drawing and res["textvalue"] != ""
+                shape = ASS.Draw.DrawingBase {str: res["textvalue"]}
+                textSection.contours = shape.contours
     @end
 
 *** When fsc is ticked in GUI
@@ -609,7 +619,8 @@ tangle: {
     @end
 
 ** Generate gui for each section
-   First lets start with creating the base GUI for the script. This is the GUI that will be shown for any lines. There are some tags like fade, move, clip_rect, iclip_rect that we will only add if they're present in the line.
+   First lets start with creating the base GUI for the script. This is the GUI that will be shown for any lines.
+   There are some tags like fade, move, clip_rect, iclip_rect that we will only add if they're present in the line.
 
    @code moon
    --------------------------------------------------------
@@ -621,7 +632,8 @@ tangle: {
 *** Get different sections
     Some implications:
     - If textSection is present and tagSection is not present, it indicates that the text section is the first section.
-    - If both tagSection and textSection is not present, it indicates the line is either empty or there is only comment section. In this case, defaultTags is used where defaultTags gets the effective values of tags from style.
+    - If both tagSection and textSection is not present, it indicates the line is either empty or there is only comment section.
+      In this case, defaultTags is used where defaultTags gets the effective values of tags from style.
 
     @code moon
         local tagSection, textSection, defaultTags
@@ -636,7 +648,9 @@ tangle: {
     @end
 
 *** Get existing tags
-    We now gather tags that actually exist in the line. Those tags will be ticked in the gui so you know which tags are present in the lines and which tags are only effective on the line.
+    We now gather tags that actually exist in the line.
+    Those tags will be ticked in the gui so you know which
+    tags are present in the lines and which tags are only effective on the line.
     @code moon
         existingTagTable = {}
         if tagSection

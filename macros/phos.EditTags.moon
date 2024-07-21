@@ -1,6 +1,6 @@
 export script_name = "Edit Tags"
 export script_description = "Edit tags of current line."
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.EditTags"
 
@@ -294,11 +294,14 @@ parseEffectiveTags = (str, tags, existingTagTable) ->
 applyGUItoLine = (res, data, existingTagTable, sectionTable, count, tagSection, textSection, defaultTags) ->
 ------------------------------------------------------------------------------------------------------------
 
-    res["textvalue"] = "" unless res["text"]
     if defaultTags or not textSection
         data\insertSections(ASS.Section.Text res["textvalue"])
     else
-        textSection.value = res["textvalue"]
+        if textSection.class == ASS.Section.Text
+            textSection.value = res["textvalue"] if res["text"] or ""
+        elseif textSection.class == ASS.Section.Drawing
+            shape = ASS.Draw.DrawingBase {str: res["textvalue"]}
+            textSection.contours = shape.contours
 
     if res["scale"]
         res["scale_x"] = true
