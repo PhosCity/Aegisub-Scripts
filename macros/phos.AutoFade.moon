@@ -1,6 +1,6 @@
 export script_name = "Auto Fade"
 export script_description = "Automatically determine fade in and fade out"
-export script_version = "1.1.1"
+export script_version = "1.1.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.AutoFade"
 
@@ -64,8 +64,11 @@ determineFadeTime = (fadeType, startFrame, endFrame, targetColor, pos) ->
   for i = startFrame, endFrame
     color = getColor(i, pos["x"][i], pos["y"][i])
     dist = euclideanDistance(color, targetColor)
-    if (fadeType == "Fade in" and dist < 5) or (fadeType == "Fade out" and dist > 5)
+    if fadeType == "Fade in" and dist < 5
       fadeTime = math.floor((aegisub.ms_from_frame(i+1)+ aegisub.ms_from_frame(i))/2)
+      break
+    elseif fadeType == "Fade out" and dist > 5
+      fadeTime = math.floor((aegisub.ms_from_frame(i-1)+ aegisub.ms_from_frame(i))/2)
       break
   windowAssertError fadeTime, "#{fadeType} time could not be determined."
   fadeTime
