@@ -8,7 +8,7 @@ updated: 2024-04-19T14:08:38+0530
 version: 1.1.1
 tangle: {
     languages: {
-        moon: ./AssfPlus.moon
+        moon: ~/Git/Aegisub-Scripts/modules/phos/AssfPlus.moon
     }
     scope: all
 }
@@ -28,7 +28,7 @@ tangle: {
   if haveDepCtrl
       depctrl = DependencyControl{
           name: "AssfPlus",
-          version: "1.0.2",
+          version: "1.0.3",
           description: "Adds more features to ASSFoundation.",
           author: "PhosCity",
           moduleName: "phos.AssfPlus",
@@ -62,8 +62,8 @@ tangle: {
   @code moon
   local lineData
   local _tag
+  local shape
   @end
-
 
 * Functions
 ** Assert Line Contents
@@ -492,6 +492,23 @@ tangle: {
            else
                data\replaceTags {target, pos, org}
    @end
+** Pathfinder Operation
+   @code moon
+       pathfinder: (data, mode) ->
+           assertLineContent data
+   
+           local clip
+           vectorialClip = data\getTags "clip_vect"
+           if #vectorialClip == 0
+               rectangularClip = data\getTags "clip_rect"
+               if #rectangularClip != 0
+                   clip = rectangularClip[1]\getDrawing!\toString!
+               else
+                   logger\log "Rectangular or Vectorial clip was expected but not found."
+                   aegisub.cancel!
+           else
+               clip = vectorialClip[1]\getDrawing!\toString!
+   @end
 * Line Content End
   @code moon
   }
@@ -527,6 +544,18 @@ tangle: {
                return tagList
    
            tags
+   @end
+
+** Insert Tags at Character Index
+   Insert tags in the middle of tag section by index.
+
+   @code moon
+       -- insertTagsAtChar: (data, section, index, tags) ->
+       --     assertLineContent data
+       --     assertTextSection section
+       --
+       --     sectionIndex = section.index
+       --     table.insert section, sectionIndex + 1
    @end
 * Text Section End
   @code moon
@@ -799,12 +828,45 @@ tangle: {
 
   @end
 
+* Shape
+  @code moon
+  shape = {
+  @end
+** Pathfinder
+   @code moon
+       pathfinder: (mode, shape, clip) ->
+           if shape.class == ASS.Section.Drawing
+               shape = shape\toString!
+           if clip.class == ASS.Tag.ClipRect or clip.class == ASS.Tag.ClipVect
+               clip = clip\getDrawing!toString!
+   
+           switch mode
+             when "Unite" then shape = Path(shape)\unite Path(clip)
+             when "Intersect" then shape = Path(shape)\intersect Path(clip)
+             when "Difference" then shape = Path(shape)\difference Path(clip)
+             when "Exclude" then shape = Path(shape)\exclude Path(clip)
+             else
+                 logger\log "\"#{mode}\" is not a valid pathfinder mode."
+   
+           shape = shape\export!
+           shape = nil if shape == ""
+           shape = ASS.Draw.DrawingBase {str: shape}
+           shape
+   @end
+
+* Shape End
+  @code moon
+  }
+
+  @end
+
 * Main module table
   @code moon
   lib = {
       :lineData
       :textSection
       :_tag
+      :shape
   }
   
   @end
