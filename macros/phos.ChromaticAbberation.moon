@@ -1,6 +1,6 @@
 export script_name = "Chromatic Abberation"
 export script_description = "Add chromatic abberation to shape and text."
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.ChromaticAbberation"
 
@@ -33,21 +33,54 @@ createGUI = ->
     res, btn
 
 
-mixColors = (res) ->
-    f1_r, f1_g, f1_b = util.extract_color res["color1"]
-    f2_r, f2_g, f2_b = util.extract_color res["color2"]
-    f3_r, f3_g, f3_b = util.extract_color res["color3"]
+mixColors = (res, baseColor) ->
+    rgb_to_cmy = (r, g, b) ->
+        1 - r / 255, 1 - g / 255, 1 - b / 255
 
-    n2_r, n2_g, n2_b = (f1_r * f2_r) / 255, (f1_g * f2_g) / 255, (f1_b * f2_b) / 255
-    n3_r, n3_g, n3_b = (f1_r * f3_r) / 255, (f1_g * f3_g) / 255, (f1_b * f3_b) / 255
-    n4_r, n4_g, n4_b = (f2_r * f3_r) / 255, (f2_g * f3_g) / 255, (f2_b * f3_b) / 255
+    cmy_to_rgb = (c, m, y) ->
+        255 * (1 - c), 255 * (1 - m), 255 * (1 - y)
 
-    n1_r, n1_g, n1_b = (n2_r * n3_r * n4_r) / (255 * 255), (n2_g * n3_g * n4_g) / (255 * 255), (n2_b * n3_b * n4_b) / (255 * 255)
+    mix_cmy = (c1, m1, y1, c2, m2, y2) ->
+        math.max(c1, c2), math.max(m1, m2), math.max(y1, y2)
+
+    mix_rgb_colors = (col1, col2) ->
+        c1, m1, y1 = rgb_to_cmy(table.unpack(col1))
+        c2, m2, y2 = rgb_to_cmy(table.unpack(col2))
+        c_result, m_result, y_result = mix_cmy(c1, m1, y1, c2, m2, y2)
+        cmy_to_rgb(c_result, m_result, y_result)
+
+    local color1, color2, color3
+    if baseColor
+        c_result, m_result, y_result = rgb_to_cmy(table.unpack(baseColor))
+
+        c1, m1, y1 = c_result, 0, 0
+        c2, m2, y2 = 0, m_result, 0
+        c3, m3, y3 = 0, 0, y_result
+
+        r1, g1, b1 = cmy_to_rgb(c1, m1, y1)
+        r2, g2, b2 = cmy_to_rgb(c2, m2, y2)
+        r3, g3, b3 = cmy_to_rgb(c3, m3, y3)
+
+        color1 = {r1, g1, b1}
+        color2 = {r2, g2, b2}
+        color3 = {r3, g3, b3}
+
+    else
+        color1 = {util.extract_color res["color1"]}
+        color2 = {util.extract_color res["color2"]}
+        color3 = {util.extract_color res["color3"]}
+
+    r_all, g_all, b_all = mix_rgb_colors(color1, color2)
+    n1_r, n1_g, n1_b = mix_rgb_colors({r_all, g_all, b_all}, color3)
+
+    n2_r, n2_g, n2_b = mix_rgb_colors(color1, color2)
+    n3_r, n3_g, n3_b = mix_rgb_colors(color1, color3)
+    n4_r, n4_g, n4_b = mix_rgb_colors(color2, color3)
 
     {
-        {r: f1_r, g: f1_g, b: f1_b},
-        {r: f2_r, g: f2_g, b: f2_b},
-        {r: f3_r, g: f3_g, b: f3_b},
+        {r: color1[1], g: color1[2], b: color1[3]},
+        {r: color2[1], g: color2[2], b: color2[3]},
+        {r: color3[1], g: color3[2], b: color3[3]},
         {r: n1_r, g: n1_g, b: n1_b},
         {r: n2_r, g: n2_g, b: n2_b},
         {r: n3_r, g: n3_g, b: n3_b},
@@ -105,8 +138,6 @@ main = (sub, sel) ->
     xOffset = res["xOffset"]
     yOffset = res["yOffset"]
 
-    color = mixColors res
-
     lines = LineCollection sub, sel
     return if #lines.lines == 0
 
@@ -123,6 +154,10 @@ main = (sub, sel) ->
         if #posInLine == 0
             data\insertTags pos
 
+        tags = (data\getEffectiveTags 1, true, true, false).tags
+        b, g, r = tags.color1\getTagParams!
+        color = mixColors res, (res["keepBaseColor"] and {r, g, b})
+
         textSectionCount = data\getSectionCount ASS.Section.Text
         drawingSectionCount = data\getSectionCount ASS.Section.Drawing
 
@@ -136,12 +171,6 @@ main = (sub, sel) ->
             windowError "Lines with multiple drawing section cannot be handled by this script."
 
         elseif drawingSectionCount > 0
-
-            if res["keepBaseColor"]
-                tags = (data\getEffectiveTags 1, true, true, false).tags
-                b, g, r = tags.color1\getTagParams!
-                color[4].r, color[4].g, color[4].b = r, g, b
-
             data\callback ((section) ->
                 f1, f2, f3, n1, n2, n3, n4 = pathfinding section, xOffset, yOffset
 
