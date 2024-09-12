@@ -42,14 +42,16 @@ tangle: {
               {"arch.Perspective", version: "1.0.0", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
                   feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
               "Yutils"
+              "json"
           }
       }
-      ASS, Functional, APerspective, Yutils = depctrl\requireModules!
+      ASS, Functional, APerspective, Yutils, json = depctrl\requireModules!
   else
       ASS = require "l0.ASSFoundation"
       Functional = require "l0.Functional"
       Yutils = require "Yutils"
       APerspective = require "arch.Perspective"
+      json = require "json"
   
   logger = depctrl\getLogger!
   {:string, :list, :util, :math} = Functional
@@ -61,8 +63,10 @@ tangle: {
 * Initiate all list names
   @code moon
   local lineData
+  local textSection
   local _tag
-  local shape
+  local _shape
+  local _util
   @end
 
 * Functions
@@ -124,7 +128,13 @@ tangle: {
    
        shape = ""
        width, height = 0, 0
-       for index, item in ipairs splitString(text)
+   
+       local splitTable
+       if jit.os == "Windows"
+           splitTable = {text}
+       else
+           splitTable = splitString text
+       for index, item in ipairs splitTable
            currShape = fontObj.text_to_shape item
            currShape = currShape\gsub " c", ""
    
@@ -829,32 +839,113 @@ tangle: {
   @end
 
 * Shape
+  Most of the shape operation will use ILL.
   @code moon
-  shape = {
+  _shape = {
   @end
 ** Pathfinder
    @code moon
-       pathfinder: (mode, shape, clip) ->
-           if shape.class == ASS.Section.Drawing
-               shape = shape\toString!
-           if clip.class == ASS.Tag.ClipRect or clip.class == ASS.Tag.ClipVect
-               clip = clip\getDrawing!toString!
+       pathfinder: (mode, shape1, shape2) ->
    
+           if shape1.class != ASS.Section.Drawing and shape1.class != ASS.Draw.DrawingBase
+               logger\log " Expected a drawing section or drawing. Got something else."
+               aegisub.cancel!
+   
+           base = Path(shape1\toString!)
+   
+           if shape2.class == ASS.Section.Drawing or shape2.class == ASS.Draw.DrawingBase
+               shape2 = Path(shape2\toString!)
+           elseif shape2.class == ASS.Tag.ClipRect or shape2.class == ASS.Tag.ClipVect
+               shape2 = Path(shape2\getDrawing!\toString!)
+   
+           local shape
            switch mode
-             when "Unite" then shape = Path(shape)\unite Path(clip)
-             when "Intersect" then shape = Path(shape)\intersect Path(clip)
-             when "Difference" then shape = Path(shape)\difference Path(clip)
-             when "Exclude" then shape = Path(shape)\exclude Path(clip)
-             else
-                 logger\log "\"#{mode}\" is not a valid pathfinder mode."
+               when "Unite" then shape = base\unite shape2
+               when "Intersect" then shape = base\intersect shape2
+               when "Difference" then shape = base\difference shape2
+               when "Exclude" then shape = base\exclude shape2
+               else
+                   logger\log "\"#{mode}\" is not a valid pathfinder mode."
+                   aegisub.cancel!
    
            shape = shape\export!
            shape = nil if shape == ""
            shape = ASS.Draw.DrawingBase {str: shape}
-           shape
+           shape1.contours = shape.contours
    @end
 
 * Shape End
+  @code moon
+  }
+
+  @end
+* Util
+  These do not necessarily extend Assf but there are here nonetheless.
+  @code moon
+  _util = {
+  @end
+** Add original line to extradata
+   This one saves original line to extradata so that any operation can be reverted back.
+   @code moon
+       setOgLineExtradata: (line, extradataName) ->
+           line\setExtraData extradataName, { originalText: line.text, uuid: util.uuid! }
+   @end
+** Revert Line
+   This one reverts the line back to original line.
+   @code moon
+       revertLines: (sub, sel, extradataName) ->
+   
+           decode = (line) ->
+               return if not line.extra
+               extradata = line.extra[extradataName]
+               return if not extradata
+               json.decode extradata
+   
+           uuids = {}
+           for index in *sel
+               line = sub[index]
+               data = decode line
+               continue unless data
+   
+               unless uuids[data.uuid]
+                   line.text = data.originalText
+                   line.number = index
+                   line.extra[extradataName] = nil
+                   uuids[data.uuid] = line
+   
+           indicesToNuke = {}
+           for i = 1, #sub
+               line = sub[i]
+               data = decode line
+               continue unless data 
+   
+               if uuids[data.uuid]
+                   oldLine = uuids[data.uuid]
+   
+                   if i < oldLine.number
+                       oldLine.number = i
+                   elseif i > oldLine.number
+                       indicesToNuke[#indicesToNuke+1] = i
+   
+           for _, line in pairs uuids
+               sub[line.number] = line
+   
+           sub.delete indicesToNuke
+   @end
+** Show message and exit
+   @code moon
+       windowError: ( errorMessage ) ->
+           aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
+           aegisub.cancel!
+   @end
+** Show message and exit if condition is false
+   @code moon
+       windowAssertError: ( condition, errorMessage ) ->
+           if not condition
+               aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
+               aegisub.cancel!
+   @end
+* util End
   @code moon
   }
 
@@ -866,7 +957,8 @@ tangle: {
       :lineData
       :textSection
       :_tag
-      :shape
+      :_shape
+      :_util
   }
   
   @end

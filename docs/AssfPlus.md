@@ -32,6 +32,8 @@ text only for example, I can disable them and get actual line bounds.
 | bounds  | Line bounds same as assf | Table |
 
 ```moon
+data = ASS\parse line
+
 -- This will give you the same result as assf will.
 bounds = lineData.getLineBounds data
 
@@ -56,6 +58,7 @@ you the co-ordinates of the bounding box. It's just a convenience function.
 | x1, y1, x2, y2 | Number |
 
 ```moon
+data = ASS\parse line
 x1, y1, x2, y2 = lineData.getBoundingBox data, true
 ```
 
@@ -86,6 +89,7 @@ breaks. These spaces can mess up calculation of text extents.
 | Nothing |
 
 ```moon
+data = ASS\parse line
 lineData.trim(data)
 ```
 
@@ -114,9 +118,13 @@ Known cases where it may not work:
 | Returns | Type   |
 | ------- | ------ |
 | Shape   | String |
+| Width   | Number |
+| Height  | Number |
 
 ```moon
+data = ASS\parse line
 shape = lineData.getTextShape data
+shape, width, height = lineData.getTextShape data
 ```
 
 ## convertTextToShape
@@ -132,6 +140,7 @@ Convert and replace the text in current line to shape.
 | nil     |
 
 ```moon
+data = ASS\parse line
 lineData.convertTextToShape data
 ```
 
@@ -189,6 +198,24 @@ tags = textSection.getTags data, section, true
 # Tags
 
 ## Color
+
+### extractColor
+
+Extract the R, G and B value of a color. The input can be the color string or a color object made by Assf.
+
+| Arguments | Type                                       |
+| --------- | ------------------------------------------ |
+| color     | colorString or {r, g, b} or assf color tag |
+
+| Returns | Type   |
+| ------- | ------ |
+| r, g, b | Number |
+
+```moon
+r, g, b = _tag.color.extractColor "&H1010CF&"
+r, g, b = _tag.color.extractColor {73, 201, 37}
+r, g, b = _tag.color.extractColor {ASS\createTag "color1", 73, 201, 37}
+```
 
 ### getDeltaE
 
@@ -253,7 +280,102 @@ L, A, B = _tag.color.getLAB {ASS\createTag "color1", 73, 201, 37}
 
 # Shapes
 
-# Logging
+## Pathfinder
+
+This allows us to perform various boolean operations in shapes. This depends on ILL.
+
+This takes the shape1 and shape2, performs the boolean operation on them and then the resulting shape is saved on shape1.
+
+The different modes are "Unite", "Intersect", "Difference" and "Exclude"
+
+| Arguments | Type                                                                                 |
+| --------- | ------------------------------------------------------------------------------------ |
+| mode      | string                                                                               |
+| shape1    | Assf Drawing Section or Assf Drawing                                                 |
+| shape2    | Assf drawing Seciton or Assf Drawing or Assf rectangular clip or Assf vectorial clip |
+
+| Returns | Type |
+| ------- | ---- |
+| nil     |      |
+
+```moon
+_shape.pathfinder "Intersect", shape1, shape2
+```
+
+# Utils
+
+These are some of the functions that are not necessarily related to assf.
+
+## setOgLineExtradata
+
+This saves the original line in extradata so that the changes made by scripts can be reverted later on.
+The extradata name provided should be unique to that script.
+
+| Arguments     | Type                                |
+| ------------- | ----------------------------------- |
+| line          | Aegsiub line or LineCollection line |
+| extradataName | string                              |
+
+| Returns | Type |
+| ------- | ---- |
+| nil     |      |
+
+```moon
+for line in *sel
+    _util.setOgLineExtradata line, "a-mo"
+```
+
+## revertLines
+
+This reverts the line if there is original line present in extradata saved using `setOgLineExtradata`.
+
+| Arguments     | Type                                 |
+| ------------- | ------------------------------------ |
+| sub           | subtitle table from Aegisub api      |
+| sel           | selected line table from Aegisub api |
+| extradataName | string                               |
+
+| Returns | Type |
+| ------- | ---- |
+| nil     |      |
+
+```moon
+for line in *sel
+    _util.revertLines sub, sel, "a-mo"
+```
+
+## windowError
+
+This shows the message and exits the script
+
+| Arguments    | Type   |
+| ------------ | ------ |
+| errorMessage | string |
+
+| Returns | Type |
+| ------- | ---- |
+| nil     |      |
+
+```moon
+_util.windowError "This is an error message."
+```
+
+## windowAssertError
+
+This shows the message and exits the script if the condition is false.
+
+| Arguments    | Type    |
+| ------------ | ------- |
+| condition    | boolean |
+| errorMessage | string  |
+
+| Returns | Type |
+| ------- | ---- |
+| nil     |      |
+
+```moon
+_util.windowError a > b, "a was not greater than b unfortunately."
+```
 
 # Credits
 

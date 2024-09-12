@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "1.0.2",
+        version: "1.0.3",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -17,14 +17,16 @@ if haveDepCtrl
             {"arch.Perspective", version: "1.0.0", url: "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
                 feed: "https://raw.githubusercontent.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/main/DependencyControl.json"},
             "Yutils"
+            "json"
         }
     }
-    ASS, Functional, APerspective, Yutils = depctrl\requireModules!
+    ASS, Functional, APerspective, Yutils, json = depctrl\requireModules!
 else
     ASS = require "l0.ASSFoundation"
     Functional = require "l0.Functional"
     Yutils = require "Yutils"
     APerspective = require "arch.Perspective"
+    json = require "json"
 
 logger = depctrl\getLogger!
 {:string, :list, :util, :math} = Functional
@@ -32,7 +34,10 @@ logger = depctrl\getLogger!
 import Path   from require "ILL.ILL.Ass.Shape.Path"
 
 local lineData
+local textSection
 local _tag
+local _shape
+local _util
 
 assertLineContent = (data) ->
     logger\assert data.class == ASS.LineContents, " Expected ASSFoundation line data. Got something else."
@@ -83,7 +88,13 @@ getYutilsShape = (text, fontObj) ->
 
     shape = ""
     width, height = 0, 0
-    for index, item in ipairs splitString(text)
+
+    local splitTable
+    if jit.os == "Windows"
+        splitTable = {text}
+    else
+        splitTable = splitString text
+    for index, item in ipairs splitTable
         currShape = fontObj.text_to_shape item
         currShape = currShape\gsub " c", ""
 
@@ -403,6 +414,21 @@ changeAlignment: (data, targetAlignment = 7) ->
         else
             data\replaceTags {target, pos, org}
 
+    pathfinder: (data, mode) ->
+        assertLineContent data
+
+        local clip
+        vectorialClip = data\getTags "clip_vect"
+        if #vectorialClip == 0
+            rectangularClip = data\getTags "clip_rect"
+            if #rectangularClip != 0
+                clip = rectangularClip[1]\getDrawing!\toString!
+            else
+                logger\log "Rectangular or Vectorial clip was expected but not found."
+                aegisub.cancel!
+        else
+            clip = vectorialClip[1]\getDrawing!\toString!
+
 }
 
 
@@ -426,6 +452,13 @@ textSection = {
             return tagList
 
         tags
+
+    -- insertTagsAtChar: (data, section, index, tags) ->
+    --     assertLineContent data
+    --     assertTextSection section
+    --
+    --     sectionIndex = section.index
+    --     table.insert section, sectionIndex + 1
 
 }
 
@@ -628,10 +661,101 @@ _tag = {
 }
 
 
+_shape = {
+
+    pathfinder: (mode, shape1, shape2) ->
+
+        if shape1.class != ASS.Section.Drawing and shape1.class != ASS.Draw.DrawingBase
+            logger\log " Expected a drawing section or drawing. Got something else."
+            aegisub.cancel!
+
+        base = Path(shape1\toString!)
+
+        if shape2.class == ASS.Section.Drawing or shape2.class == ASS.Draw.DrawingBase
+            shape2 = Path(shape2\toString!)
+        elseif shape2.class == ASS.Tag.ClipRect or shape2.class == ASS.Tag.ClipVect
+            shape2 = Path(shape2\getDrawing!\toString!)
+
+        local shape
+        switch mode
+            when "Unite" then shape = base\unite shape2
+            when "Intersect" then shape = base\intersect shape2
+            when "Difference" then shape = base\difference shape2
+            when "Exclude" then shape = base\exclude shape2
+            else
+                logger\log "\"#{mode}\" is not a valid pathfinder mode."
+                aegisub.cancel!
+
+        shape = shape\export!
+        shape = nil if shape == ""
+        shape = ASS.Draw.DrawingBase {str: shape}
+        shape1.contours = shape.contours
+
+}
+
+
+_util = {
+
+    setOgLineExtradata: (line, extradataName) ->
+        line\setExtraData extradataName, { originalText: line.text, uuid: util.uuid! }
+
+    revertLines: (sub, sel, extradataName) ->
+
+        decode = (line) ->
+            return if not line.extra
+            extradata = line.extra[extradataName]
+            return if not extradata
+            json.decode extradata
+
+        uuids = {}
+        for index in *sel
+            line = sub[index]
+            data = decode line
+            continue unless data
+
+            unless uuids[data.uuid]
+                line.text = data.originalText
+                line.number = index
+                line.extra[extradataName] = nil
+                uuids[data.uuid] = line
+
+        indicesToNuke = {}
+        for i = 1, #sub
+            line = sub[i]
+            data = decode line
+            continue unless data 
+
+            if uuids[data.uuid]
+                oldLine = uuids[data.uuid]
+
+                if i < oldLine.number
+                    oldLine.number = i
+                elseif i > oldLine.number
+                    indicesToNuke[#indicesToNuke+1] = i
+
+        for _, line in pairs uuids
+            sub[line.number] = line
+
+        sub.delete indicesToNuke
+
+    windowError: ( errorMessage ) ->
+        aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
+        aegisub.cancel!
+
+    windowAssertError: ( condition, errorMessage ) ->
+        if not condition
+            aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
+            aegisub.cancel!
+
+}
+
+
 lib = {
     :lineData
     :textSection
     :_tag
+    :_shape
+    :_util
 }
 
 
