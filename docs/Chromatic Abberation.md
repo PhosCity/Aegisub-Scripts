@@ -1,6 +1,6 @@
 <font color="green">**Available in Dependency Control**</font>
 
-[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.chromaticAbberation.moon)
+[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.ChromaticAbberation.moon)
 
 Chromatic Aberration is a stylistic effect that mimics the failure of a lens to properly focus all colors. The script `Chromatic Abberation` as the name suggests allows you to emulate that effect in your sign.
 
