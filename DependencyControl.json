@@ -643,14 +643,14 @@
 			"description": "Adds more features to ASSFoundation",
 			"channels": {
 				"main": {
-					"version": "1.0.2",
-					"released": "2024-04-19",
+					"version": "1.0.3",
+					"released": "2024-09-12",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "406ff4f88fa3522857dab1d97c641820abe5d9d6"
+							"sha1": "9bde819aa4ed970422a7ee8957346f84b13a10d3"
 						}
 					],
 					"requiredModules": [
