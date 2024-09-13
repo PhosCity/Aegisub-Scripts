@@ -12,7 +12,7 @@ Chromatic Aberration is a stylistic effect that mimics the failure of a lens to 
 
 # Usage
 
-![image](./assets/chromatic-abberation-gui.png){: style="height:216px;width:480px"}
+![image](./assets/chromatic-abberation-gui.png){: style="height:139px;width:305px"}
 
 x Offset and y Offset allows you to increase the size of the effect.
 

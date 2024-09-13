@@ -18,7 +18,7 @@ tangle: {
     @code moon
     export script_name = "Chromatic Abberation"
     export script_description = "Add chromatic abberation to shape and text."
-    export script_version = "1.0.1"
+    export script_version = "1.0.2"
     export script_author = "PhosCity"
     export script_namespace = "phos.ChromaticAbberation"
     @end
@@ -85,9 +85,9 @@ tangle: {
         if baseColor
             c_result, m_result, y_result = rgb_to_cmy(table.unpack(baseColor))
     
-            c1, m1, y1 = c_result, 0, 0
+            c1, m1, y1 = 0, 0, y_result
             c2, m2, y2 = 0, m_result, 0
-            c3, m3, y3 = 0, 0, y_result
+            c3, m3, y3 = c_result, 0, 0
     
             r1, g1, b1 = cmy_to_rgb(c1, m1, y1)
             r2, g2, b2 = cmy_to_rgb(c2, m2, y2)
