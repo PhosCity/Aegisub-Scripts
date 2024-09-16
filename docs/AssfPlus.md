@@ -10,6 +10,40 @@ this is the only way for me to add more features to it.
 This will either fix things in ASSFoundation, extend an existing feature or
 add a feature that does not exist at all.
 
+# LineCollection
+
+This acts on the line collected by LineCollection.
+
+## collectTags
+
+This collects all the tag's names present in the selected lines. Additionally, it collects information like if there are start tags, inline tags and transforms present in the line or not.
+
+| Arguments     | Meaning                                                  | Type    | Default Value |
+| ------------- | -------------------------------------------------------- | ------- | ------------- |
+| lines         | LineCollection line table                                | table   | -             |
+| errorOnNoTags | Exit the script if no tags were collected with a message | boolean | false         |
+
+| Returns    | Description                        | Type  |
+| ---------- | ---------------------------------- | ----- |
+| collection | A table with all the info collectd | table |
+
+The collection returns a table in the following format:
+
+```moon
+collection =
+    tagList: {}
+    tagTypes: {start_tag: false, inline_tags: false, transforms: false}
+    multiple_inline_tags: false
+```
+
+Usage:
+
+```moon
+lines = LineCollection sub, sel
+return if #lines.lines == 0
+collection = AssfPlus.LineCollection.collectTags lines
+```
+
 # Line Data
 
 ## getLineBounds
@@ -70,9 +104,10 @@ Find out if there is a tag section before text section or drawing section.
 | --------- | ------------------ | ---- | ------------- |
 | data      | Assf Line Contents | -    | -             |
 
-| Returns                                         |
-| ----------------------------------------------- |
-| true if there is a tag section in the beginning |
+| Returns                                         | Type    |
+| ----------------------------------------------- | ------- |
+| true if there is a tag section in the beginning | boolean |
+| the index of start tag section                  | integer |
 
 ## trim
 
@@ -163,6 +198,30 @@ lineData.changeAlignment data, 5
 data\commit!
 ```
 
+## insertTransformTags
+
+This inserts transform tags. Honestly this exists because I could not figure out how to insert transform tags natively.
+
+| Arguments       | Meaning                                                                                                                                        | Type    | Default Value |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------- |
+| data            | Assf Line Contents                                                                                                                             | -       | -             |
+| tags            | Table of Assf Tag Object                                                                                                                       | table   | -             |
+| t1              | Start time of transform in miliseconds                                                                                                         | integer | -             |
+| t2              | End time of transform in miliseconds                                                                                                           | integer | -             |
+| accel           | Accel of transform                                                                                                                             | float   | -             |
+| index           | Index of Assf section in which to insert transform tag                                                                                         | integer | 1             |
+| sectionPosition | Position within an Assf section in which to insert transform tag                                                                               | integer | -             |
+| direct          | if true, considers all sections and attempts to insert in that section if that section is tag section. if false it only considers tag sections | boolean | false         |
+
+| Returns |
+| ------- |
+| nil     |
+
+```moon
+AssfPlus.lineData.insertTransformTag data, {ASS\createTag('alpha1', 0)},
+    0, 200, 0.5, 1, _, true
+```
+
 # Text Section
 
 ## getTags
@@ -193,6 +252,32 @@ Get the list of tag names only
 
 ```moon
 tags = textSection.getTags data, section, true
+```
+
+# Tag Section
+
+## replaceTags
+
+Replace tags method does not exist for tag section.
+
+| Arguments | Meaning                                | Type   |
+| --------- | -------------------------------------- | ------ |
+| section   | Assf Tag Section                       | -      |
+| tags      | Table of Assf Tag Objects              | -      |
+| index     | Index at which to add the replaced tag | Number |
+
+| Returns |
+| ------- |
+| nil     |
+
+Index can be -1 to add the tag at the end of the tag section. If the tag section contains reset tag, then the tags will automatically add it to the end of the tag section.
+
+```moon
+AssfPlus.tagSection.replaceTags section, {
+    ASS\createTag("outline", 0),
+    ASS\createTag("shadow", 0),
+    ASS\createTag("alpha4", 255),
+}, -1
 ```
 
 # Tags
@@ -294,9 +379,9 @@ The different modes are "Unite", "Intersect", "Difference" and "Exclude"
 | shape1    | Assf Drawing Section or Assf Drawing                                                 |
 | shape2    | Assf drawing Seciton or Assf Drawing or Assf rectangular clip or Assf vectorial clip |
 
-| Returns | Type |
-| ------- | ---- |
-| nil     |      |
+| Returns |
+| ------- |
+| nil     |
 
 ```moon
 _shape.pathfinder "Intersect", shape1, shape2
@@ -316,9 +401,9 @@ The extradata name provided should be unique to that script.
 | line          | Aegsiub line or LineCollection line |
 | extradataName | string                              |
 
-| Returns | Type |
-| ------- | ---- |
-| nil     |      |
+| Returns |
+| ------- |
+| nil     |
 
 ```moon
 for line in *sel
@@ -335,9 +420,9 @@ This reverts the line if there is original line present in extradata saved using
 | sel           | selected line table from Aegisub api |
 | extradataName | string                               |
 
-| Returns | Type |
-| ------- | ---- |
-| nil     |      |
+| Returns |
+| ------- |
+| nil     |
 
 ```moon
 for line in *sel
@@ -352,9 +437,9 @@ This shows the message and exits the script
 | ------------ | ------ |
 | errorMessage | string |
 
-| Returns | Type |
-| ------- | ---- |
-| nil     |      |
+| Returns |
+| ------- |
+| nil     |
 
 ```moon
 _util.windowError "This is an error message."
@@ -369,12 +454,46 @@ This shows the message and exits the script if the condition is false.
 | condition    | boolean |
 | errorMessage | string  |
 
-| Returns | Type |
-| ------- | ---- |
-| nil     |      |
+| Returns |
+| ------- |
+| nil     |
 
 ```moon
 _util.windowError a > b, "a was not greater than b unfortunately."
+```
+
+## Progress Reporting
+
+This shows a progress bar and counter as well as a title for the progress window.
+
+| Arguments | Meaning             | Type    |
+| --------- | ------------------- | ------- |
+| title     | Title of the window | string  |
+| count     | current count       | integer |
+| total     | total count         | integer |
+
+| Returns |
+| ------- |
+| nil     |
+
+```moon
+Assf._util.progress "Removing Lines", 1, 100
+```
+
+## Check Cancellation
+
+This checks if user has cancelled the script and if they have then stops the further execution of the script.
+
+| Arguments |
+| --------- |
+| nil       |
+
+| Returns |
+| ------- |
+| nil     |
+
+```moon
+Assf._util.checkCancellation!
 ```
 
 # Credits

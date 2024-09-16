@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "1.0.3",
+        version: "1.0.4",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -33,8 +33,10 @@ logger = depctrl\getLogger!
 {:transformPoints, :an_xshift, :an_yshift} = APerspective
 import Path   from require "ILL.ILL.Ass.Shape.Path"
 
+local lineCollection
 local lineData
 local textSection
+local tagSection
 local _tag
 local _shape
 local _util
@@ -45,6 +47,10 @@ assertLineContent = (data) ->
 
 assertTextSection = (section) ->
     logger\assert section.class == ASS.Section.Text, " Expected a text section. Got something else."
+
+
+assertTagSection = (section) ->
+    logger\assert section.class == ASS.Section.Tag, " Expected a tag section. Got something else."
 
 
 perspective = (tagList, width, height, shape) ->
@@ -172,6 +178,52 @@ getSpaceWidth = (data, section, fontObj, tagList) ->
     width2 = fn ".."
     width1 - width2
 
+lineCollection = {
+
+    collectTags: (lines, errorOnNoTags = false) ->
+        collection =
+            tagList: {}
+            tagTypes: {start_tag: false, inline_tags: false, transforms: false}
+            multiple_inline_tags: false
+
+        lines\runCallback (lines, line, i) ->
+            _util.checkCancellation!
+            _util.progress "Collecting tags", i, #lines.lines
+            data = ASS\parse line
+
+            -- Determine if there is a tag at the start of the line
+            collection.tagTypes.start_tag, startTagIndex = lineData.firstSectionIsTag data
+
+            if not collection.multiple_inline_tags
+                tagSectionCount = data\getSectionCount ASS.Section.Tag
+                collection.tagTypes.inline_tags = tagSectionCount > 1
+                if startTagIndex and tagSectionCount > 2
+                    collection.multiple_inline_tags = true
+                elseif not startTagIndex and tagSectionCount > 1
+                    collection.multiple_inline_tags = true
+
+            -- Collect all the tags in the line
+            for tag in *data\getTags!
+                collection.tagList[#collection.tagList + 1] = tag.__tag.name
+
+                if tag.class == ASS.Tag.Transform
+                    collection.tagTypes.transforms = true
+                    for transformTag in *tag.tags\getTags!
+                        collection.tagList[#collection.tagList + 1] = transformTag.__tag.name
+
+        -- No tags could be found in the selected lines
+        if errorOnNoTags and #collection.tagList == 0
+            _util.windowError "No tags found in the selected lines."
+
+        -- Deduplicate the taglist
+        collection.tagList = list.uniq collection.tagList
+
+        -- Sort the taglist
+        collection.tagList = [tag for tag in *(list.join(ASS.tagSortOrder, {"transform"})) when list.find collection.tagList, (value) -> value == tag ]
+        collection
+
+}
+
 lineData = {
 
     getLineBounds: (data, noBordShad = false, noClip = false, noBlur = false, noPerspective = false) ->
@@ -216,12 +268,14 @@ lineData = {
     firstSectionIsTag: (data) ->
         assertLineContent data
 
-        local firstSectionIsTag
-        for section in *data.sections
+        local firstSectionIsTag, startTagIndex
+        for index, section in ipairs data.sections
             continue if section.class == ASS.Section.Comment
-            firstSectionIsTag = true if section.class == ASS.Section.Tag
+            if section.class == ASS.Section.Tag
+                firstSectionIsTag = true 
+                startTagIndex = index
             break
-        firstSectionIsTag
+        firstSectionIsTag, startTagIndex
 
 
     trim: (data) ->
@@ -361,58 +415,58 @@ lineData = {
                 drawing ..= "#{shape} "
         return drawing, maxWidth, maxHeight
 
-convertTextToShape: (data) ->
-    shape = lineData.getTextShape data
-    if shape == nil or shape == ""
-        logger\log "Text shape not found."
-        aegisub.cancel!
+    convertTextToShape: (data) ->
+        shape = lineData.getTextShape data
+        if shape == nil or shape == ""
+            logger\log "Text shape not found."
+            aegisub.cancel!
 
-    drawing = ASS.Draw.DrawingBase {str: shape}
-    data\removeSections 2, #data.sections
+        drawing = ASS.Draw.DrawingBase {str: shape}
+        data\removeSections 2, #data.sections
 
-    pos, align = data\getPosition!
-    drawing\sub pos.x, pos.y
+        pos, align = data\getPosition!
+        drawing\sub pos.x, pos.y
 
-    drawing = data\insertSections ASS.Section.Drawing {drawing}
+        drawing = data\insertSections ASS.Section.Drawing {drawing}
 
-    align\set 7
-    data\insertTags align
+        align\set 7
+        data\insertTags align
 
-    data\removeTags {"angle", "angle_x", "angle_y", "origin", "shear_x", "shear_y", "bold", "italic", "underline", "strikeout", "spacing", "fontsize", "fontname"}
-    data\replaceTags {
-        ASS\createTag "scale_x", 100
-        ASS\createTag "scale_y", 100
-    }
-    data\cleanTags!
+        data\removeTags {"angle", "angle_x", "angle_y", "origin", "shear_x", "shear_y", "bold", "italic", "underline", "strikeout", "spacing", "fontsize", "fontname"}
+        data\replaceTags {
+            ASS\createTag "scale_x", 100
+            ASS\createTag "scale_y", 100
+        }
+        data\cleanTags!
 
-changeAlignment: (data, targetAlignment = 7) ->
-    assertLineContent data
-    target = ASS\createTag("align", targetAlignment)
-    pos, align, org = data\getPosition!
-    return if target\equal align
+    changeAlignment: (data, targetAlignment = 7) ->
+        assertLineContent data
+        target = ASS\createTag("align", targetAlignment)
+        pos, align, org = data\getPosition!
+        return if target\equal align
 
-    drawingSectionCount = data\getSectionCount ASS.Section.Drawing
+        drawingSectionCount = data\getSectionCount ASS.Section.Drawing
 
-    if drawingSectionCount > 0
+        if drawingSectionCount > 0
 
-        data\callback ((section) ->
-            ex = section\getExtremePoints true
-            section\add target\getPositionOffset ex.w, ex.h, align
-            data\replaceTags {target}
-        ), ASS.Section.Drawing
+            data\callback ((section) ->
+                ex = section\getExtremePoints true
+                section\add target\getPositionOffset ex.w, ex.h, align
+                data\replaceTags {target}
+            ), ASS.Section.Drawing
 
-    else
-
-        _, width, height = lineData.getTextShape data
-        pos\add target\getPositionOffset width, height, align
-
-        -- https://github.com/TypesettingTools/line0-Aegisub-Scripts/blob/b6deb78511a0a96fd6fd074d2337cc8a687c9655/l0.Nudge.moon#L222
-        effTags = data\getEffectiveTags -1, true, true, false
-        trans, tags = effTags\checkTransformed!, effTags.tags
-        if tags.angle\modEq(0, 360) and tags.angle_x\modEq(0, 360) and tags.angle_y\modEq(0, 360) and not (trans.angle or trans.angle_x or trans.angle_y)
-            data\replaceTags {target, pos}
         else
-            data\replaceTags {target, pos, org}
+
+            _, width, height = lineData.getTextShape data
+            pos\add target\getPositionOffset width, height, align
+
+            -- https://github.com/TypesettingTools/line0-Aegisub-Scripts/blob/b6deb78511a0a96fd6fd074d2337cc8a687c9655/l0.Nudge.moon#L222
+            effTags = data\getEffectiveTags -1, true, true, false
+            trans, tags = effTags\checkTransformed!, effTags.tags
+            if tags.angle\modEq(0, 360) and tags.angle_x\modEq(0, 360) and tags.angle_y\modEq(0, 360) and not (trans.angle or trans.angle_x or trans.angle_y)
+                data\replaceTags {target, pos}
+            else
+                data\replaceTags {target, pos, org}
 
     pathfinder: (data, mode) ->
         assertLineContent data
@@ -428,6 +482,24 @@ changeAlignment: (data, targetAlignment = 7) ->
                 aegisub.cancel!
         else
             clip = vectorialClip[1]\getDrawing!\toString!
+
+    insertTransformTag: (data, tags, t1, t2, accel, index = 1, sectionPosition, direct) ->
+        assertLineContent data
+
+        if type(tags) != "table"
+            logger\error "argument #2 (tags) to insertTransformTag() must be a table of tags , got type #{type(tags)}"
+
+        transform = {ASS\createTag 'transform', _, t1, t2, accel}
+        for tag in *tags
+            if not tag.class or not tag.class == ASS.Tag
+                logger\error "argument #2 (tags) to insertTransformTag() must be a table of tag object"
+
+            if not ASS.tagMap[tag.__tag.name].props.transformable
+                logger\error "argument #2 (tags) to insertTransformTag() contains tag that is not transformable."
+
+            -- table.insert transform[1].tags.tags, tag
+            transform[1].tags\insertTags tag
+        data\insertTags transform, index, sectionPosition, direct
 
 }
 
@@ -459,6 +531,35 @@ textSection = {
     --
     --     sectionIndex = section.index
     --     table.insert section, sectionIndex + 1
+
+}
+
+
+tagSection = {
+
+    replaceTags: (section, tags, index) ->
+        assertTagSection section
+
+        if type(tags) != "table"
+            logger\error "argument #2 (tags) to replaceTags() must be a table of tags , got type #{type(tags)}"
+
+        if index != nil
+            logger\assert math.isInt(index) and index != 0,
+                "argument #4 (index) must be an integer != 0, got '#{tostring(index)}' of type #{type(index)}."
+
+        if index == -1 or index == nil or #(section\getTags "reset") > 0
+            index = #section.tags + 1
+
+        for tag in *tags
+
+            tagName = tag.__tag.name
+            tagInSection = section\getTags tagName
+
+            if #tagInSection > 0
+                section\removeTags tagName
+                index -= 1
+
+            section\insertTags tag, index
 
 }
 
@@ -747,12 +848,22 @@ _util = {
             aegisub.dialog.display { { class: "label", label: errorMessage } }, { "&Close" }, { cancel: "&Close" }
             aegisub.cancel!
 
+    progress: (title, count, total) ->
+        aegisub.progress.title(title)
+        aegisub.progress.task("Processing line "..count.."/"..total)
+        aegisub.progress.set(100*count/total)
+
+    checkCancellation: ->
+        aegisub.cancel! if aegisub.progress.is_cancelled!
+
 }
 
 
 lib = {
+    :lineCollection
     :lineData
     :textSection
+    :tagSection
     :_tag
     :_shape
     :_util
