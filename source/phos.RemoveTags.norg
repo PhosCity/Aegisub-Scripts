@@ -1,0 +1,300 @@
+@document.meta
+title: phos.RemoveTags
+description: 
+authors: phos
+categories: 
+created: 2024-09-16T17:58:55+0530
+updated: 2024-09-16T17:58:55+0530
+version: 1.1.1
+tangle: {
+    languages: {
+        moon: ~/Git/Aegisub-Scripts/macros/phos.RemoveTags.moon
+    }
+    scope: all
+}
+@end
+
+* Script Details
+    @code moon
+    export script_name = "Remove Tags"
+    export script_description = "Dynamically remove tags based on selection"
+    export script_version = "1.0.2"
+    export script_author = "PhosCity"
+    export script_namespace = "phos.RemoveTags"
+
+    @end
+
+* Dependency Control
+    @code moon
+    DependencyControl = require "l0.DependencyControl"
+    depctrl = DependencyControl{
+        feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json",
+        {
+            {"a-mo.LineCollection", version: "1.3.0", url: "https: //github.com/TypesettingTools/Aegisub-Motion",
+                feed: "https: //raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"},
+            {"l0.ASSFoundation", version: "0.5.0", url: "https: //github.com/TypesettingTools/ASSFoundation",
+                feed: "https: //raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"},
+            {"l0.Functional", version: "0.6.0", url: "https://github.com/TypesettingTools/Functional",
+                feed: "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"},
+            {"phos.AssfPlus", version: "1.0.4", url: "https://github.com/PhosCity/Aegisub-Scripts",
+                feed: "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"},
+        }
+    }
+    LineCollection, ASS, Functional, AssfPlus = depctrl\requireModules!
+    {:list} = Functional
+
+    @end
+
+* Collect Tags
+  This collects all the tags in the selected lines along with some info about the tags.
+  @code moon
+  collectTags = (lines) ->
+  @end
+** Collect tags using AssfPlus
+   Most of the actual collection is already handled by AssfPlus so we don't need to do much here.
+   @code moon
+       collection = AssfPlus.lineCollection.collectTags lines, true
+   @end
+** Now we're adding more info to that collection
+   @code moon
+       with collection
+   @end
+*** Buttons
+    We add most of the buttons here. There is another button that is conditional so we add it later.
+    @code moon
+            .buttons = {"Remove Tags", "Remove All", "Cancel"}
+    @end
+*** Groups
+    These are the group names that will allow us to remove a bunch of related tags at once.
+    @code moon
+            .removeGroup = {color: false, alpha: false, rotation: false, scale: false, perspective: false, inline_except_last: .multiple_inline_tags}
+    @end
+*** Groups Tags
+    Here, we add what tags are associated with the group name we just added above.
+    @code moon
+            .removeGroupTags = {
+                color: {"color1", "color2", "color3", "color4"}
+                alpha: {"alpha", "alpha1", "alpha2", "alpha3", "alpha4"}
+                rotation: {"angle", "angle_x", "angle_y"}
+                scale: {"fontsize", "scale_x", "scale_y"}
+                perspective: {"angle", "angle_x", "angle_y", "shear_x", "shear_y"}
+            }
+    @end
+*** Hint
+    Here are the hints that will be used all over the GUI later on
+    @code moon
+            .hint = {
+                color: "c, 1c, 2c, 3c, 4c"
+                alpha: "alpha, 1a, 2a, 3a, 4a"
+                rotation: "frz, frx, fry"
+                scale: "fs, fscx, fscy"
+                perspective: "frz, frx, fry, fax, fay, org"
+                inline_except_last: "Remove all inline tags except the last one"
+                start_tag: "Remove from start tags only"
+                inline_tags: "Remove from inline tags only"
+                transform: "Remove from transform only"
+                invert: "Remove all except selected"
+            }
+    @end
+*** Invert
+    Add invert as an option which allows us to invert the selection of tags to be removed meaning tags except the selected will be removed.
+    @code moon
+            .tagTypes.invert = true
+    @end
+** Activate groups in GUI
+   Only groups that has tags present in the line are shown in the GUI so we activate them here.
+   @code moon
+       for tag in *collection.tagList
+           with collection.removeGroup
+               if tag\match "color"
+                   .color = true
+               elseif tag\match "alpha"
+                   .alpha = true
+               elseif tag\match "angle"
+                   .rotation = true
+                   .perspective = true
+               elseif tag\match "shear" or tag == "origin"
+                   .perspective = true
+               elseif tag\match "scale" or tag == "fontsize"
+                   .scale = true
+   @end
+** Return collection
+   @code moon
+       collection
+   @end
+* Create GUI
+  Dynamically creates a gui depending on the options set in collection table
+  @code moon
+  createGui = (collection) ->
+  @end
+** Left portion of the GUI
+   @code moon
+       y, dialog = 0, {}
+       for key, value in pairs collection.removeGroup
+           continue unless value
+           label = ("Remove all #{key}")\gsub "_", " "
+           dialog[#dialog+1]= {x: 0, y: y, class: "checkbox", label: label, name: "group_"..key, hint: collection.hint[key]}
+           y += 1
+   @end
+** Right portion of the GUI
+   @code moon
+       startX = 0
+       if #dialog > 0
+           table.insert collection.buttons, 1, "Remove Group"
+           startX = 1
+       x = startX
+   @end
+*** Top Row
+    @code moon
+        for key in *[ item for item in *{"start_tag", "inline_tags", "transforms", "invert"} when collection.tagTypes[item]]       -- Manually sorting since lua doesn't loop through table in order
+            label = key\gsub("^%l", string.upper)\gsub("_%l", string.upper)\gsub("_", " ")
+            dialog[#dialog+1]= {x: x, y: 0, class: "checkbox", label: label, name: key, hint: collection.hint[key]}
+            x += 1
+    @end
+*** Determine the number of columns in GUI
+    Currently variable x holds the number of top row checkboxes.
+    The number of columns should be at least equal to that much.
+    However, it can be higher if the square root of the total number of collected tags is greater than x.
+    We find square root because we want a square-ish grid of tags in GUI.
+    @code moon
+        column = math.max math.ceil(math.sqrt #collection.tagList), x
+    @end
+*** Dynamically create GUI
+    We finally add tags checkboxes to the GUI.
+    @code moon
+        count = 0
+        for y = 1, column
+            for x = startX, column + startX - 1
+                count += 1
+                break if count > #collection.tagList
+                label = (ASS.toFriendlyName[collection.tagList[count]])\gsub("\\1c%s+", "")\gsub("\\", "")
+                dialog[#dialog+1] = {x: x, y: y, class: "checkbox", label: label, name: collection.tagList[count]}
+    @end
+** Create Aegisub dialog
+   @code moon
+       btn, res = aegisub.dialog.display dialog, collection.buttons, {"cancel": "Cancel"}
+       aegisub.cancel! unless btn
+   @end
+** Return
+   @code moon
+       btn, res
+   @end
+
+* Main Function
+   @code moon
+   main = (sub, sel) ->
+   @end
+** Line Collection
+   @code moon
+       lines = LineCollection sub, sel
+       return if #lines.lines == 0
+   @end
+** Collect Tags
+   @code moon
+       collection = collectTags lines
+   @end
+** Create GUI
+   @code moon
+       btn, res = createGui collection
+   @end
+** Loop through line
+   @code moon
+       lines\runCallback (lines, line, i) ->
+   @end
+*** Progress Reporting
+    @code moon
+            AssfPlus._util.checkCancellation!
+            AssfPlus._util.progress "Removing tags", i, #lines.lines
+    @end
+*** Parse line
+
+    @code moon
+            data = ASS\parse line
+            tagSectionCount = data\getSectionCount ASS.Section.Tag
+            transforms = data\getTags "transform"
+            switch btn
+    @end
+**** Remove All
+     This removes all tags.
+     If start tag is checked in GUI, all start tags are removed.
+     If inline tag is checked in GUI, all inline tags are removed.
+     If none of them is checked, all tags are removed.
+     @code moon
+                 when "Remove All"
+                     if res.start_tag
+                         data\removeTags _, 1, 1
+                     elseif res.inline_tags
+                         data\removeTags _, 2, tagSectionCount
+                     else
+                         data\stripTags!
+     @end
+**** Remove Group
+     This removes all tags in the group.
+     @code moon
+                 when "Remove Group"
+     @end
+***** Remove all inline tags except the last one
+      This is mostly useful for undoing gradients.
+      @code moon
+                      if res["group_inline_except_last"]
+                          data\removeTags _, (collection.tagTypes.start_tag and 2 or 1), tagSectionCount - 1
+      @end
+***** Remove rest of the groups
+      Here we remove all other groups.
+      Clicking on start tag or inline tag will cause the tags associated with a group to be removed from start tag or inline tag respectively.
+      @code moon
+                      else
+                          start, end_, tagsToDelete = 1, tagSectionCount, {}
+                          end_ = 1 if res.start_tag
+                          start = 2 if res.inline_tags
+                          for key, value in pairs collection.removeGroupTags
+                              continue unless res["group_" .. key]
+                              tagsToDelete = list.join tagsToDelete, value
+                          tagsToDelete = list.diff ASS.tagSortOrder, tagsToDelete if res.invert
+                          data\removeTags tagsToDelete, start, end_
+      @end
+**** Remove Tags
+     This removes individual tags selected in the GUI.
+     @code moon
+                 when "Remove Tags"
+     @end
+***** Find all the tags that should be removed
+      We already have tags that user selected in the GUI.
+      If user also checked Invert checkbox, we then select all the other tags other than what user selected for removal.
+      @code moon
+                      local tagsToDelete
+                      if res.invert
+                          tagsToDelete = [tag for tag in *collection.tagList when not res[tag]]
+                      else
+                          tagsToDelete = [tag for tag in *collection.tagList when res[tag]]
+      @end
+***** Start Tags
+      @code moon
+                      if res.start_tag
+                          data\removeTags tagsToDelete, 1, 1
+      @end
+***** Inline Tags
+      @code moon
+                      elseif res.inline_tags
+                          data\removeTags tagsToDelete, 2, tagSectionCount
+      @end
+***** Transforms
+      @code moon
+                      elseif res.transforms
+                          for tr in *transforms
+                              tr.tags\removeTags tagsToDelete
+      @end
+***** Remove all tag instances
+      @code moon
+                      else
+                          data\removeTags tagsToDelete
+      @end
+*** Cleanup and Commit
+    @code moon
+            data\commit!
+        lines\replaceLines!
+    @end
+* Register the macro to Aegisub
+  @code moon
+  depctrl\registerMacro main
+  @end
