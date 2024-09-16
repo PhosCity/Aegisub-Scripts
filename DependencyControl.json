@@ -606,14 +606,14 @@
 			"description": "Add chromatic abberation to shape and text.",
 			"channels": {
 				"main": {
-					"version": "1.0.2",
-					"released": "2024-09-13",
+					"version": "1.0.3",
+					"released": "2024-09-16",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "50e9c1647e6a32423707929be7be77ed6ce5ef58"
+							"sha1": "0bbeeae1d4be1966b34bdd7dba185de0b2ca9508"
 						}
 					],
 					"requiredModules": [
