@@ -1,6 +1,6 @@
 export script_name = "Chromatic Abberation"
 export script_description = "Add chromatic abberation to shape and text."
-export script_version = "1.0.2"
+export script_version = "1.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.ChromaticAbberation"
 
@@ -27,6 +27,7 @@ createGUI = ->
     | label, x Offset                           | float,xOffset, 2 | pad, 10 | label, Color 1 | color, color1, &H00FFFF& |
     | label, y Offset                           | float,yOffset, 2 | null    | label, Color 2 | color, color2, &HFF00FF& |
     | check, keepBaseColor, Keep Original Color |                  |         | label, Color 3 | color, color3, &HFFFF00& |
+    | check, textToShape, Convert text to shape |                  |         |                |                          |
     "
     btn, res = AegiGui.open str, "Apply:ok, Revert, Cancel:cancel"
     aegisub.cancel! unless btn
@@ -148,6 +149,9 @@ main = (sub, sel) ->
         data = ASS\parse line
         table.insert toDelete, line
         AssfPlus._util.setOgLineExtradata line, "phos.ca"
+
+        if res["textToShape"]
+            AssfPlus.lineData.convertTextToShape data
 
         pos = data\getPosition!
         posInLine = data\getTags "position"
