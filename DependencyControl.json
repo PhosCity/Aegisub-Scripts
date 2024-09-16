@@ -337,14 +337,14 @@
 			"description": "Dynamically remove tags based on selection",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2024-07-15",
+					"version": "1.0.2",
+					"released": "2024-09-16",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "b473dba0ee6e77ad1b27d8e19f4a92d9d8618a82"
+							"sha1": "dbea567dd56961cb97e1b2c14cc8ec871240823b"
 						}
 					],
 					"requiredModules": [
@@ -699,14 +699,14 @@
 			"description": "Adds more features to ASSFoundation",
 			"channels": {
 				"main": {
-					"version": "1.0.3",
-					"released": "2024-09-12",
+					"version": "1.0.4",
+					"released": "2024-09-16",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "9bde819aa4ed970422a7ee8957346f84b13a10d3"
+							"sha1": "444fbfc5ea07a50abee76936f210d7e21e3fed3a"
 						}
 					],
 					"requiredModules": [
