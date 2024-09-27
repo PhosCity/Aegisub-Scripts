@@ -670,13 +670,13 @@
 			"channels": {
 				"main": {
 					"version": "1.0.0",
-					"released": "2024-09-16",
+					"released": "2024-09-27",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "0bbeeae1d4be1966b34bdd7dba185de0b2ca9508"
+							"sha1": "5de27952e4c2395c5687bff9a78378ad8f562da0"
 						}
 					],
 					"requiredModules": [
@@ -763,13 +763,13 @@
 			"channels": {
 				"main": {
 					"version": "1.0.5",
-					"released": "2024-09-12",
+					"released": "2024-09-27",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "444fbfc5ea07a50abee76936f210d7e21e3fed3a"
+							"sha1": "4906983c2a9b26180ff47bfa7b50fd4cf813ba5d"
 						}
 					],
 					"requiredModules": [
