@@ -22,6 +22,7 @@ This collects all the tag's names present in the selected lines. Additionally, i
 | ------------- | -------------------------------------------------------- | ------- | ------------- |
 | lines         | LineCollection line table                                | table   | -             |
 | errorOnNoTags | Exit the script if no tags were collected with a message | boolean | false         |
+| checkDrawing  | Also collects \p tags                                    | boolean | false         |
 
 | Returns    | Description                        | Type  |
 | ---------- | ---------------------------------- | ----- |
@@ -494,6 +495,42 @@ This checks if user has cancelled the script and if they have then stops the fur
 
 ```moon
 Assf._util.checkCancellation!
+```
+
+## checkVideoIsOpen
+
+This checks if a video is loaded or not in the current subtitle file.
+
+| Arguments |
+| --------- |
+| nil       |
+
+| Returns                                                           |
+| ----------------------------------------------------------------- |
+| boolean true if video is open, boolean flase if video is not open |
+
+```moon
+if Assf._util.checkVideoIsOpen!
+    -- do something here if video is open
+else
+    -- do something here if video is closed
+```
+
+## getFramerate
+
+The gets the framerate of the video that is open. The framerate is in frame per second.
+If the video is not open the framerate returned is 23.379 fps.
+
+| Arguments         | Meaning                                 | Default Value |
+| ----------------- | --------------------------------------- | ------------- |
+| default_framerate | Framerate returned if video is not open | 23.379        |
+
+| Returns                       |
+| ----------------------------- |
+| framerate in frame per second |
+
+```moon
+fps = Assf._util.getFramerate!
 ```
 
 # Credits

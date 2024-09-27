@@ -3,7 +3,7 @@ local Functional, ASS, Yutils, APerspective
 if haveDepCtrl
     depctrl = DependencyControl{
         name: "AssfPlus",
-        version: "1.0.4",
+        version: "1.0.5",
         description: "Adds more features to ASSFoundation.",
         author: "PhosCity",
         moduleName: "phos.AssfPlus",
@@ -180,7 +180,7 @@ getSpaceWidth = (data, section, fontObj, tagList) ->
 
 lineCollection = {
 
-    collectTags: (lines, errorOnNoTags = false) ->
+    collectTags: (lines, errorOnNoTags = false, checkDrawing = false) ->
         collection =
             tagList: {}
             tagTypes: {start_tag: false, inline_tags: false, transforms: false}
@@ -210,6 +210,11 @@ lineCollection = {
                     collection.tagTypes.transforms = true
                     for transformTag in *tag.tags\getTags!
                         collection.tagList[#collection.tagList + 1] = transformTag.__tag.name
+
+            if checkDrawing
+                drawingSectionCount = data\getSectionCount ASS.Section.Drawing
+                if drawingSectionCount > 0
+                    collection.tagList[#collection.tagList + 1] = "drawing"
 
         -- No tags could be found in the selected lines
         if errorOnNoTags and #collection.tagList == 0
@@ -855,6 +860,20 @@ _util = {
 
     checkCancellation: ->
         aegisub.cancel! if aegisub.progress.is_cancelled!
+
+    checkVideoIsOpen: ->
+        if aegisub.project_properties!.video_file == ""
+            return false
+        return true
+
+    getFramerate: (default = 23.379) ->
+        if aegisub.project_properties!.video_file == ""
+            return default
+        else
+            ref_ms = 100000000                          -- 10^8 ms ~~ 27.7h
+            ref_frame = aegisub.frame_from_ms(ref_ms)
+            framerate = ref_frame * 1000 / ref_ms
+            return framerate
 
 }
 
