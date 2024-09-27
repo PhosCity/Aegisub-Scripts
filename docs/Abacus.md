@@ -1,5 +1,6 @@
 <font color="green">**Available in Dependency Control**</font>
 
+[Source to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/source/phos.Abacus.norg)
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.Abacus.moon)
 
 The script `Abacus` allows you to recalculate the value of tags in the line. The GUI of this script is dynamically generated such that only tags that are available in the line are shown in the GUI.
