@@ -12,7 +12,7 @@ The script `Abacus` allows you to recalculate the value of tags in the line. The
 
 ## Add
 
-This will increase/lower value of selected tags by adding the user specified number. If the value is positive, the value will increase and if the value is negative, the value will decrease.
+This will increase/lower value of selected tags by adding the user specified number. If the input is positive, the tag value will increase and if the input is negative, the tag value will decrease.
 
 ## Multiply
 
