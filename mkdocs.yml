@@ -7,6 +7,7 @@ repo_url: https://github.com/PhosCity/Aegisub-Scripts
 nav:
   - Home: index.md
   - Typesetting:
+      - Abacus: Abacus.md
       - Add Grain: Add Grain.md
       - Auto Fade: Auto Fade.md
       - Chromatic Abberation: Chromatic Abberation.md
