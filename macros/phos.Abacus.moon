@@ -1,6 +1,6 @@
 export script_name = "Abacus"
 export script_description = "Recalculates values of tags."
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.Abacus"
 
@@ -46,13 +46,13 @@ execute_command = (expr, operation) ->
     elseif s = expr\match("^([%d%-%.]+)s$")
         return tonumber(s) * 1000
 
-    elseif m = expr\match("^([%d%-%.]+)m$") -- minutes
+    elseif m = expr\match("^([%d%-%.]+)m$")
         return tonumber(m) * 60 * 1000
 
     elseif h = expr\match("^([%d%-%.]+)h$")
         return tonumber(h) * 3600 * 1000
 
-    elseif f = expr\match("^([%d%-%.]+)f$") -- frames
+    elseif f = expr\match("^([%d%-%.]+)f$")
         AssfPlus._util.windowAssertError AssfPlus._util.checkVideoIsOpen!, "Shifting time by frame only makes sense in the context of video. Could not find any loaded video."
         return expr
 
@@ -169,6 +169,10 @@ main = (sub, sel) ->
         res["scale_x"] = true
         res["scale_y"] = true
 
+    if res["teleport"]
+        for item in {"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"}
+            res[item] = true
+
     if res["changeValueX"]\match "random" or res["changeValueY"]\match "random"
         math.randomseed os.time!
 
@@ -188,7 +192,7 @@ main = (sub, sel) ->
             continue unless res[tag]
             data\insertDefaultTags tag if #data\getTags(tag) == 0
 
-        for tag in *(list.join tagList, coreTags, {"time", "end_time", "layer", "margin_left", "margin_right", "margin_vertical", "teleport"})
+        for tag in *(list.join tagList, coreTags, {"time", "end_time", "layer", "margin_left", "margin_right", "margin_vertical"})
             continue unless res[tag]
             switch tag
 
@@ -210,7 +214,7 @@ main = (sub, sel) ->
 
                     if res["preserveTime"]
 
-                     ktags = data\getTags {'k_fill', 'k_sweep', 'k_bord'}
+                        ktags = data\getTags {'k_fill', 'k_sweep', 'k_bord'}
                         unless #ktags == 0
                             ktags[1].value -= startDelta
                             AssfPlus._util.windowAssertError ktags[1].value >= 0, "Recalculation of line's time pushed the first syl before the line start."
@@ -244,60 +248,25 @@ main = (sub, sel) ->
                     assertType x, "number", tag
                     line.margin_t = math.max(line.margin_t + x, 0)
 
-                when "position", "origin", "fade_simple", "clip_vect", "iclip_vect"
+                when "position", "origin", "clip_vect", "iclip_vect", "move (x1, y1)", "clip_rect (x1,y1)", "iclip_rect (x1,y1)"
                     assertType x, "number", tag
                     assertType y, "number", tag
                     data\modTags tag, (tg) -> tg[operation] tg, x, y
 
-                when "move"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "move", (tg) -> tg[operation] tg, x, y, x, y
-
-                when "move (x1, y1)"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "move", (tg) -> tg[operation] tg, x, y
-
-                when "move (x2, y2)"
+                when "move (x2, y2)", "clip_rect (x2,y2)", "iclip_rect (x2,y2)"
                     assertType x, "number", tag
                     assertType y, "number", tag
                     data\modTags "move", (tg) -> tg[operation] tg, _, _, x, y
+
+                when "move", "clip_rect", "iclip_rect"
+                    assertType x, "number", tag
+                    assertType y, "number", tag
+                    data\modTags "move", (tg) -> tg[operation] tg, x, y, x, y
 
                 when "move (t1, t2)"
                     assertType x, "number", tag
                     assertType y, "number", tag
                     data\modTags "move", (tg) -> tg[operation] tg, _, _, _, _, x, y
-
-                when "clip_rect"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "clip_rect", (tg) -> tg[operation] tg, x, y, x, y
-
-                when "clip_rect (x1,y1)"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "clip_rect", (tg) -> tg[operation] tg, x, y
-
-                when "clip_rect (x2,y2)"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "clip_rect", (tg) -> tg[operation] tg, _, _, x, y
-
-                when "iclip_rect"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "iclip_rect", (tg) -> tg[operation] tg, x, y, x, y
-
-                when "iclip_rect (x1,y1)"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "iclip_rect", (tg) -> tg[operation] tg, x, y
-
-                when "iclip_rect (x2,y2)"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags "iclip_rect", (tg) -> tg[operation] tg, _, _, x, y
 
                 when "transform (t1, t2)"
                     assertType x, "number", tag
@@ -317,12 +286,6 @@ main = (sub, sel) ->
                     assertType x, "table"
                     a1, a2, a3, t1, t2, t3, t4 = table.unpack x
                     data\modTags tag, (tg) -> tg[operation] tg, t2, t4 - t3, t1, t3, a1, a2, a3
-
-                when "teleport"
-                    assertType x, "number", tag
-                    assertType y, "number", tag
-                    data\modTags {"position", "origin", "clip_vect", "iclip_vect"}, (tg) -> tg[operation] tg, x, y
-                    data\modTags {"clip_rect", "iclip_rect", "move"}, (tg) -> tg[operation] tg, x, y, x, y
 
                 when "k_fill", "k_sweep", "k_bord"
                     assertType x, "number", tag
