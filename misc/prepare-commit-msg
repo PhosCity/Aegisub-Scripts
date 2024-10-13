@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-mapfile -t macros < <(git diff-index --cached --name-only 'HEAD^{tree}' | awk -F/ '{print $NF}' | uniq | sed -e "s|.lua$||g" -e "s|^phos.||g" -e "s|.moon$||g" -e 's/^./\U&/g' -e 's/ ./\U&/g')
+mapfile -t macros < <(git diff-index --cached --name-only 'HEAD^{tree}' | awk -F/ '{print $NF}' | uniq | sed -e "s|.lua$||g" -e "s|^phos.||g" -e "s|.moon$||g" -e "s|.norg$||g" -e 's/^./\U&/g' -e 's/ ./\U&/g' | awk '!a[$0]++')
 
 if ((${#macros[@]})) && ! head -1 "$1" | grep -q -e '^\[' -e '^fixup!' -e '^squash!'; then
-	sed -i '1s/^/['"$(
-		IFS=,
-		printf "%s" "${macros[*]}"
-	)"'] /' "$1"
+    sed -i '1s/^/['"$(
+        IFS=,
+        printf "%s" "${macros[*]}"
+    )"'] /' "$1"
 fi
