@@ -669,14 +669,14 @@
 			"description": "Recalculates values of tags.",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2024-10-03",
+					"version": "1.0.2",
+					"released": "2024-10-13",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "c98bc7865e33eef26e83200281009c1e5c957dc0"
+							"sha1": "ebca7a4c5dc6ae28843fdfc4e23056b11be8a21b"
 						}
 					],
 					"requiredModules": [
