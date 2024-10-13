@@ -1,6 +1,6 @@
 export script_name = "Abacus"
 export script_description = "Recalculates values of tags."
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.Abacus"
 
@@ -170,7 +170,7 @@ main = (sub, sel) ->
         res["scale_y"] = true
 
     if res["teleport"]
-        for item in {"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"}
+        for item in *{"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"}
             res[item] = true
 
     if res["changeValueX"]\match "random" or res["changeValueY"]\match "random"

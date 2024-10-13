@@ -8,7 +8,7 @@ updated: 2024-09-11T12:10:19+0530
 version: 1.1.1
 tangle: {
     languages: {
-        moon: ~/Git/Aegisub-Scripts/macros/phos.Abacus.moon
+        moon: ~/Git/Repos/Aegisub-Scripts/macros/phos.Abacus.moon
     }
     scope: all
 }
@@ -18,7 +18,7 @@ tangle: {
     @code moon
     export script_name = "Abacus"
     export script_description = "Recalculates values of tags."
-    export script_version = "1.0.1"
+    export script_version = "1.0.2"
     export script_author = "PhosCity"
     export script_namespace = "phos.Abacus"
     @end
@@ -285,7 +285,7 @@ tangle: {
    There is a pos/org/move/clip option in GUI. If that is ticked, its the same as ticking a lot of tags at once. So we manually activate them here.
    @code moon
        if res["teleport"]
-           for item in {"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"}
+           for item in *{"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"}
                res[item] = true
    @end
 ** Randomseed
