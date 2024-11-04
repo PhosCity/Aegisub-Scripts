@@ -4,13 +4,25 @@ This is the collection of the Aegisub scripts written by me. For detailed explan
 
 ## Typesetting
 
+### [Abacus](https://phoscity.github.io/Aegisub-Scripts/Abacus/)
+
+Recalculates values of tags.
+
 ### [Add Grain](https://phoscity.github.io/Aegisub-Scripts/Add%20Grain/)
 
 Add static and dynamic grain
 
+### [ASS2SVG](https://phoscity.github.io/Aegisub-Scripts/ASS2SVG/)
+
+Export ass shapes to svg path
+
 ### [Auto Fade](https://phoscity.github.io/Aegisub-Scripts/Auto%20Fade/)
 
 Automatically determine fade in and fade out
+
+### [Chromatic Abberation](https://phoscity.github.io/Aegisub-Scripts/Chromatic%20Abberation/)
+
+Add chromatic abberation to shape and text.
 
 ### [Edit Tags](https://phoscity.github.io/Aegisub-Scripts/Edit%20Tags/)
 
