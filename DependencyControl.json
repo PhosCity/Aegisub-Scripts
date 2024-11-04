@@ -716,6 +716,41 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.ASS2SVG": {
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "ASS2SVG",
+			"description": "Export ass shapes to svg path",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2024-10-13",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "ebca7a4c5dc6ae28843fdfc4e23056b11be8a21b"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "ILL.ILL",
+							"name": "ILL Library",
+							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+							"version": "1.5.1",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	},
 	"modules": {
@@ -801,7 +836,7 @@
 							"moduleName": "ILL.ILL",
 							"name": "ILL Library",
 							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
-							"version": "1.4.6",
+							"version": "1.5.1",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
 						}
 					]
