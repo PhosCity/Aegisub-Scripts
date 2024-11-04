@@ -739,7 +739,7 @@
 						{
 							"moduleName": "ILL.ILL",
 							"name": "ILL Library",
-							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+							"url": "https://github.com/TypesettingTools/ILL-Aegisub-Scripts",
 							"version": "1.5.1",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
 						}
@@ -835,7 +835,7 @@
 						{
 							"moduleName": "ILL.ILL",
 							"name": "ILL Library",
-							"url": "https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts",
+							"url": "https://github.com/TypesettingTools/ILL-Aegisub-Scripts",
 							"version": "1.5.1",
 							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
 						}
