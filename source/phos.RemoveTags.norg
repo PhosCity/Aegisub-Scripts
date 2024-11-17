@@ -4,11 +4,11 @@ description:
 authors: phos
 categories: 
 created: 2024-09-16T17:58:55+0530
-updated: 2024-09-16T17:58:55+0530
+updated: 2024-11-17T17:03:36+0530
 version: 1.1.1
 tangle: {
     languages: {
-        moon: ~/Git/Aegisub-Scripts/macros/phos.RemoveTags.moon
+        moon: ~/Git/Repos/Aegisub-Scripts/macros/phos.RemoveTags.moon
     }
     scope: all
 }
@@ -18,10 +18,10 @@ tangle: {
     @code moon
     export script_name = "Remove Tags"
     export script_description = "Dynamically remove tags based on selection"
-    export script_version = "1.0.2"
+    export script_version = "1.0.3"
     export script_author = "PhosCity"
     export script_namespace = "phos.RemoveTags"
-
+    
     @end
 
 * Dependency Control
@@ -292,6 +292,7 @@ tangle: {
 *** Cleanup and Commit
     @code moon
             data\commit!
+            line.text = line.text\gsub "{}", ""
         lines\replaceLines!
     @end
 * Register the macro to Aegisub

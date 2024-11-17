@@ -1,6 +1,6 @@
 export script_name = "Remove Tags"
 export script_description = "Dynamically remove tags based on selection"
-export script_version = "1.0.2"
+export script_version = "1.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.RemoveTags"
 
@@ -171,6 +171,7 @@ main = (sub, sel) ->
                     data\removeTags tagsToDelete
 
         data\commit!
+        line.text = line.text\gsub "{}", ""
     lines\replaceLines!
 
 depctrl\registerMacro main
