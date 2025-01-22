@@ -1,6 +1,6 @@
 export script_name = "Chromatic Abberation"
 export script_description = "Add chromatic abberation to shape and text."
-export script_version = "1.0.3"
+export script_version = "1.0.4"
 export script_author = "PhosCity"
 export script_namespace = "phos.ChromaticAbberation"
 
@@ -21,7 +21,7 @@ depctrl = DependencyControl{
 }
 LineCollection, ASS, AssfPlus, AegiGui, util = depctrl\requireModules!
 
-
+globalGUIResult = {}
 createGUI = ->
     str = "
     | label, x Offset                           | float,xOffset, 2 | pad, 10 | label, Color 1 | color, color1, &H00FFFF& |
@@ -29,8 +29,25 @@ createGUI = ->
     | check, keepBaseColor, Keep Original Color |                  |         | label, Color 3 | color, color3, &HFFFF00& |
     | check, textToShape, Convert text to shape |                  |         |                |                          |
     "
-    btn, res = AegiGui.open str, "Apply:ok, Revert, Cancel:cancel"
+
+    dialog, button, buttonID = AegiGui.create str, "Apply:ok, Revert, Reset GUI, Cancel:cancel"
+    for index, item in pairs dialog
+        continue unless item.name
+        continue unless globalGUIResult[item.name]
+        if item.text
+            item.text = globalGUIResult[item.name]
+        else
+            item.value = globalGUIResult[item.name]
+
+    btn, res = aegisub.dialog.display(dialog, button, buttonID)
+    globalGUIResult = res
     aegisub.cancel! unless btn
+
+    if btn == "Reset GUI"
+        globalGUIResult = {}
+        res, btn = createGUI!
+        return res, btn
+
     res, btn
 
 
