@@ -165,7 +165,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						}
 					]
 				}
@@ -217,7 +217,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						},
 						{
 							"moduleName": "Yutils"
@@ -280,7 +280,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						}
 					]
 				}
@@ -367,7 +367,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						}
 					]
 				}
@@ -409,7 +409,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						},
 						{
 							"moduleName": "phos.AegiGui",
@@ -577,7 +577,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						},
 						{
 							"moduleName": "phos.AegiGui",
@@ -636,7 +636,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						},
 						{
 							"moduleName": "phos.AegiGui",
@@ -778,7 +778,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						}
 					]
 				}
@@ -820,7 +820,7 @@
 							"name": "(Almost) Functional Suite",
 							"url": "https://github.com/TypesettingTools/ASSFoundation",
 							"version": "0.6.0",
-							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Functional/master/DependencyControl.json"
 						},
 						{
 							"moduleName": "arch.Perspective",
