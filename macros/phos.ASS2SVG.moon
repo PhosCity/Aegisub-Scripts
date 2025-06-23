@@ -1,6 +1,6 @@
 export script_name = "ASS2SVG"
 export script_description = "Export ass shapes to svg path"
-export script_version = "1.0.1"
+export script_version = "1.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.ASS2SVG"
 
