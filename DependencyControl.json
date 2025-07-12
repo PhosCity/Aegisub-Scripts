@@ -302,14 +302,14 @@
 			"description": "A second brain for timers.",
 			"channels": {
 				"main": {
-					"version": "2.0.0",
-					"released": "2024-04-01",
+					"version": "2.0.1",
+					"released": "2025-07-12",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "bbb1c71932f1df7cacf2d8028536b98d3b3562d6"
+							"sha1": "e13c63c7c358db404dc18c7ccfacfd2eafc3ddee"
 						}
 					],
 					"requiredModules": [
