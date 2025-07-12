@@ -1,6 +1,6 @@
 export script_name = "Timing Assistant"
 export script_description = "A second brain for timers."
-export script_version = "2.0.1"
+export script_version = "2.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.TimingAssistant"
 
@@ -293,8 +293,16 @@ timeBoth = (sub, sel) ->
     timeStart sub, sel, preset.c
     timeEnd sub, sel, preset.c
 
-    if preset.c.automove and sel[1] + 1 <= #sub
-        return { sel[1] + 1}
+    if preset.c.automove
+        i = sel[1]
+        if i == #sub
+            line = sub[i]
+            line.actor, line.effect, line.text = "", "", ""
+            end_time = line.end_time
+            line.start_time = end_time
+            line.end_time = end_time + 3003
+            sub.insert(i + 1, line)
+        return {i + 1}
 
 depctrl\registerMacros({
   { "Time", "Time the line after exact timing", timeBoth },
