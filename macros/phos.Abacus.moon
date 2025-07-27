@@ -1,6 +1,6 @@
 export script_name = "Abacus"
 export script_description = "Recalculates values of tags."
-export script_version = "1.0.2"
+export script_version = "1.0.3"
 export script_author = "PhosCity"
 export script_namespace = "phos.Abacus"
 
@@ -261,7 +261,7 @@ main = (sub, sel) ->
                 when "move", "clip_rect", "iclip_rect"
                     assertType x, "number", tag
                     assertType y, "number", tag
-                    data\modTags "move", (tg) -> tg[operation] tg, x, y, x, y
+                    data\modTags tag, (tg) -> tg[operation] tg, x, y, x, y
 
                 when "move (t1, t2)"
                     assertType x, "number", tag
