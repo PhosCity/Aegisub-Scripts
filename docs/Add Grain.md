@@ -4,6 +4,7 @@
 
 The script `Add Grain` allows you to emulate the grain texture in your sign. This script closely follows the manual approach of creating grain from this [guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>). All you need to do before using this script is to install the grain font from this [link](https://github.com/PhosCity/Aegisub-Scripts/tree/main/misc/Grain%20Font)
 
+
 # Usage
 
 ![image](./assets/add-grain-menu.png){: style="height:216px;width:480px"}
