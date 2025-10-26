@@ -2,7 +2,7 @@
 
 [Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.AddGrain.moon)
 
-The script `Add Grain` allows you to emulate the grain texture in your sign. This script closely follows the manual approach of creating grain from this [guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>). All you need to do before using this script is to install the grain font from this [link](https://cdn.discordapp.com/attachments/425357202963038208/708726507173838958/grain.ttf)
+The script `Add Grain` allows you to emulate the grain texture in your sign. This script closely follows the manual approach of creating grain from this [guide](<https://fansubbers.miraheze.org/wiki/Guide:Adding_film_grain_(typesetting)>). All you need to do before using this script is to install the grain font from this [link](https://github.com/PhosCity/Aegisub-Scripts/tree/main/misc/Grain%20Font)
 
 # Usage
 
