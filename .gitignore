@@ -11,3 +11,4 @@
 !docs/**
 !mkdocs.yml
 !source/*.norg
+!misc/Grain Font/*.ttf
