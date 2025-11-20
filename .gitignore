@@ -12,3 +12,4 @@
 !mkdocs.yml
 !source/*.norg
 !misc/Grain Font/*.ttf
+!misc/phos.ink2ass.py
