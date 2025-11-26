@@ -547,14 +547,14 @@
 			"description": "Edit tags of current line.",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2024-07-21",
+					"version": "1.1.0",
+					"released": "2025-11-26",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "6e141fd1b549ec4a1e031f143a094e80bceba85b"
+							"sha1": "302d1bd7070863de7fb0b6e66813741ffbc880ba"
 						}
 					],
 					"requiredModules": [
