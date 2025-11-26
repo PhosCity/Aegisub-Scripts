@@ -1,6 +1,6 @@
 export script_name = "Edit Tags"
 export script_description = "Edit tags of current line."
-export script_version = "1.0.1"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.EditTags"
 
@@ -376,6 +376,8 @@ applyGUItoLine = (res, data, existingTagTable, sectionTable, count, tagSection, 
 generateGUI = (data, sectionTable, count, transforms) ->
 --------------------------------------------------------
     str = getGUIstring!
+    parseLine = false
+
 
     local tagSection, textSection, defaultTags
     sectionPair = sectionTable[count]
@@ -421,7 +423,7 @@ generateGUI = (data, sectionTable, count, transforms) ->
     aegisub.cancel! unless pressed
 
     if pressed == "Text Mode"
-        return nil, true, nil, true
+        return nil, true, nil, true, false
 
     if res["tagSection"]
         sectionTable[count]["toRemove"] = false if tagSection
@@ -435,10 +437,15 @@ generateGUI = (data, sectionTable, count, transforms) ->
         count = tonumber(count)
         exitLoop = false
 
+    if res["textvalue"]\match "{}"
+        parseLine = true
+        data\commit!
+        exitLoop = false
+
     if pressed == "Transform"
         handleTransform transforms
 
-    count, exitLoop, sectionTable, textMode
+    count, exitLoop, sectionTable, textMode, parseLine
 
 
 -----------------------------------
@@ -574,33 +581,35 @@ textModeMain = (sub, sel, lines) ->
 -------------------------------------
 singleLineMain = (sub, sel, lines) ->
 -------------------------------------
-    local textMode
-    line = lines[1]
+    local textMode, sectionTable, data, count, transforms
+    parseLine = true
 
-    data = ASS\parse line
-
-    transforms = data\getTags "transform"
-
-    data\cleanTags 0
-
-    sectionTable = {}
-    local tagIndex
-    data\callback (section, _, j) ->
-        return if section.class == ASS.Section.Comment
-        if section.class == ASS.Section.Tag
-            tagIndex = j
-        else
-            local text
-            if section.class == ASS.Section.Text
-                text = section\getString!
-            else
-                text = section\toString!
-            sectionTable[#sectionTable + 1] = tagIndex: tagIndex, textIndex: j, text: text, toRemove: false
-            tagIndex = nil
-
-    count = 1
     while true
-        count, exitLoop, sectionTable, textMode = generateGUI data, sectionTable, count, transforms
+        if parseLine
+            line = lines[1]
+            data = ASS\parse line
+
+            transforms = data\getTags "transform"
+
+            data\cleanTags 0
+
+            sectionTable = {}
+            local tagIndex
+            data\callback (section, _, j) ->
+                return if section.class == ASS.Section.Comment
+                if section.class == ASS.Section.Tag
+                    tagIndex = j
+                else
+                    local text
+                    if section.class == ASS.Section.Text
+                        text = section\getString!
+                    else
+                        text = section\toString!
+                    sectionTable[#sectionTable + 1] = tagIndex: tagIndex, textIndex: j, text: text, toRemove: false
+                    tagIndex = nil
+
+            count = 1
+        count, exitLoop, sectionTable, textMode, parseLine = generateGUI data, sectionTable, count, transforms
         break if exitLoop
 
     if textMode

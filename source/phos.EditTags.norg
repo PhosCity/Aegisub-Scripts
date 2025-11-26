@@ -18,7 +18,7 @@ tangle: {
     @code moon
     export script_name = "Edit Tags"
     export script_description = "Edit tags of current line."
-    export script_version = "1.0.1"
+    export script_version = "1.1.0"
     export script_author = "PhosCity"
     export script_namespace = "phos.EditTags"
     @end
@@ -627,6 +627,7 @@ tangle: {
    generateGUI = (data, sectionTable, count, transforms) ->
    --------------------------------------------------------
        str = getGUIstring!
+       parseLine = false
    @end
 
 *** Get different sections
@@ -713,7 +714,7 @@ tangle: {
     Ignores all the changes made in the gui if text mode is selected.
     @code moon
         if pressed == "Text Mode"
-            return nil, true, nil, true
+            return nil, true, nil, true, false
     @end
 
 *** Apply GUI to Lines
@@ -736,6 +737,15 @@ tangle: {
             exitLoop = false
     @end
 
+*** Check if user has inserted a new tag section
+    @code moon
+        if res["textvalue"]\match "{}"
+            parseLine = true
+            data\commit!
+            exitLoop = false
+    @end
+
+
 *** Transforms
     If the user has selected transform button, then we go to the main function that handles transform.
     @code moon
@@ -745,7 +755,7 @@ tangle: {
 
 *** Returns
     @code moon
-        count, exitLoop, sectionTable, textMode
+        count, exitLoop, sectionTable, textMode, parseLine
 
     @end
 
@@ -920,67 +930,75 @@ tangle: {
   -------------------------------------
   singleLineMain = (sub, sel, lines) ->
   -------------------------------------
-      local textMode
-      line = lines[1]
+      local textMode, sectionTable, data, count, transforms
+      parseLine = true
    @end
+
+** Start a while loop that will continue until exitLoop variable is true
+   @code moon
+       while true
+   @end
+
+*** Parse Line
+    If the variable parseLine is true, which is always the case in the beginning, we parse the line. The variable is also true when user adds new tag section and we have to reparse the line again.
 
 ** Collect line data using ASSFoundation
    @code moon
-       data = ASS\parse line
+           if parseLine
+               line = lines[1]
+               data = ASS\parse line
    @end
 
-** Gather transforms
+*** Gather transforms
 
-   It's kinda easier to get transform this way than get their values from effective tags. Actually effective tags don't provide transforms at tll. So we're doing this here now while we get all other tags later.
+    It's kinda easier to get transform this way than get their values from effective tags. Actually effective tags don't provide transforms at tll. So we're doing this here now while we get all other tags later.
    @code moon
-       transforms = data\getTags "transform"
+               transforms = data\getTags "transform"
    @end
 
-** Clean Tags
+*** Clean Tags
 
-   Here we don't want to change tags willy nilly. We only want to merge consecutive tag sections so that we have clear distinction of tag, text and drawing sections.
+    Here we don't want to change tags willy nilly. We only want to merge consecutive tag sections so that we have clear distinction of tag, text and drawing sections.
    @code moon
-       data\cleanTags 0
+               data\cleanTags 0
    @end
 
-** Loop through all the sections of a line
-   We loop through all the sections of a line and collect all the information we need from the line.
+*** Loop through all the sections of a line
+    We loop through all the sections of a line and collect all the information we need from the line.
 
-   The first thing we do is we ignore the comment sections. We aren't touching it in this script. Our goal here is to find effective tags of text or drawing section which we can do but at the same time I also want to find out which tags actually exist in the line itself. These tags will be checked in the GUI so that user can easily differentiate which tags are coming from the line and which tags are effectively applied.
+    The first thing we do is we ignore the comment sections. We aren't touching it in this script. Our goal here is to find effective tags of text or drawing section which we can do but at the same time I also want to find out which tags actually exist in the line itself. These tags will be checked in the GUI so that user can easily differentiate which tags are coming from the line and which tags are effectively applied.
 
-   I do not know any way to find existing tags in text and drawing section currently which is why when we find a tag section, we collect all the tags that we find in that tag section and save it in a variable called *tempExistingTable*. Since we merged consecutive tag sections, these tags will apply to the next text or drawing sections we find which means when we find any text or drawing section, we save these existing tags as the tags that applies to that section. Then we clear the variable *tempExistingTable* for next tag section.
+    I do not know any way to find existing tags in text and drawing section currently which is why when we find a tag section, we collect all the tags that we find in that tag section and save it in a variable called *tempExistingTable*. Since we merged consecutive tag sections, these tags will apply to the next text or drawing sections we find which means when we find any text or drawing section, we save these existing tags as the tags that applies to that section. Then we clear the variable *tempExistingTable* for next tag section.
 
-   After this loop is finished, here's what we get:
-   - *tagTable* is table of tables where key is the index of that text or drawing section and its value is table of effective tags for that section.
-   - *existingtagTable* is table just like *tagTable* but in this case only the tags that already exist in the line are available.
-   - *textTable* is table of tables where key is the index of that text/drawing section and its value is the text of that section.
+    After this loop is finished, here's what we get:
+    - *tagTable* is table of tables where key is the index of that text or drawing section and its value is table of effective tags for that section.
+    - *existingtagTable* is table just like *tagTable* but in this case only the tags that already exist in the line are available.
+    - *textTable* is table of tables where key is the index of that text/drawing section and its value is the text of that section.
 
-   The indexes are important because they are assigned by ASSFoundation to those sections. So, whatever changes the user makes on the GUI will be applied on the basis of those indexes.
+    The indexes are important because they are assigned by ASSFoundation to those sections. So, whatever changes the user makes on the GUI will be applied on the basis of those indexes.
 
-   Resource: {https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L174-L203}[Fansubbing Wiki]
+    Resource: {https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L174-L203}[Fansubbing Wiki]
+
+    @code moon
+                sectionTable = {}
+                local tagIndex
+                data\callback (section, _, j) ->
+                    return if section.class == ASS.Section.Comment
+                    if section.class == ASS.Section.Tag
+                        tagIndex = j
+                    else
+                        local text
+                        if section.class == ASS.Section.Text
+                            text = section\getString!
+                        else
+                            text = section\toString!
+                        sectionTable[#sectionTable + 1] = tagIndex: tagIndex, textIndex: j, text: text, toRemove: false
+                        tagIndex = nil
+    @end
 
    @code moon
-       sectionTable = {}
-       local tagIndex
-       data\callback (section, _, j) ->
-           return if section.class == ASS.Section.Comment
-           if section.class == ASS.Section.Tag
-               tagIndex = j
-           else
-               local text
-               if section.class == ASS.Section.Text
-                   text = section\getString!
-               else
-                   text = section\toString!
-               sectionTable[#sectionTable + 1] = tagIndex: tagIndex, textIndex: j, text: text, toRemove: false
-               tagIndex = nil
-   @end
-
-** Parse the information we collected to use in GUI
-   @code moon
-       count = 1
-       while true
-           count, exitLoop, sectionTable, textMode = generateGUI data, sectionTable, count, transforms
+               count = 1
+           count, exitLoop, sectionTable, textMode, parseLine = generateGUI data, sectionTable, count, transforms
            break if exitLoop
    @end
 

@@ -78,6 +78,13 @@ If you press the button, you will be greeted with a new GUI.
 
 You actually already know how to use this GUI because this is just a mini version of what we did earlier. The GUI only shows transformable tags but other than that the way you edit transforms is just similar to how you work with other tags. If there are multiple transforms, you can switch between those transforms using drop-down menu.
 
+## Example 4: Inserting New Tag Section
+
+If you want to add a new tag section in the middle of the text, simply add `{}`
+in the text box where you want a new tag section and click `Apply`. The GUI will
+close and reopen with that tag section inserted. Now you can navigate to that
+tag section and add tags to it.
+
 # Multi-Line Mode
 
 When you select multiple lines and run the script, this mode is run.
