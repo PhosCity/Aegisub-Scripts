@@ -1,6 +1,6 @@
 export script_name = "Abacus"
 export script_description = "Recalculates values of tags."
-export script_version = "1.0.3"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.Abacus"
 
@@ -115,11 +115,11 @@ main = (sub, sel) ->
                     tagList[#tagList + 1] = item
 
             when "clip_rect"
-                for item in *{"clip_rect", "[[clip_rect (x1,y1)]]", "[[clip_rect (x2,y2)]]"}
+                for item in *{"clip_rect", "[[clip_rect (x1, y1)]]", "[[clip_rect (x2, y2)]]"}
                     tagList[#tagList + 1] = item
 
             when "iclip_rect"
-                for item in *{"iclip_rect", "[[iclip_rect (x1,y1)]]", "[[iclip_rect (x2,y2)]]"}
+                for item in *{"iclip_rect", "[[iclip_rect (x1, y1)]]", "[[iclip_rect (x2, y2)]]"}
                     tagList[#tagList + 1] = item
 
             when "transform"
@@ -248,15 +248,18 @@ main = (sub, sel) ->
                     assertType x, "number", tag
                     line.margin_t = math.max(line.margin_t + x, 0)
 
-                when "position", "origin", "clip_vect", "iclip_vect", "move (x1, y1)", "clip_rect (x1,y1)", "iclip_rect (x1,y1)"
+                when "position", "origin", "clip_vect", "iclip_vect", "move (x1, y1)", "clip_rect (x1, y1)", "iclip_rect (x1, y1)"
+                    tag = tag\gsub " %(x1, y1%)", ""
+
                     assertType x, "number", tag
                     assertType y, "number", tag
                     data\modTags tag, (tg) -> tg[operation] tg, x, y
 
-                when "move (x2, y2)", "clip_rect (x2,y2)", "iclip_rect (x2,y2)"
+                when "move (x2, y2)", "clip_rect (x2, y2)", "iclip_rect (x2, y2)"
+                    tag = tag\gsub " %(x2, y2%)", ""
                     assertType x, "number", tag
                     assertType y, "number", tag
-                    data\modTags "move", (tg) -> tg[operation] tg, _, _, x, y
+                    data\modTags tag, (tg) -> tg[operation] tg, _, _, x, y
 
                 when "move", "clip_rect", "iclip_rect"
                     assertType x, "number", tag
