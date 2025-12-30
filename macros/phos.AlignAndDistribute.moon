@@ -1,6 +1,6 @@
 export script_name = "Align and Distribute"
 export script_description = "Align and distribute lines relative to something"
-export script_version = "0.0.1"
+export script_version = "0.0.2"
 export script_author = "PhosCity"
 export script_namespace = "phos.AlignAndDistribute"
 
@@ -23,14 +23,14 @@ LineCollection, ASS, AegiGui, AssfPlus = depctrl\requireModules!
 
 createGUI = (lines, hasClip, playRes, layoutRes) ->
     relativeToTable = {}
+
     if #lines > 1
         relativeToTable = {"First Line", "Last Line", "Custom Line"}
 
+    relativeToTable[#relativeToTable + 1] = "Video"
+
     if hasClip
         relativeToTable[#relativeToTable + 1] = "Clip"
-
-    if AssfPlus._util.checkVideoIsOpen!
-        relativeToTable[#relativeToTable + 1] = "Video"
 
     if #playRes > 1
         relativeToTable[#relativeToTable + 1] = "PlayRes"
@@ -75,6 +75,8 @@ calculate_deltas = (tbl) ->
 
 main = (sub, sel) ->
 
+    AssfPlus._util.windowAssertError AssfPlus._util.checkVideoIsOpen!, "You must have video open to use this script."
+
     lines = LineCollection sub, sel
     return if #lines.lines == 0
 
@@ -111,7 +113,7 @@ main = (sub, sel) ->
             targets =
                 "First Line": -> boundingBox[1]
 
-                "Last Line": -> boundingBox[-1]
+                "Last Line": -> boundingBox[#boundingBox]
 
                 "Custom Line": -> boundingBox[tonumber res.customLine]
 
@@ -155,6 +157,11 @@ main = (sub, sel) ->
                 if res.horizontal
                     dx = horizontal_delta[res.horizontalOptions](target, currentBoundingBox)
 
+                position = data\getTags {"position"}
+                if #position == 0
+                    effective_tags = (data\getEffectiveTags -1, true, true, false).tags
+                    data\insertTags effective_tags.position
+
                 data\modTags {"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"},
                     (tg) -> tg\add dx, dy
                 data\commit!
@@ -174,23 +181,15 @@ main = (sub, sel) ->
             "Left Edge": (item) -> item[1]
             "Right edge": (item) -> item[3]
 
-        verticalTargetValues = {}
-        horizontalTargetValues = {}
-
         local verticalDelta, horizontalDelta
         if res.vertical
             selector = verticalSelectors[res.verticalOptions]
-            if selector
-                verticalTargetValues = [ selector(item) for item in *boundingBox ]
-
-            verticalDelta = calculate_deltas(verticalTargetValues)
+            verticalDelta = calculate_deltas([selector(item) for item in *boundingBox])
 
         if res.horizontal
             selector = horizontalSelectors[res.horizontalOptions]
-            if selector
-                horizontalTargetValues = [ selector(item) for item in *boundingBox ]
+            horizontalDelta = calculate_deltas([selector(item) for item in *boundingBox])
 
-            horizontalDelta = calculate_deltas(horizontalTargetValues)
 
         lines\runCallback ((lines, line, i) ->
             data = ASS\parse line
@@ -200,6 +199,11 @@ main = (sub, sel) ->
             dy = verticalDelta and verticalDelta[i] or 0
 
             if dx != 0 or dy != 0
+                position = data\getTags {"position"}
+                if #position == 0
+                    effective_tags = (data\getEffectiveTags -1, true, true, false).tags
+                    data\insertTags effective_tags.position
+
                 data\modTags {"position", "origin", "clip_vect", "iclip_vect", "clip_rect", "iclip_rect", "move"},
                     (tg) -> tg\add dx, dy
                 data\commit!
