@@ -760,14 +760,14 @@
 			"description": "Align and distribute lines relative to something.",
 			"channels": {
 				"main": {
-					"version": "0.0.1",
-					"released": "2025-12-29",
+					"version": "0.0.2",
+					"released": "2025-12-30",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "0979dce8f0d5c74bf5f862d5f5abdc6b7a5a6abd"
+							"sha1": "a8e6e36297a61f56984834dd15d1ae11d3970ac7"
 						}
 					],
 					"requiredModules": [
