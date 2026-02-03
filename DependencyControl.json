@@ -817,13 +817,13 @@
 			"channels": {
 				"main": {
 					"version": "0.0.1",
-					"released": "2025-12-30",
+					"released": "2026-02-03",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "a8e6e36297a61f56984834dd15d1ae11d3970ac7"
+							"sha1": "093fe40b38c39b08ca009de0622bc4ecbbd316c0"
 						}
 					],
 					"requiredModules": [
