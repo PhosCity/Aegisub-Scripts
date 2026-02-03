@@ -1,0 +1,2856 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="PhosCity">
+      
+      
+      
+        <link rel="prev" href="../AssfPlus/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>ASSFoundation - PhosCity's Aegisub Script</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-79V80MELY3"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-79V80MELY3",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-79V80MELY3",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-header__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PhosCity's Aegisub Script
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ASSFoundation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Abacus/" class="md-tabs__link">
+          
+  
+  
+  Typesetting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Timing%20Assistant/" class="md-tabs__link">
+          
+  
+  
+  Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../KFX/" class="md-tabs__link">
+          
+  
+  
+  Karaoke
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Quality%20Report/" class="md-tabs__link">
+          
+  
+  
+  QC
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AegiGUI/" class="md-tabs__link">
+          
+  
+  
+  Module
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Others
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-nav__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PhosCity's Aegisub Script
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Typesetting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Typesetting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Abacus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abacus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Add%20Grain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Grain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Align%20and%20Distribute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Align and Distribute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ASS2SVG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASS2SVG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Auto%20Fade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auto Fade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Chromatic%20Abberation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chromatic Abberation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edit%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edit Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Extrapolate%20Tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extrapolate Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fold%20Operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fold Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remove Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Rotated%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rotated Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg2ass/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svg2ass
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terrain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    terrain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wobble/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wobble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fit%20Text%20in%20Clip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fit Text in Clip
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Vector%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Timing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Timing%20Assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Bidirectional%20Snapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bidirectional Snapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Karaoke
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Karaoke
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../KFX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    QC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Quality%20Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality Report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Module
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AegiGUI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AegiGUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AssfPlus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AssfPlus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Others
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Others
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASSFoundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="introduction">Introduction</h1>
+<p><a href="https://github.com/TypesettingTools/ASSFoundation">ASSFoundation</a>, henceforth called assf, is a module that aims to make working with subtitle object efficient. It does most of the heavy lifting so that we can do more with less lines of code in our script. No need to use messy regular expressions, define the types of tags and the nature of their values. No need to reinvent the wheel and write functions to work in subtitle object or write your own module for common things.</p>
+<p>This guide assumes that you already know <a href="https://unanimated.github.io/ts/ts-lua.htm">how to write Aegisub scripts</a> and know the basics of <a href="https://moonscript.org/reference/">Moonscript</a>.</p>
+<p>Here's the very basics:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">export</span> <span class="n">script_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">name of the script</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">export</span> <span class="n">script_description</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">description of your script</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">export</span> <span class="n">script_version</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">0.0.1</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">export</span> <span class="n">script_author</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">you</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">export</span> <span class="n">script_namespace</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">namespace of your script</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nc">DependencyControl</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">l0.DependencyControl</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">depctrl</span> <span class="o">=</span> <span class="nc">DependencyControl</span><span class="kt">{</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  <span class="nv">feed:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  <span class="kt">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="kt">{</span><span class="s2">&quot;</span><span class="s">a-mo.LineCollection</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">version:</span> <span class="s2">&quot;</span><span class="s">1.3.0</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">url:</span> <span class="s2">&quot;</span><span class="s">https://github.com/TypesettingTools/Aegisub-Motion</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      <span class="nv">feed:</span> <span class="s2">&quot;</span><span class="s">https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="kt">{</span><span class="s2">&quot;</span><span class="s">l0.ASSFoundation</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">version:</span> <span class="s2">&quot;</span><span class="s">0.4.0</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">url:</span> <span class="s2">&quot;</span><span class="s">https://github.com/TypesettingTools/ASSFoundation</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>      <span class="nv">feed:</span> <span class="s2">&quot;</span><span class="s">https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json</span><span class="s2">&quot;</span><span class="kt">}</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  <span class="kt">}</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="kt">}</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nc">LineCollection</span><span class="p">,</span> <span class="nc">ASS</span> <span class="o">=</span> <span class="n">depctrl</span><span class="o">\</span><span class="n">requireModules</span><span class="o">!</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">depctrl</span><span class="o">\</span><span class="n">getLogger</span><span class="o">!</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">functionName</span> <span class="o">=</span> <span class="kt">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="n">act</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>  <span class="c1">-- stuff goes here</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="n">depctrl</span><span class="o">\</span><span class="n">registerMacro</span> <span class="n">functionName</span>
+</code></pre></div>
+<p>This is the framework that all your scripts will have. Here we import LineCollection and assf and define a function called functionName. This function name is what we register in aegisub in the last line. Everything we do below will go inside the function where <code>--stuff goes here</code> is written. We also define logger for logging purposes but if you don't need to log anything, you can remove that line.</p>
+<h1 id="linecollection">LineCollection</h1>
+<p>LineCollection is actually not a part of assf but almost anything that assf does will act on the line table generated by LineCollection. The line table generated by LineCollection will have all the elements of a normal line table like start_time, actor, end_time etc but in addition, it also adds other elements. Apart from the <a href="https://aeg-dev.github.io/AegiSite/docs/3.2/automation/lua/modules/karaskel.lua/#dialogue-line-table">basic fields of line table</a>, following fields are now available to you.:</p>
+<table>
+<thead>
+<tr>
+<th>Fields</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>duration</td>
+<td>duration of line in ms</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>startFrame</td>
+<td>start frame of a line</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>endFrame</td>
+<td>end frame of a line</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>styleRef</td>
+<td>style table</td>
+<td>table</td>
+</tr>
+<tr>
+<td>number</td>
+<td>number of line in subtitle file</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>humanizedNumber</td>
+<td>number of line as seen in Aegisub</td>
+<td>integer</td>
+</tr>
+</tbody>
+</table>
+<p>Some of the methods LineCollection provides to us to modify subtitles are:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Usage</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LineCollection</td>
+<td>lines = LineCollection sub, sel</td>
+<td>Add all the selected lines to a variable named <code>lines</code>. It ignores commented lines.</td>
+</tr>
+<tr>
+<td>replaceLines</td>
+<td>lines\replaceLines!</td>
+<td>Any change you make to <code>lines</code> will be put back to the subtitle</td>
+</tr>
+<tr>
+<td>deleteLines</td>
+<td>lines\deleteLines!</td>
+<td>Delete all the lines</td>
+</tr>
+<tr>
+<td></td>
+<td>lines\deleteLines tbl</td>
+<td>Provide a table of line to delete those lines only</td>
+</tr>
+<tr>
+<td>insertLines</td>
+<td>lines\insertLines!</td>
+<td>insert lines to subtitle file</td>
+</tr>
+<tr>
+<td></td>
+<td>newLines\insertLines</td>
+<td>Insert a new set of lines that you defined called newLines</td>
+</tr>
+<tr>
+<td>addline</td>
+<td>lines\addLine</td>
+<td>add line to subtitle file</td>
+</tr>
+</tbody>
+</table>
+<p>You can actually work in the line table generated by LineCollection without using assf as shown in an example below where we change the effect of the line to "Actor".</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">functionName</span> <span class="o">=</span> <span class="kt">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">sel</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  <span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  <span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="o">*</span><span class="n">lines</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">line</span><span class="o">.</span><span class="n">effect</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Actor</span><span class="s2">&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  <span class="n">lines</span><span class="o">\</span><span class="n">replaceLines</span><span class="o">!</span>
+</code></pre></div>
+<p>But we'll use LineCollection alongside assf to get the most out of both of them.</p>
+<h1 id="logger">Logger</h1>
+<p>Logger is a logging module from dependency control that you can use to log messages. If you do not pass log level, default log level is 2. By default, Aegisub's log level is set to 3 which means that the message above 3 wont be seen by end user unless they set the log level higher themself. The script exits after showing message if the log level is below 2.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">A simple message inside quotes</span><span class="s2">&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">A simple message inside quotes but with log level 4</span><span class="s2">&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">-- dump is the most useful part of logger as far as debugging goes.</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">-- You can pass a table and it&#39;ll show you a nice formatted view with all it&#39;s keys and values.</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">logger</span><span class="o">\</span><span class="n">dump</span> <span class="n">table</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1">-- With predefined log levels</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">logger</span><span class="o">\</span><span class="n">fatal</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                      <span class="c1">-- log level 0</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">logger</span><span class="o">\</span><span class="nb">error</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                      <span class="c1">-- log level 1</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">logger</span><span class="o">\</span><span class="nb">warn</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                       <span class="c1">-- log level 2</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">logger</span><span class="o">\</span><span class="n">hint</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                       <span class="c1">-- log level 3</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">logger</span><span class="o">\</span><span class="n">debug</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                      <span class="c1">-- log level 4</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">logger</span><span class="o">\</span><span class="n">trace</span> <span class="s2">&quot;</span><span class="s">message</span><span class="s2">&quot;</span>                                                      <span class="c1">-- log level 5</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">logger</span><span class="o">\</span><span class="nb">assert</span> <span class="n">condition</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Show this message if the condition is false</span><span class="s2">&quot;</span>      <span class="c1">-- log level 1</span>
+</code></pre></div>
+<h1 id="assfoundation">ASSFoundation</h1>
+<h2 id="name-of-tags-as-understood-by-assf">Name of tags as understood by assf</h2>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Assf name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\fscx</td>
+<td>scale_x</td>
+</tr>
+<tr>
+<td>\fscy</td>
+<td>scale_y</td>
+</tr>
+<tr>
+<td>\an</td>
+<td>align</td>
+</tr>
+<tr>
+<td>\frz</td>
+<td>angle</td>
+</tr>
+<tr>
+<td>\fry</td>
+<td>angle_y</td>
+</tr>
+<tr>
+<td>\frx</td>
+<td>angle_x</td>
+</tr>
+<tr>
+<td>\bord</td>
+<td>outline</td>
+</tr>
+<tr>
+<td>\xbord</td>
+<td>outline_x</td>
+</tr>
+<tr>
+<td>\ybord</td>
+<td>outline_y</td>
+</tr>
+<tr>
+<td>\shad</td>
+<td>shadow</td>
+</tr>
+<tr>
+<td>\xshad</td>
+<td>shadow_x</td>
+</tr>
+<tr>
+<td>\yshad</td>
+<td>shadow_y</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>reset</td>
+</tr>
+<tr>
+<td>\pos</td>
+<td>position</td>
+</tr>
+<tr>
+<td>\move</td>
+<td>move</td>
+</tr>
+<tr>
+<td>\org</td>
+<td>origin</td>
+</tr>
+<tr>
+<td>\alpha</td>
+<td>alpha</td>
+</tr>
+<tr>
+<td>\1a</td>
+<td>alpha1</td>
+</tr>
+<tr>
+<td>\2a</td>
+<td>alpha2</td>
+</tr>
+<tr>
+<td>\3a</td>
+<td>alpha3</td>
+</tr>
+<tr>
+<td>\4a</td>
+<td>alpha4</td>
+</tr>
+<tr>
+<td>\1c</td>
+<td>color1</td>
+</tr>
+<tr>
+<td>\2c</td>
+<td>color2</td>
+</tr>
+<tr>
+<td>\3c</td>
+<td>color3</td>
+</tr>
+<tr>
+<td>\4c</td>
+<td>color4</td>
+</tr>
+<tr>
+<td>\clip</td>
+<td>clip_vect</td>
+</tr>
+<tr>
+<td>\iclip</td>
+<td>iclip_vect</td>
+</tr>
+<tr>
+<td>\clip</td>
+<td>clip_rect</td>
+</tr>
+<tr>
+<td>\iclip</td>
+<td>iclip_rect</td>
+</tr>
+<tr>
+<td>\p</td>
+<td>drawing</td>
+</tr>
+<tr>
+<td>\be</td>
+<td>blur_edges</td>
+</tr>
+<tr>
+<td>\blur</td>
+<td>blur</td>
+</tr>
+<tr>
+<td>\fax</td>
+<td>shear_x</td>
+</tr>
+<tr>
+<td>\fay</td>
+<td>shear_y</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>bold</td>
+</tr>
+<tr>
+<td>\i</td>
+<td>italic</td>
+</tr>
+<tr>
+<td>\u</td>
+<td>underline</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>strikeout</td>
+</tr>
+<tr>
+<td>\fsp</td>
+<td>spacing</td>
+</tr>
+<tr>
+<td>\fs</td>
+<td>fontsize</td>
+</tr>
+<tr>
+<td>\fn</td>
+<td>fontname</td>
+</tr>
+<tr>
+<td>\k</td>
+<td>k_fill</td>
+</tr>
+<tr>
+<td>\kf</td>
+<td>k_sweep</td>
+</tr>
+<tr>
+<td>\ko</td>
+<td>k_bord</td>
+</tr>
+<tr>
+<td>\q</td>
+<td>wrapstyle</td>
+</tr>
+<tr>
+<td>\fad</td>
+<td>fade_simple</td>
+</tr>
+<tr>
+<td>\fade</td>
+<td>fade</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>transform</td>
+</tr>
+</tbody>
+</table>
+<h2 id="loop-through-all-selected-lines">Loop through all selected lines</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">return</span> <span class="k">if</span> <span class="o">#</span><span class="n">lines</span><span class="o">.</span><span class="n">lines</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+</code></pre></div>
+<p>This loops through all selected lines. If the number of lines is 0, exits out. Here <code>line</code> is the line table for the current line and <code>i</code> is the index of line i.e. the first selected line has index 1 and second has index 2 and so on.</p>
+<h2 id="line-data">Line Data</h2>
+<p>This creates a line data for each line. Everything assf does will be acted on this line data.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">return</span> <span class="k">if</span> <span class="o">#</span><span class="n">lines</span><span class="o">.</span><span class="n">lines</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  <span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+</code></pre></div>
+<h2 id="sections">Sections</h2>
+<p>In assf, a single line can have four different types of sections. Their names make them self-explanatory so I'll only list them.</p>
+<ol>
+<li>ASS.Section.Text</li>
+<li>ASS.Section.Tag</li>
+<li>ASS.Section.Drawing</li>
+<li>ASS.Section.Comment</li>
+</ol>
+<h2 id="work-in-different-sections-of-a-line">Work in different sections of a line</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">return</span> <span class="k">if</span> <span class="o">#</span><span class="n">lines</span><span class="o">.</span><span class="n">lines</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  <span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  <span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">(</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">if</span> <span class="n">section</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Tag</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>      <span class="c1">-- do stuff to tags</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="k">elseif</span> <span class="n">section</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>      <span class="c1">-- do stuff to text</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="k">elseif</span> <span class="n">section</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Comment</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>      <span class="c1">-- do stuff to comment</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="k">elseif</span> <span class="n">section</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Drawing</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>      <span class="c1">-- do stuff to drawing</span>
+</code></pre></div>
+<p>If you care, you can download this <a href="../examples/sections.moon">example script</a> and try this in different types of lines (with/without tags, comments, drawings, text, gbc etc.) to get a idea of how assf treats different sections of a line.</p>
+<p>If you want to work in an individual section, you can do the following:</p>
+<p>Example: Working with only text of line</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  <span class="c1">--obtain the text</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  <span class="n">text</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  <span class="c1">-- do stuff to text of line</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+</code></pre></div>
+<p>Example: Working with only tags of line</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  <span class="k">for</span> <span class="n">tags</span> <span class="k">in</span> <span class="o">*</span><span class="n">section</span><span class="o">\</span><span class="n">getTags</span><span class="o">!</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="c1">-- do stuff to tags of line</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Tag</span>
+</code></pre></div>
+<h3 id="modifying-text">Modifying text</h3>
+<h4 id="change-whole-text">Change whole text</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  <span class="n">section</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Change the text to this.</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="append-text-to-the-existing-text">Append text to the existing text</h4>
+<p><code>string\append str, sep</code></p>
+<p>str = string you want to append to the text</p>
+<p>sep = string that seperates your text and str</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  <span class="n">section</span><span class="o">\</span><span class="n">append</span> <span class="s2">&quot;</span><span class="s">string you want to append</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="prepend-text-to-the-existing-text">Prepend text to the existing text</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  <span class="n">section</span><span class="o">\</span><span class="n">prepend</span> <span class="s2">&quot;</span><span class="s">string you want to prepend</span><span class="s2">&quot;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="replace-text">Replace text</h4>
+<p><code>string\replace pattern, replacement, plainMatch, useRegex</code></p>
+<p>If <code>useRegex</code> is true, regular expressions (re module) can be used else gsub is used for replacement.</p>
+<p>If <code>plainMatch</code> is true, then <code>useRegex</code> is automatically set to false and any thing that must be escaped in the pattern is escaped and any thing that must be escaped in the pattern is escaped for gsub to work.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>  <span class="n">section</span><span class="o">\</span><span class="n">replace</span> <span class="s2">&quot;</span><span class="s">pattern you want to replace</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">replacment for pattern</span><span class="s2">&quot;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h3 id="modifying-tags">Modifying Tags</h3>
+<h4 id="getdefaulttags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L636">getDefaultTags</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">styleTags</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getDefaultTags</span><span class="o">!</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1">-- Then we can access a table for each tag as such</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">angleTable</span> <span class="o">=</span> <span class="n">styleTags</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">angle</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1">-- We can directly get the value as:</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">angle</span><span class="o">=</span> <span class="n">styleTags</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">angle</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="insertdefaulttags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L349">insertDefaultTags</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tagnames</td>
+<td>names of tag or table of tag's name</td>
+<td>string or table</td>
+</tr>
+<tr>
+<td>index</td>
+<td>index of section i.e. 1 = first section and so on</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>sectionPostion</td>
+<td>position where tag is inserted ({\1\2\3...})</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>direct</td>
+<td>if true, index considers all sections and errors if index is not tag section else only considers tag sections</td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">data</span><span class="o">\</span><span class="n">insertDefaultTags</span> <span class="s2">&quot;</span><span class="s">align</span><span class="s2">&quot;</span>                            <span class="c1">-- Insert a single tag</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">data</span><span class="o">\</span><span class="n">insertDefaultTags</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">scale_x</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">scale_y</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">blur</span><span class="s2">&quot;</span><span class="kt">}</span>     <span class="c1">-- Insert multiple tags</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">data</span><span class="o">\</span><span class="n">insertDefaultTags</span> <span class="s2">&quot;</span><span class="s">fontname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">2</span>                      <span class="c1">-- Insert tag at second tag block</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>A way to change the value of the default tag you inserted is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">blur</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">insertDefaultTags</span> <span class="s2">&quot;</span><span class="s">blur</span><span class="s2">&quot;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">blur</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="geteffectivetags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L313">getEffectiveTags</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td>index of section of which effective tag is being required (It considers all types of sections)</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>includeDefault</td>
+<td>include style tag value if override tag is not found</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>includePrevious</td>
+<td>consider the tag value of tag section before current section</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>copyTags</td>
+<td></td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1">-- Get effective tag values for last section</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">tags</span> <span class="o">=</span> <span class="kt">(</span><span class="n">data</span><span class="o">\</span><span class="n">getEffectiveTags</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="kt">)</span><span class="o">.</span><span class="n">tags</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1">-- Then you can insert tags to line in following way</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="s2">&quot;</span><span class="s">align</span><span class="s2">&quot;</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="n">tags</span><span class="o">.</span><span class="n">align</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="removetags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L313">removeTags</a></h4>
+<p>Remove tags already present in the line</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tagnames</td>
+<td>names of tag or table of tag's name</td>
+<td>string or table</td>
+</tr>
+<tr>
+<td>start</td>
+<td>index of section from where to start removing tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>index of selection upto which to remove tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>relative</td>
+<td></td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="c1">-- You can pass a single tag name to delete it</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">-- You can pass a table of tag names to delete them all</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">align</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">blur</span><span class="s2">&quot;</span><span class="kt">}</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">-- Removes first instance of the tag blur</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="s2">&quot;</span><span class="s">blur</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1">-- Removes second to fifth instance of the tag blur</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="s2">&quot;</span><span class="s">blur</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>NOTE: After you remove tags using <code>removeTags</code>, there might be stray '{}' left if that's the only tag. It is recommended that you use <a href="">cleanTags</a> to remove them.
+TODO: link the guide portion of clean</p>
+<p>It is very useful to get a value of a tag to a variable using <code>removeTags</code> as well</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">path</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">removeTags</span><span class="kt">({</span><span class="s2">&quot;</span><span class="s">clip_vect</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">iclip_vect</span><span class="s2">&quot;</span><span class="kt">})</span>
+</code></pre></div>
+<h4 id="inserttags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L331">insertTags</a></h4>
+<p>Insert tags to current line.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tag</td>
+<td>tag instance you want to insert</td>
+<td>assf tag instance</td>
+</tr>
+<tr>
+<td>start</td>
+<td>index of section from where to start removing tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>index of selection upto which to remove tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>relative</td>
+<td>if true, only tag section is considered (i.e. 2 = second tag section not literal 2nd section in line)</td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">tags</span> <span class="o">=</span> <span class="kt">(</span><span class="n">data</span><span class="o">\</span><span class="n">getEffectiveTags</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="kt">)</span><span class="o">.</span><span class="n">tags</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="n">tags</span><span class="o">.</span><span class="n">shadow</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="n">tags</span><span class="o">.</span><span class="n">scale_x</span><span class="p">,</span> <span class="mi">2</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="n">tags</span><span class="o">.</span><span class="n">scale_y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div>
+<h4 id="createtag"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/FoundationMethods.moon#L65">createTag</a></h4>
+<p>Create a new instance of tags.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">data</span><span class="o">\</span><span class="n">removeTags</span> <span class="s2">&quot;</span><span class="s">position</span><span class="s2">&quot;</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">pos</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">position</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="n">pos</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>Alternatively, you can direct insert a tag without assigning it to a variable.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">position</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="kt">}</span>                 <span class="c1">-- \pos(5,50)</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">outline</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="kt">}</span>                      <span class="c1">-- \bord5</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">blur</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mf">0.8</span><span class="kt">}</span>                       <span class="c1">-- \blur0.8</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">move</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="kt">}</span>              <span class="c1">-- \move(0,0,50,50)</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">move</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">500</span><span class="kt">}</span>     <span class="c1">-- \move(0,0,50,50,25,500)</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">clip_rect</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="kt">}</span>     <span class="c1">-- \clip(50,50,500,500)</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">drawing</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="kt">}</span>                      <span class="c1">-- \p1</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">transform</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span><span class="n">tags</span><span class="kt">}</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="kt">}</span>       <span class="c1">-- transfrom all tags inside {tags} from time t1 to t2</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="c1">-- creating Vectorial Clip</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="n">m</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Draw</span><span class="o">.</span><span class="nc">Move</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="n">l</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Draw</span><span class="o">.</span><span class="nc">Line</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">clip_vect</span><span class="s1">&#39;</span><span class="p">,</span> <span class="kt">{</span><span class="n">m</span><span class="kt">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="kt">)</span><span class="p">,</span> <span class="n">l</span><span class="kt">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="kt">)</span><span class="p">,</span> <span class="n">l</span><span class="kt">(</span><span class="mi">700</span><span class="p">,</span><span class="mi">100</span><span class="kt">)}}</span>         <span class="c1">-- \clip( m 0 0 l 500 500 700 100)</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>Some tags like color and alpha can have special parameters</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">color1</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">22</span><span class="kt">}</span>      <span class="c1">-- b, g, r</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">alpha</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">110</span><span class="kt">}</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1">-- You can also give hex as a parameter</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">data</span><span class="o">\</span><span class="n">insertTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s1">&#39;</span><span class="s">alpha</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">6E</span><span class="s2">&quot;</span><span class="kt">}</span>
+</code></pre></div>
+<h4 id="replacetags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L265">replaceTags</a></h4>
+<p>Replace tags present in a line.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tagList</td>
+<td>tag instance you want to replace</td>
+<td>assf tag instance</td>
+</tr>
+<tr>
+<td>start</td>
+<td>index of section from where to start replacing tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>index of selection upto which to replace tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>relative</td>
+<td>if true, only tag section is considered (i.e. 2 = second tag section not literal 2nd section in line)</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>insertRemaining</td>
+<td>if the tag you're replacing does not already exist in the line, it adds the tag to the line.</td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">bord</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">5</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">data</span><span class="o">\</span><span class="n">replaceTags</span> <span class="n">bord</span>                   <span class="c1">-- Replace all bord tags</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">data</span><span class="o">\</span><span class="n">replaceTags</span> <span class="n">bord</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">true</span>       <span class="c1">-- Replace bord from 2nd to 5th tag block</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>You can also create a new instance of tag and replace it in a single line</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="n">data</span><span class="o">\</span><span class="n">replaceTags</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">angle</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="kt">}</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="gettags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L260">getTags</a></h4>
+<p>Obtain the tags present in the line.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tag name</td>
+<td>name of the tag</td>
+<td>string or table</td>
+</tr>
+<tr>
+<td>start</td>
+<td>index of section from where to look for tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>index of selection upto which to look for tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>relative</td>
+<td>if true, only tag section is considered (i.e. 2 = second tag section not literal 2nd section in line)</td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="n">bord</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span>         <span class="c1">-- A table that has all the border values in this line</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="n">first</span> <span class="o">=</span> <span class="n">bord</span><span class="kt">[</span><span class="mi">1</span><span class="kt">]</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>                  <span class="c1">-- To get the first border value</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="n">first</span> <span class="o">=</span> <span class="n">bord</span><span class="kt">[</span><span class="mi">1</span><span class="kt">]</span><span class="o">.</span><span class="n">value</span>                 <span class="c1">-- Another way to get value</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="n">nth</span> <span class="o">=</span> <span class="n">bord</span><span class="kt">[</span><span class="n">n</span><span class="kt">]</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>                    <span class="c1">-- Get nth border value</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="k">for</span> <span class="n">b</span> <span class="k">in</span> <span class="o">*</span><span class="n">bord</span>                        <span class="c1">-- To get all values of border tags in a line</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">dump</span> <span class="n">b</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+</code></pre></div>
+<p>To get multiple tag values</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="k">for</span> <span class="n">tag</span> <span class="k">in</span> <span class="o">*</span><span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">scale_x</span><span class="s2">&quot;</span><span class="kt">}</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>  <span class="n">tagname</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">name</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>  <span class="n">tagvalue</span> <span class="o">=</span> <span class="n">tag</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">#{tagname}(#{tagvalue})</span><span class="s2">&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">tag</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">tagname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span>         <span class="c1">-- Get first instance of tag value</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">tag</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">tagname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>      <span class="c1">-- Get from first to third instance of tag value</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="n">tag</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">tagname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span>    <span class="c1">-- Get last instance of tag value</span>
+</code></pre></div>
+<h4 id="modtags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L245">modTags</a></h4>
+<p>Modify tags already present in the line. If the tag is not found in the line, it does nothing.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tag name</td>
+<td>name of the tag</td>
+<td>string or table</td>
+</tr>
+<tr>
+<td>callback</td>
+<td></td>
+<td>callback</td>
+</tr>
+<tr>
+<td>start</td>
+<td>index of section from where to modify tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>index of selection upto which to modify tags</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>relative</td>
+<td></td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="n">data</span><span class="o">\</span><span class="n">modTags</span> <span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">(</span><span class="n">tag</span><span class="kt">)</span> <span class="nf">-&gt;</span> <span class="n">tag</span><span class="o">\</span><span class="n">add</span> <span class="mi">1</span>            <span class="c1">-- Add 1 to all \bord in the line</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">data</span><span class="o">\</span><span class="n">modTags</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span> <span class="kt">((</span><span class="n">tag</span><span class="kt">)</span> <span class="nf">-&gt;</span> <span class="n">tag</span><span class="o">\</span><span class="n">add</span> <span class="mi">1</span><span class="kt">)</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>  <span class="c1">-- Add 1 to \bord in 1st to 3rd tag block</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>You can have multiple lines for modifying tags, run functions inside them and so on.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">data</span><span class="o">\</span><span class="n">modTags</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">scale_x</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span> <span class="kt">(</span><span class="n">tag</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>  <span class="n">old_value</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>  <span class="n">new_value</span> <span class="o">=</span> <span class="n">old_value</span> <span class="o">*</span> <span class="mi">5</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>  <span class="n">tag</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">new_value</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="getposition"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L601">getPosition</a></h4>
+<p>Get position, alignment or org.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>style</td>
+<td>line style</td>
+<td>string</td>
+</tr>
+<tr>
+<td>align</td>
+<td>alignment</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>forceDefault</td>
+<td>ignore override \pos</td>
+<td>boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">pos</span><span class="p">,</span> <span class="n">align</span><span class="p">,</span> <span class="n">org</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getPosition</span><span class="o">!</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="c1">-- Get position of the line if alignent were 7</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="n">pos</span><span class="p">,</span> <span class="n">align</span><span class="p">,</span> <span class="n">org</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getPosition</span> <span class="kc">nil</span><span class="p">,</span> <span class="mi">7</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="c1">-- To get the actual value {\bord1do the following</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="n">org_x</span><span class="p">,</span> <span class="n">org_y</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">org</span><span class="p">,</span><span class="n">y</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="n">an</span> <span class="o">=</span> <span class="n">align</span>
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="c1">-- Alternatively, you can also do something like this if you need value</span>
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getPosition</span><span class="o">!\</span><span class="n">getTagParams</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="getlinebounds"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L710">getLineBounds</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="n">bound</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getLineBounds</span><span class="o">!</span>
+</code></pre></div>
+<p>Then to get co-ordinate of the bounding box:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">bound</span><span class="kt">[</span><span class="mi">1</span><span class="kt">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">bound</span><span class="kt">[</span><span class="mi">1</span><span class="kt">]</span><span class="o">.</span><span class="n">y</span>                 <span class="c1">-- To get co-ordinate of top left boundary</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">bound</span><span class="kt">[</span><span class="mi">2</span><span class="kt">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">bound</span><span class="kt">[</span><span class="mi">2</span><span class="kt">]</span><span class="o">.</span><span class="n">y</span>                 <span class="c1">-- To get co-ordinate of bottom right boundary</span>
+</code></pre></div>
+<p>To get the dimension of the bounding box():</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">height</span> <span class="o">=</span> <span class="n">bound</span><span class="o">.</span><span class="n">h</span>                                <span class="c1">-- To get height of the text</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">width</span> <span class="o">=</span> <span class="n">bound</span><span class="o">.</span><span class="n">w</span>                                 <span class="c1">-- To get width of the text</span>
+</code></pre></div>
+<p>An easy way to check if the text is visible in the screen or not is to check if height or width is 0 or not</p>
+<p>To check if the text is animated or not (transform, move etc)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">if</span> <span class="n">bound</span><span class="o">.</span><span class="n">animated</span> <span class="o">==</span> <span class="kc">true</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">Text is animated.</span><span class="s2">&quot;</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="k">else</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">Text is not animated.</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Then you can also loop over all the fbf lines to get their bounding box. This is also the same number of lines you'd get if you do line2fbf so you could probably do other interesting things by using this loop.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">for</span> <span class="n">item</span> <span class="k">in</span> <span class="o">*</span><span class="n">bound</span><span class="o">.</span><span class="n">fbf</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">dump</span> <span class="n">item</span>
+</code></pre></div>
+<h4 id="getstring"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L112">getString</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="n">line_text</span> <span class="o">=</span>  <span class="n">data</span><span class="o">\</span><span class="n">getString</span><span class="o">!</span>
+</code></pre></div>
+<p>To loop over tag blocks and get their string.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>  <span class="n">tag_text</span> <span class="o">=</span> <span class="n">section</span><span class="o">\</span><span class="n">getString</span><span class="o">!</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Tag</span>
+</code></pre></div>
+<p>Something similar for text</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="n">data</span><span class="o">\</span><span class="n">callback</span> <span class="kt">((</span><span class="n">section</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>  <span class="n">text</span> <span class="o">=</span> <span class="n">section</span><span class="o">\</span><span class="n">getString</span><span class="o">!</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="kt">)</span><span class="p">,</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+</code></pre></div>
+<!-- LineContents.cleanTags = (level = 3, mergeConsecutiveSections = true, defaultToKeep, tagSortOrder) => -->
+
+<h4 id="cleantags">cleanTags</h4>
+<p>Clean/Sort/Merge tags in the line.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>level</td>
+<td></td>
+<td>integer</td>
+<td>3</td>
+</tr>
+<tr>
+<td>mergeConsecutiveSections</td>
+<td>level for cleanTags</td>
+<td>boolean</td>
+<td>true</td>
+</tr>
+<tr>
+<td>defaultToKeep</td>
+<td>adjust position after splitting</td>
+<td>table</td>
+<td></td>
+</tr>
+<tr>
+<td>tagSortOrder</td>
+<td>add origin if needed to maintain appearance</td>
+<td>table</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Clean Level:</p>
+<ul>
+<li>0: no cleaning</li>
+<li>1: remove empty tag sections</li>
+<li>2: deduplicate tags inside sections</li>
+<li>3: deduplicate tags globally,</li>
+<li>4: remove tags matching the style defaults and otherwise ineffective tags</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="n">data</span><span class="o">\</span><span class="n">cleanTags</span><span class="o">!</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="n">data</span><span class="o">\</span><span class="n">cleanTags</span> <span class="mi">1</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="n">data</span><span class="o">\</span><span class="n">cleanTags</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">tagSortOrder</span>              <span class="c1">-- where tagSortOrder is the table of tags</span>
+</code></pre></div>
+<p>Note: Make sure the tagSortOrder has all the tags in the table if you want to run it. There might be some unwanted results if done otherwise. Also the tags in the tagSortOrder must be the names of the tags as understood by assf.</p>
+<h4 id="splitting-stuff">Splitting Stuff</h4>
+<h5 id="splitatintervals"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L467">splitAtIntervals</a></h5>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td></td>
+<td>callback</td>
+<td></td>
+</tr>
+<tr>
+<td>cleanLevel</td>
+<td>level for cleanTags</td>
+<td>integer</td>
+<td>3</td>
+</tr>
+<tr>
+<td>reposition</td>
+<td>adjust position after splitting</td>
+<td>boolean</td>
+<td>true</td>
+</tr>
+<tr>
+<td>writeOrigin</td>
+<td>add origin if needed to maintain appearance</td>
+<td>boolean</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">char</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">splitAtIntervals</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">false</span>          <span class="c1">-- split by characters</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="n">char</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">splitAtIntervals</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span>     <span class="c1">-- split by 2 characters</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="c1">-- get nth split</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="n">n_char</span> <span class="o">=</span> <span class="n">char</span><span class="kt">[</span><span class="n">n</span><span class="kt">]</span>
+</code></pre></div>
+<p>Working with split characters:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="c1">-- define newLines where we&#39;ll be adding each split characters</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="n">newLines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>
+<a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a>  <span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a>  <span class="n">charLines</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">splitAtIntervals</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">false</span>          <span class="c1">-- split by characters</span>
+<a id="__codelineno-40-9" name="__codelineno-40-9" href="#__codelineno-40-9"></a>
+<a id="__codelineno-40-10" name="__codelineno-40-10" href="#__codelineno-40-10"></a>  <span class="c1">-- Looping through each interval</span>
+<a id="__codelineno-40-11" name="__codelineno-40-11" href="#__codelineno-40-11"></a>  <span class="k">for</span> <span class="n">char</span> <span class="k">in</span> <span class="o">*</span><span class="n">charLines</span>
+<a id="__codelineno-40-12" name="__codelineno-40-12" href="#__codelineno-40-12"></a>    <span class="n">charData</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="nc">ASS</span>
+<a id="__codelineno-40-13" name="__codelineno-40-13" href="#__codelineno-40-13"></a>
+<a id="__codelineno-40-14" name="__codelineno-40-14" href="#__codelineno-40-14"></a>    <span class="c1">-- get effective tag for each split</span>
+<a id="__codelineno-40-15" name="__codelineno-40-15" href="#__codelineno-40-15"></a>    <span class="n">effTags</span> <span class="o">=</span> <span class="n">charData</span><span class="o">.</span><span class="n">sections</span><span class="kt">[</span><span class="mi">1</span><span class="kt">]</span><span class="o">\</span><span class="n">getEffectiveTags</span><span class="kt">(</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="kt">)</span><span class="o">.</span><span class="n">tags</span>
+<a id="__codelineno-40-16" name="__codelineno-40-16" href="#__codelineno-40-16"></a>
+<a id="__codelineno-40-17" name="__codelineno-40-17" href="#__codelineno-40-17"></a>    <span class="c1">-- do stuff to each split here like adding new tags</span>
+<a id="__codelineno-40-18" name="__codelineno-40-18" href="#__codelineno-40-18"></a>    <span class="c1">-- don&#39;t forget to add their position as well</span>
+<a id="__codelineno-40-19" name="__codelineno-40-19" href="#__codelineno-40-19"></a>
+<a id="__codelineno-40-20" name="__codelineno-40-20" href="#__codelineno-40-20"></a>    <span class="c1">-- commit changes to the split</span>
+<a id="__codelineno-40-21" name="__codelineno-40-21" href="#__codelineno-40-21"></a>    <span class="n">charData</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+<a id="__codelineno-40-22" name="__codelineno-40-22" href="#__codelineno-40-22"></a>    <span class="n">newLines</span><span class="o">\</span><span class="n">addLine</span> <span class="n">char</span>
+<a id="__codelineno-40-23" name="__codelineno-40-23" href="#__codelineno-40-23"></a>
+<a id="__codelineno-40-24" name="__codelineno-40-24" href="#__codelineno-40-24"></a><span class="c1">-- add new lines that contains all the splits</span>
+<a id="__codelineno-40-25" name="__codelineno-40-25" href="#__codelineno-40-25"></a><span class="n">newLines</span><span class="o">\</span><span class="n">insertLines</span><span class="o">!</span>
+<a id="__codelineno-40-26" name="__codelineno-40-26" href="#__codelineno-40-26"></a>
+<a id="__codelineno-40-27" name="__codelineno-40-27" href="#__codelineno-40-27"></a><span class="c1">-- remove orignal lines</span>
+<a id="__codelineno-40-28" name="__codelineno-40-28" href="#__codelineno-40-28"></a><span class="n">lines</span><span class="o">\</span><span class="n">deleteLines</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="repositionsplitlines"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L536">repositionSplitLines</a></h5>
+<p>After using any other split methods of assf, if you want the splits to maintain position, use this.</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>splitLines</td>
+<td>split lines from other split methods</td>
+<td>integer</td>
+<td>3</td>
+</tr>
+<tr>
+<td>writeOrigin</td>
+<td>add origin if needed to maintain appearance</td>
+<td>boolean</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="n">newLines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span>
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>  <span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>  <span class="n">charLines</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">splitAtIntervals</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">false</span>          <span class="c1">-- split by 2 characters</span>
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>  <span class="n">charLines</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">repositionSplitLines</span> <span class="n">charLines</span>
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a>  <span class="k">for</span> <span class="n">char</span> <span class="k">in</span> <span class="o">*</span><span class="n">charLines</span>
+<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>    <span class="n">charData</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="nc">ASS</span>
+<a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a>    <span class="n">charData</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+<a id="__codelineno-41-10" name="__codelineno-41-10" href="#__codelineno-41-10"></a>    <span class="n">newLines</span><span class="o">\</span><span class="n">addLine</span> <span class="n">char</span>
+<a id="__codelineno-41-11" name="__codelineno-41-11" href="#__codelineno-41-11"></a><span class="n">newLines</span><span class="o">\</span><span class="n">insertLines</span><span class="o">!</span>
+<a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a><span class="n">lines</span><span class="o">\</span><span class="n">deleteLines</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="splitattags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L452">splitAtTags</a></h5>
+<p>Split line at each tag block and get new lines</p>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cleanLevel</td>
+<td>clean level for \cleanTags</td>
+<td>integer</td>
+<td>3</td>
+</tr>
+<tr>
+<td>reposition</td>
+<td>repostion split tags</td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>writeOrigin</td>
+<td>add origin if needed to maintain appearance</td>
+<td>boolean</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="n">newLines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="n">lines</span><span class="o">\</span><span class="n">runCallback</span> <span class="kt">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>  <span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a>  <span class="n">splitLines</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">splitAtTags</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a>  <span class="k">for</span> <span class="n">char</span> <span class="k">in</span> <span class="o">*</span><span class="n">splitLines</span>
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a>    <span class="n">charData</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="nc">ASS</span>
+<a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a>
+<a id="__codelineno-42-9" name="__codelineno-42-9" href="#__codelineno-42-9"></a>    <span class="c1">-- Here you can do stuff to each line before committing if you desire</span>
+<a id="__codelineno-42-10" name="__codelineno-42-10" href="#__codelineno-42-10"></a>
+<a id="__codelineno-42-11" name="__codelineno-42-11" href="#__codelineno-42-11"></a>    <span class="n">charData</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+<a id="__codelineno-42-12" name="__codelineno-42-12" href="#__codelineno-42-12"></a>    <span class="n">newLines</span><span class="o">\</span><span class="n">addLine</span> <span class="n">char</span>
+<a id="__codelineno-42-13" name="__codelineno-42-13" href="#__codelineno-42-13"></a><span class="n">newLines</span><span class="o">\</span><span class="n">insertLines</span><span class="o">!</span>
+<a id="__codelineno-42-14" name="__codelineno-42-14" href="#__codelineno-42-14"></a><span class="n">lines</span><span class="o">\</span><span class="n">deleteLines</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="stripping-stuff">Stripping Stuff</h4>
+<h5 id="striptags"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L367">stripTags</a></h5>
+<p>Remove all tags present in the line.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="n">data</span><span class="o">\</span><span class="n">stripTags</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="striptext"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L371">stripText</a></h5>
+<p>Remove all text present in the line.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="n">data</span><span class="o">\</span><span class="n">stripText</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="stripcomments"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L375">stripComments</a></h5>
+<p>Remove all comments present in the line.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="n">data</span><span class="o">\</span><span class="n">stripComments</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="stripdrawings"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L379">stripDrawings</a></h5>
+<p>Remove all drawings as well as <code>\\p</code> tags present in the line.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="n">data</span><span class="o">\</span><span class="n">stripDrawings</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="miscellaneous">Miscellaneous</h4>
+<h5 id="trim"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L570">trim</a></h5>
+<p>Trim whitespace in the beginning or end of the text.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="n">data</span><span class="o">\</span><span class="n">trim</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="gettagcount"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L362">getTagCount</a></h5>
+<p>Get the total number of tags present in the line. Start as well as inline override tags - it counts all of them.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="n">tagCount</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTagCount</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="gettextextents"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L699">getTextExtents</a></h5>
+<p>Get the width of the text no matter it's orientation.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTextExtents</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="gettextmetrics"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L737">getTextMetrics</a></h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="n">metrics</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTextMetrics</span><span class="o">!</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="c1">-- Access different metrics</span>
+<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a><span class="n">ascent</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">ascent</span>
+<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a><span class="n">descent</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">descent</span>
+<a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a><span class="n">internal_leading</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">internal_leading</span>
+<a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a><span class="n">external_leading</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">external_leading</span>
+<a id="__codelineno-50-8" name="__codelineno-50-8" href="#__codelineno-50-8"></a><span class="n">height</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">height</span>
+<a id="__codelineno-50-9" name="__codelineno-50-9" href="#__codelineno-50-9"></a><span class="n">width</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">width</span>
+</code></pre></div>
+<h5 id="getsectioncount"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L768">getSectionCount</a></h5>
+<p>Get the exact count of the type of section</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="n">tagSectionCount</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getSectionCount</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Tag</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="n">textSectionCount</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getSectionCount</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Text</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="n">drawingSectionCount</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getSectionCount</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Drawing</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="n">commentSectionCount</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getSectionCount</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Section</span><span class="o">.</span><span class="nc">Comment</span>
+</code></pre></div>
+<h5 id="gettextlength"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L781">getTextLength</a></h5>
+<p>Get the total number of characters in the text. Letters, spaces and punctuations.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="n">len</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTextLength</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="isanimated"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L786">isAnimated</a></h5>
+<p>Check if the text is animated or not. Checks if there are transforms, move, fade or karaoke tags. It's intelligent enough to know that a single frame line can't be animated so it'll return false even if a single frame line has those tags.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="n">checkAnimated</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">isAnimated</span><span class="o">!</span>
+</code></pre></div>
+<h5 id="reverse"><a href="https://github.com/TypesettingTools/ASSFoundation/blob/ba2cace60efc39edfdedce1747b2b68aeff0af01/l0/ASSFoundation/LineContents.moon#L818">reverse</a></h5>
+<p>It reverses the text of the current line. <code>It's huge.</code> will become <code>.eguh s'tI</code>. This is sometimes useful but the most useful part of this function is that it keeps the tags intact. So for example if you run this in gbc, the gbc will remain intact while the text will be reversed.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="n">data</span><span class="o">\</span><span class="n">reverse</span><span class="o">!</span>
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="c1">-- you can also save it to a variable and do some stuff to it before committing it</span>
+<a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a><span class="n">rev</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">reverse</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="working-with-move">Working with move</h4>
+<p>Check if move exists in a line</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a><span class="n">pos</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getPosition</span><span class="o">!</span>
+<a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a><span class="k">if</span> <span class="n">pos</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Tag</span><span class="o">.</span><span class="nc">Move</span>
+<a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">Move exists</span><span class="s2">&quot;</span>
+<a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a><span class="k">else</span>
+<a id="__codelineno-55-6" name="__codelineno-55-6" href="#__codelineno-55-6"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="s2">&quot;</span><span class="s">Move does not exist</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Check if the move is simple or not</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="c1">-- if move is simple &quot;\move(x1,y1,x2,y2)&quot;</span>
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="n">pos</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">signature</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="s">simple</span><span class="s2">&quot;</span>
+<a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>
+<a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a><span class="c1">-- else &quot;\move(x1,y1,x2,y2,t1,t2)&quot;</span>
+<a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a><span class="n">pos</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">signature</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="s">default</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Obtain values of move tag</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="k">if</span> <span class="n">pos</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Tag</span><span class="o">.</span><span class="nc">Move</span> <span class="k">and</span> <span class="n">pos</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">signature</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="s">simple</span><span class="s2">&quot;</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>  <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">pos</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="k">elseif</span> <span class="n">pos</span><span class="o">.</span><span class="k">class</span> <span class="o">==</span> <span class="nc">ASS</span><span class="o">.</span><span class="nc">Tag</span><span class="o">.</span><span class="nc">Move</span> <span class="k">and</span> <span class="n">pos</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">signature</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="s">default</span><span class="s2">&quot;</span>
+<a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>  <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">pos</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>
+</code></pre></div>
+<p>It is also possible to obtain each value individually if you desire.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">startPos</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">endPos</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="n">t1</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">startTime</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="n">t2</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">endTime</span><span class="o">\</span><span class="n">get</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="working-with-transform">Working with transform</h4>
+<p>There are 3 types of transform</p>
+<ol>
+<li>"accel" - \t(accel,style modifiers)</li>
+<li>"default" - \t(t1,t2,accel,style modifiers)</li>
+<li>"time" - \t(t1,t2,style modifiers)</li>
+</ol>
+<p>To check if tags are transformed</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="n">tags</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getEffectiveTags</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="n">transformed</span> <span class="o">=</span> <span class="n">tags</span><span class="o">\</span><span class="n">checkTransformed</span><span class="o">!</span>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="c1">-- Get the list of all the tags that were transformed</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="nb">pairs</span> <span class="n">transformed</span>
+<a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a>  <span class="n">logger</span><span class="o">\</span><span class="n">log</span> <span class="n">key</span>
+</code></pre></div>
+<p>To get the idea of how transform table is structured, you can run the following <a href="../examples/transform.moon">script</a></p>
+<p>Obtain all parameters of transforms</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="n">transforms</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">transform</span><span class="s2">&quot;</span>
+<a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="k">for</span> <span class="n">tr</span> <span class="k">in</span> <span class="o">*</span><span class="n">transforms</span>
+<a id="__codelineno-60-4" name="__codelineno-60-4" href="#__codelineno-60-4"></a>  <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">tags</span> <span class="o">=</span> <span class="n">tr</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>
+</code></pre></div>
+<p>Change the times or accel in transforms (Here adding 100 to start time, 200 to end time and 5 to accel of all transforms)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="n">transforms</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">transform</span><span class="s2">&quot;</span>
+<a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">tr</span> <span class="k">in</span> <span class="nb">ipairs</span> <span class="n">transforms</span>
+<a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a>  <span class="n">tr</span><span class="o">.</span><span class="n">startTime</span><span class="o">\</span><span class="n">add</span> <span class="mi">100</span>
+<a id="__codelineno-61-5" name="__codelineno-61-5" href="#__codelineno-61-5"></a>  <span class="n">tr</span><span class="o">.</span><span class="n">endTime</span><span class="o">\</span><span class="n">add</span> <span class="mi">200</span>
+<a id="__codelineno-61-6" name="__codelineno-61-6" href="#__codelineno-61-6"></a>  <span class="n">tr</span><span class="o">.</span><span class="n">accel</span><span class="o">\</span><span class="n">add</span> <span class="mi">5</span>
+<a id="__codelineno-61-7" name="__codelineno-61-7" href="#__codelineno-61-7"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<p>Modify tags inside transforms (In this case add 50 to fscx as an example)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="n">transforms</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">transform</span><span class="s2">&quot;</span>
+<a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">tr</span> <span class="k">in</span> <span class="nb">ipairs</span> <span class="n">transforms</span>
+<a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a>  <span class="k">for</span> <span class="n">tag</span> <span class="k">in</span> <span class="o">*</span><span class="n">tr</span><span class="o">.</span><span class="n">tags</span><span class="o">\</span><span class="n">getTags</span><span class="o">!</span>
+<a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a>    <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">__tag</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="s">scale_x</span><span class="s2">&quot;</span>
+<a id="__codelineno-62-6" name="__codelineno-62-6" href="#__codelineno-62-6"></a>      <span class="n">tag</span><span class="o">\</span><span class="n">add</span> <span class="mi">50</span>
+<a id="__codelineno-62-7" name="__codelineno-62-7" href="#__codelineno-62-7"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h4 id="working-with-fade">Working with fade</h4>
+<p>There are two types of fade. Simple fade (\fad) and complex fade (\fade).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="c1">-- Simple fade</span>
+<a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="n">fad</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">fade_simple</span><span class="s2">&quot;</span>      <span class="c1">-- Get simple fade</span>
+<a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">fad</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>            <span class="c1">-- Get parameters of simple fade</span>
+<a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a>
+<a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a><span class="c1">-- Complex fade</span>
+<a id="__codelineno-63-6" name="__codelineno-63-6" href="#__codelineno-63-6"></a><span class="n">fade</span> <span class="o">=</span> <span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="s2">&quot;</span><span class="s">fade</span><span class="s2">&quot;</span>                            <span class="c1">-- Get complex fade</span>
+<a id="__codelineno-63-7" name="__codelineno-63-7" href="#__codelineno-63-7"></a><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">,</span> <span class="n">t4</span> <span class="o">=</span> <span class="n">fade</span><span class="o">\</span><span class="n">getTagParams</span><span class="o">!</span>       <span class="c1">-- Get parameters of simple fade</span>
+</code></pre></div>
+<p>Parameters of fade tags:</p>
+<table>
+<thead>
+<tr>
+<th>Parameters in assf</th>
+<th>Equivalent fade parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>inAlpha</td>
+<td>a1</td>
+</tr>
+<tr>
+<td>midAlpha</td>
+<td>a2</td>
+</tr>
+<tr>
+<td>outAlpha</td>
+<td>a3</td>
+</tr>
+<tr>
+<td>inStartTime</td>
+<td>t1</td>
+</tr>
+<tr>
+<td>inDuration</td>
+<td>t2</td>
+</tr>
+<tr>
+<td>outStartTime</td>
+<td>t3</td>
+</tr>
+<tr>
+<td>outDuration</td>
+<td>t4</td>
+</tr>
+</tbody>
+</table>
+<p>Modifying fades</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="k">for</span> <span class="n">tag</span> <span class="k">in</span> <span class="o">*</span><span class="n">data</span><span class="o">\</span><span class="n">getTags</span> <span class="kt">{</span><span class="s1">&#39;</span><span class="s">fade</span><span class="s1">&#39;</span><span class="kt">}</span>
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a>  <span class="n">tag</span><span class="o">.</span><span class="n">inStartTime</span> <span class="o">-=</span> <span class="mi">150</span>
+<a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a>  <span class="n">tag</span><span class="o">.</span><span class="n">outStartTime</span> <span class="o">-=</span> <span class="mi">150</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

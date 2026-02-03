@@ -1,0 +1,2614 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="PhosCity">
+      
+      
+      
+        <link rel="prev" href="../AegiGUI/">
+      
+      
+        <link rel="next" href="../ASSFoundation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>AssfPlus - PhosCity's Aegisub Script</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-79V80MELY3"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-79V80MELY3",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-79V80MELY3",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-header__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PhosCity's Aegisub Script
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AssfPlus
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Abacus/" class="md-tabs__link">
+          
+  
+  
+  Typesetting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Timing%20Assistant/" class="md-tabs__link">
+          
+  
+  
+  Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../KFX/" class="md-tabs__link">
+          
+  
+  
+  Karaoke
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Quality%20Report/" class="md-tabs__link">
+          
+  
+  
+  QC
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../AegiGUI/" class="md-tabs__link">
+          
+  
+  
+  Module
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ASSFoundation/" class="md-tabs__link">
+          
+  
+  
+  Others
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-nav__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PhosCity's Aegisub Script
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Typesetting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Typesetting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Abacus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abacus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Add%20Grain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Grain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Align%20and%20Distribute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Align and Distribute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ASS2SVG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASS2SVG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Auto%20Fade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auto Fade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Chromatic%20Abberation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chromatic Abberation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edit%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edit Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Extrapolate%20Tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extrapolate Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fold%20Operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fold Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remove Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Rotated%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rotated Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg2ass/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svg2ass
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terrain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    terrain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wobble/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wobble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fit%20Text%20in%20Clip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fit Text in Clip
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Vector%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Timing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Timing%20Assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Bidirectional%20Snapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bidirectional Snapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Karaoke
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Karaoke
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../KFX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    QC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Quality%20Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality Report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Module
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AegiGUI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AegiGUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AssfPlus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Others
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Others
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ASSFoundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASSFoundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p><font color="green"><strong>Available in Dependency Control</strong></font></p>
+<p><a href="https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AssfPlus.moon">Link to script</a></p>
+<h1 id="introduction">Introduction</h1>
+<p>This is a module that will contain a lot of extensions for ASSFoundation.
+Given how the development in ASSFoundation has not progressed for years,
+this is the only way for me to add more features to it.
+This will either fix things in ASSFoundation, extend an existing feature or
+add a feature that does not exist at all.</p>
+<h1 id="linecollection">LineCollection</h1>
+<p>This acts on the line collected by LineCollection.</p>
+<h2 id="collecttags">collectTags</h2>
+<p>This collects all the tag's names present in the selected lines. Additionally, it collects information like if there are start tags, inline tags and transforms present in the line or not.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td>LineCollection line table</td>
+<td>table</td>
+<td>-</td>
+</tr>
+<tr>
+<td>errorOnNoTags</td>
+<td>Exit the script if no tags were collected with a message</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>checkDrawing</td>
+<td>Also collects \p tags</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>collection</td>
+<td>A table with all the info collectd</td>
+<td>table</td>
+</tr>
+</tbody>
+</table>
+<p>The collection returns a table in the following format:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">collection</span> <span class="o">=</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="nv">tagList:</span> <span class="kt">{}</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="nv">tagTypes:</span> <span class="kt">{</span><span class="nv">start_tag:</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">inline_tags:</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">transforms:</span> <span class="kc">false</span><span class="kt">}</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="nv">multiple_inline_tags:</span> <span class="kc">false</span>
+</code></pre></div>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">lines</span> <span class="o">=</span> <span class="nc">LineCollection</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">return</span> <span class="k">if</span> <span class="o">#</span><span class="n">lines</span><span class="o">.</span><span class="n">lines</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">collection</span> <span class="o">=</span> <span class="nc">AssfPlus</span><span class="o">.</span><span class="nc">LineCollection</span><span class="o">.</span><span class="n">collectTags</span> <span class="n">lines</span>
+</code></pre></div>
+<h1 id="line-data">Line Data</h1>
+<h2 id="getlinebounds">getLineBounds</h2>
+<p>This is similar to <code>getLineBounds</code> of ASSFoundation but this allows you to get
+the line bounds after removing border, shadows, clip and blur. All of these
+tags affect the line bounds. So when I need to find the line bounds of fill of
+text only for example, I can disable them and get actual line bounds.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>noBordShad</td>
+<td>bounds without border and shadow</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>noClip</td>
+<td>bounds without clips</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>noBlur</td>
+<td>bounds without blur</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>noPerspective</td>
+<td>bounds without perspective</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bounds</td>
+<td>Line bounds same as assf</td>
+<td>Table</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">-- This will give you the same result as assf will.</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">bounds</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getLineBounds</span> <span class="n">data</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">-- This will give you line bounds after removing borders and shadows</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">bounds</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getLineBounds</span> <span class="n">data</span><span class="p">,</span> <span class="kc">true</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1">-- This will give you line bounds after removing, borders, shadows, clips, blurs and perspective.</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">bounds</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getLineBounds</span> <span class="n">data</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span>
+</code></pre></div>
+<h2 id="getboundingbox">getBoundingBox</h2>
+<p>It's purpose is just like <a href="#getlinebounds">getLineBounds</a> but this will give
+you the co-ordinates of the bounding box. It's just a convenience function.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same as <a href="#getlinebounds">getLineBounds</a></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x1, y1, x2, y2</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getBoundingBox</span> <span class="n">data</span><span class="p">,</span> <span class="kc">true</span>
+</code></pre></div>
+<h2 id="firstsectionistag">firstSectionIsTag</h2>
+<p>Find out if there is a tag section before text section or drawing section.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>true if there is a tag section in the beginning</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>the index of start tag section</td>
+<td>integer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="trim">trim</h2>
+<p>While assf does have a trim method, it only trims the spaces from the
+beginning and the end of the line but it does not trim spaces around line
+breaks. These spaces can mess up calculation of text extents.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nothing</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">lineData</span><span class="o">.</span><span class="n">trim</span><span class="kt">(</span><span class="n">data</span><span class="kt">)</span>
+</code></pre></div>
+<h2 id="gettextshape">getTextShape</h2>
+<p>There is really no way to convert text to shape in Linux reliably (not even ILL at the time of this writing)
+and there is no way to use Assf to convert text to shape in any OS at all.
+This is just a temporary workaround until a proper fix for it is made.</p>
+<p>There were two main problems that I faced:</p>
+<ul>
+<li>Any text that is more than 18 characters are truncated when converted to shapes. I fixed this by splitting the text into chunks of 15 characters, converting them to shape and then appending them together.</li>
+<li>There were many fonts where the aegisub.text_extents and pangocairo gave wrong font extents and metrics. This caused the converted shape to be scaled incorrectly. I tried to fix it by using SubInspector which correctly returns bounds of the actual generated bitmaps.</li>
+</ul>
+<p>The resulting shape has an alignment of 7, scale of 100 and is anchored to position (0,0).</p>
+<p>Known cases where it may not work:</p>
+<ul>
+<li>Gradient by character</li>
+<li>Negative spacing</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shape</td>
+<td>String</td>
+</tr>
+<tr>
+<td>Width</td>
+<td>Number</td>
+</tr>
+<tr>
+<td>Height</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">shape</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getTextShape</span> <span class="n">data</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">shape</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">lineData</span><span class="o">.</span><span class="n">getTextShape</span> <span class="n">data</span>
+</code></pre></div>
+<h2 id="converttexttoshape">convertTextToShape</h2>
+<p>Convert and replace the text in current line to shape.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">lineData</span><span class="o">.</span><span class="n">convertTextToShape</span> <span class="n">data</span>
+</code></pre></div>
+<h2 id="changealignment">changeAlignment</h2>
+<p>Change alignment of a line while maintaining its position.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>alignment</td>
+<td>Alignment to change to</td>
+<td>number</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">data</span> <span class="o">=</span> <span class="nc">ASS</span><span class="o">\</span><span class="n">parse</span> <span class="n">line</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">lineData</span><span class="o">.</span><span class="n">changeAlignment</span> <span class="n">data</span><span class="p">,</span> <span class="mi">5</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">data</span><span class="o">\</span><span class="n">commit</span><span class="o">!</span>
+</code></pre></div>
+<h2 id="inserttransformtags">insertTransformTags</h2>
+<p>This inserts transform tags. Honestly this exists because I could not figure out how to insert transform tags natively.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>Table of Assf Tag Object</td>
+<td>table</td>
+<td>-</td>
+</tr>
+<tr>
+<td>t1</td>
+<td>Start time of transform in miliseconds</td>
+<td>integer</td>
+<td>-</td>
+</tr>
+<tr>
+<td>t2</td>
+<td>End time of transform in miliseconds</td>
+<td>integer</td>
+<td>-</td>
+</tr>
+<tr>
+<td>accel</td>
+<td>Accel of transform</td>
+<td>float</td>
+<td>-</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Index of Assf section in which to insert transform tag</td>
+<td>integer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>sectionPosition</td>
+<td>Position within an Assf section in which to insert transform tag</td>
+<td>integer</td>
+<td>-</td>
+</tr>
+<tr>
+<td>direct</td>
+<td>if true, considers all sections and attempts to insert in that section if that section is tag section. if false it only considers tag sections</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nc">AssfPlus</span><span class="o">.</span><span class="n">lineData</span><span class="o">.</span><span class="n">insertTransformTag</span> <span class="n">data</span><span class="p">,</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span><span class="kt">(</span><span class="s1">&#39;</span><span class="s">alpha1</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="kt">)}</span><span class="p">,</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="kc">true</span>
+</code></pre></div>
+<h1 id="text-section">Text Section</h1>
+<h2 id="gettags">getTags</h2>
+<p>While you don't necessarily don't need <code>getTags</code> in a text section, I sometimes
+find myself needing to know which tags actually exists in the line rather than
+effective tags in the line. If you want to act on a tag, it's still better to
+use <code>getEffectiveTags</code> btw. This is for getting information on which tags
+exists in line for the current text section.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Assf Line Contents</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>section</td>
+<td>Assf text section</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>listOnly</td>
+<td>if you only need list of tag names</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Assf tagList if listOnly is false, list of tag's name if listOnly is true</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">tags</span> <span class="o">=</span> <span class="n">textSection</span><span class="o">.</span><span class="n">getTags</span> <span class="n">data</span><span class="p">,</span> <span class="n">section</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">if</span> <span class="n">tags</span><span class="o">.</span><span class="n">fontname</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="c1">-- do things here if \fn exists in the line before this section</span>
+</code></pre></div>
+<p>Get the list of tag names only</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">tags</span> <span class="o">=</span> <span class="n">textSection</span><span class="o">.</span><span class="n">getTags</span> <span class="n">data</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="kc">true</span>
+</code></pre></div>
+<h1 id="tag-section">Tag Section</h1>
+<h2 id="replacetags">replaceTags</h2>
+<p>Replace tags method does not exist for tag section.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>section</td>
+<td>Assf Tag Section</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>Table of Assf Tag Objects</td>
+<td>-</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Index at which to add the replaced tag</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<p>Index can be -1 to add the tag at the end of the tag section. If the tag section contains reset tag, then the tags will automatically add it to the end of the tag section.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nc">AssfPlus</span><span class="o">.</span><span class="n">tagSection</span><span class="o">.</span><span class="n">replaceTags</span> <span class="n">section</span><span class="p">,</span> <span class="kt">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">outline</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="kt">)</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">shadow</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="kt">)</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">alpha4</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">255</span><span class="kt">)</span><span class="p">,</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kt">}</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div>
+<h1 id="tags">Tags</h1>
+<h2 id="color">Color</h2>
+<h3 id="extractcolor">extractColor</h3>
+<p>Extract the R, G and B value of a color. The input can be the color string or a color object made by Assf.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>colorString or {r, g, b} or assf color tag</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r, g, b</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">extractColor</span> <span class="s2">&quot;</span><span class="s">&amp;H1010CF&amp;</span><span class="s2">&quot;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">extractColor</span> <span class="kt">{</span><span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">extractColor</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">color1</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+</code></pre></div>
+<h3 id="getdeltae">getDeltaE</h3>
+<p>This will compare 2 colors to check how similar they are.
+The similarity is based on human perception.
+If delta E value is less than 1, then they appear the same
+for human eyes. If they're 1 - 2, then they need to be observed
+carefully to find difference.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color1</td>
+<td>colorString or {r, g, b} or assf color tag</td>
+</tr>
+<tr>
+<td>color2</td>
+<td>colorString or {r, g, b} or assf color tag</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>delta E value</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">deltaEValue</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getDeltaE</span> <span class="s2">&quot;</span><span class="s">&amp;H1010CF&amp;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">&amp;H1515A9&amp;</span><span class="s2">&quot;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">deltaEValue</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getDeltaE</span> <span class="kt">{</span><span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span><span class="p">,</span> <span class="kt">{</span><span class="mi">169</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="kt">}</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">deltaEValue</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getDeltaE</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">color1</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span><span class="p">,</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">color1</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="kt">}</span>
+</code></pre></div>
+<h3 id="getxyz">getXYZ</h3>
+<p>Converts RGB to XYZ. I needed to convert the color from RGB to XYZ to LAB for delta E calculation.
+That's the only reason why this exists.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>colorString or {r, g, b} or assf color tag</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X, Y, Z</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nc">X</span><span class="p">,</span> <span class="nc">Y</span><span class="p">,</span> <span class="nc">Z</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getXYZ</span> <span class="s2">&quot;</span><span class="s">&amp;H1010CF&amp;</span><span class="s2">&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nc">X</span><span class="p">,</span> <span class="nc">Y</span><span class="p">,</span> <span class="nc">Z</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getXYZ</span> <span class="kt">{</span><span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nc">X</span><span class="p">,</span> <span class="nc">Y</span><span class="p">,</span> <span class="nc">Z</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getXYZ</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">color1</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+</code></pre></div>
+<h3 id="getlab">getLAB</h3>
+<p>Converts RGB to LAB.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>colorString or {r, g, b} or assf color tag</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L, A, B</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nc">L</span><span class="p">,</span> <span class="nc">A</span><span class="p">,</span> <span class="nc">B</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getLAB</span> <span class="s2">&quot;</span><span class="s">&amp;H1010CF&amp;</span><span class="s2">&quot;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nc">L</span><span class="p">,</span> <span class="nc">A</span><span class="p">,</span> <span class="nc">B</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getLAB</span> <span class="kt">{</span><span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nc">L</span><span class="p">,</span> <span class="nc">A</span><span class="p">,</span> <span class="nc">B</span> <span class="o">=</span> <span class="n">_tag</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getLAB</span> <span class="kt">{</span><span class="nc">ASS</span><span class="o">\</span><span class="n">createTag</span> <span class="s2">&quot;</span><span class="s">color1</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">37</span><span class="kt">}</span>
+</code></pre></div>
+<h1 id="shapes">Shapes</h1>
+<h2 id="pathfinder">Pathfinder</h2>
+<p>This allows us to perform various boolean operations in shapes. This depends on ILL.</p>
+<p>This takes the shape1 and shape2, performs the boolean operation on them and then the resulting shape is saved on shape1.</p>
+<p>The different modes are "Unite", "Intersect", "Difference" and "Exclude"</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mode</td>
+<td>string</td>
+</tr>
+<tr>
+<td>shape1</td>
+<td>Assf Drawing Section or Assf Drawing</td>
+</tr>
+<tr>
+<td>shape2</td>
+<td>Assf drawing Seciton or Assf Drawing or Assf rectangular clip or Assf vectorial clip</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">_shape</span><span class="o">.</span><span class="n">pathfinder</span> <span class="s2">&quot;</span><span class="s">Intersect</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">shape1</span><span class="p">,</span> <span class="n">shape2</span>
+</code></pre></div>
+<h1 id="utils">Utils</h1>
+<p>These are some of the functions that are not necessarily related to assf.</p>
+<h2 id="setoglineextradata">setOgLineExtradata</h2>
+<p>This saves the original line in extradata so that the changes made by scripts can be reverted later on.
+The extradata name provided should be unique to that script.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td>Aegsiub line or LineCollection line</td>
+</tr>
+<tr>
+<td>extradataName</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="o">*</span><span class="n">sel</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>    <span class="n">_util</span><span class="o">.</span><span class="n">setOgLineExtradata</span> <span class="n">line</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">a-mo</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="revertlines">revertLines</h2>
+<p>This reverts the line if there is original line present in extradata saved using <code>setOgLineExtradata</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sub</td>
+<td>subtitle table from Aegisub api</td>
+</tr>
+<tr>
+<td>sel</td>
+<td>selected line table from Aegisub api</td>
+</tr>
+<tr>
+<td>extradataName</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="o">*</span><span class="n">sel</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>    <span class="n">_util</span><span class="o">.</span><span class="n">revertLines</span> <span class="n">sub</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">a-mo</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="windowerror">windowError</h2>
+<p>This shows the message and exits the script</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>errorMessage</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">_util</span><span class="o">.</span><span class="n">windowError</span> <span class="s2">&quot;</span><span class="s">This is an error message.</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="windowasserterror">windowAssertError</h2>
+<p>This shows the message and exits the script if the condition is false.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>condition</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>errorMessage</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">_util</span><span class="o">.</span><span class="n">windowError</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">a was not greater than b unfortunately.</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="progress-reporting">Progress Reporting</h2>
+<p>This shows a progress bar and counter as well as a title for the progress window.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>Title of the window</td>
+<td>string</td>
+</tr>
+<tr>
+<td>count</td>
+<td>current count</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>total</td>
+<td>total count</td>
+<td>integer</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nc">Assf</span><span class="o">.</span><span class="n">_util</span><span class="o">.</span><span class="n">progress</span> <span class="s2">&quot;</span><span class="s">Removing Lines</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span>
+</code></pre></div>
+<h2 id="check-cancellation">Check Cancellation</h2>
+<p>This checks if user has cancelled the script and if they have then stops the further execution of the script.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nc">Assf</span><span class="o">.</span><span class="n">_util</span><span class="o">.</span><span class="n">checkCancellation</span><span class="o">!</span>
+</code></pre></div>
+<h2 id="checkvideoisopen">checkVideoIsOpen</h2>
+<p>This checks if a video is loaded or not in the current subtitle file.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nil</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean true if video is open, boolean flase if video is not open</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">if</span> <span class="nc">Assf</span><span class="o">.</span><span class="n">_util</span><span class="o">.</span><span class="n">checkVideoIsOpen</span><span class="o">!</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="c1">-- do something here if video is open</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">else</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="c1">-- do something here if video is closed</span>
+</code></pre></div>
+<h2 id="getframerate">getFramerate</h2>
+<p>The gets the framerate of the video that is open. The framerate is in frame per second.
+If the video is not open the framerate returned is 23.379 fps.</p>
+<table>
+<thead>
+<tr>
+<th>Arguments</th>
+<th>Meaning</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default_framerate</td>
+<td>Framerate returned if video is not open</td>
+<td>23.379</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>framerate in frame per second</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">fps</span> <span class="o">=</span> <span class="nc">Assf</span><span class="o">.</span><span class="n">_util</span><span class="o">.</span><span class="n">getFramerate</span><span class="o">!</span>
+</code></pre></div>
+<h1 id="credits">Credits</h1>
+<p>This module stands on the shoulders of giants that did most of the work.</p>
+<ul>
+<li>ASSFoundation (Obviously)</li>
+<li>Perspective by Arch (For things related to perspective)</li>
+<li>ILL (For things related to shapes)</li>
+<li>Yutils</li>
+<li>SubInspector</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

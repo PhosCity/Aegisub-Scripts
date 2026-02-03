@@ -1,0 +1,2151 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="PhosCity">
+      
+      
+      
+        <link rel="prev" href="../Quality%20Report/">
+      
+      
+        <link rel="next" href="../AssfPlus/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>AegiGUI - PhosCity's Aegisub Script</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-79V80MELY3"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-79V80MELY3",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-79V80MELY3",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-header__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PhosCity's Aegisub Script
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AegiGUI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Abacus/" class="md-tabs__link">
+          
+  
+  
+  Typesetting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Timing%20Assistant/" class="md-tabs__link">
+          
+  
+  
+  Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../KFX/" class="md-tabs__link">
+          
+  
+  
+  Karaoke
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Quality%20Report/" class="md-tabs__link">
+          
+  
+  
+  QC
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Module
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ASSFoundation/" class="md-tabs__link">
+          
+  
+  
+  Others
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PhosCity&#39;s Aegisub Script" class="md-nav__button md-logo" aria-label="PhosCity's Aegisub Script" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PhosCity's Aegisub Script
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PhosCity/Aegisub-Scripts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PhosCity/Aegisub-Scripts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Typesetting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Typesetting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Abacus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abacus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Add%20Grain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Grain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Align%20and%20Distribute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Align and Distribute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ASS2SVG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASS2SVG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Auto%20Fade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auto Fade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Chromatic%20Abberation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chromatic Abberation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edit%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edit Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Extrapolate%20Tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extrapolate Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fold%20Operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fold Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove%20Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remove Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Rotated%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rotated Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg2ass/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svg2ass
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terrain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    terrain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Wobble/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wobble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Fit%20Text%20in%20Clip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fit Text in Clip
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Vector%20Gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector Gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Timing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Timing%20Assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timing Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Bidirectional%20Snapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bidirectional Snapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Karaoke
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Karaoke
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../KFX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    QC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Quality%20Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality Report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Module
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AegiGUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AssfPlus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AssfPlus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Others
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Others
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ASSFoundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASSFoundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p><font color="green"><strong>Available in Dependency Control</strong></font></p>
+<p><a href="https://github.com/PhosCity/Aegisub-Scripts/blob/main/modules/phos/AegiGui.moon">Link to script</a></p>
+<h1 id="introduction">Introduction</h1>
+<p>I hate making GUIs for Aegisub macros and you do too. This module helps you to create and more importantly modify the GUIs easily and quickly. It was designed to take a single string and convert it to a GUI table that Aegisub accepts. Additionally, the GUI string looks similar to how it will look in Aegisub so you can look at the code itself to get the general idea of how to create and modify the string to get corresponding look in Aegisub.</p>
+<h1 id="showcase">Showcase</h1>
+<p>Let's say we want to make a simple GUI like this:</p>
+<p><img alt="image" src="../assets/AegiGUI_showcase_1.png" /></p>
+<p>Then the GUI string will look something like this.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="s">| drop,lineselect,Selected lines::All lines,Selected lines | check,unitalic,Unitalicize already italic lines |</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s">| label, \\fax value:                                      | float,faxvalue,0                                |</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Notice that the GUI string looks very similar to how the GUI looks in Aegisub. Now let's say I don't like this and want to change the GUI to look something like this:</p>
+<p><img alt="image" src="../assets/AegiGUI_showcase_2.png" /></p>
+<p>All I'd have to do is to modify the string as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s">| drop,lineselect,Selected lines::All lines,Selected lines |                  |</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s">| check,unitalic,Unitalicize already italic lines          |                  |</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s">| label, \\fax value:                                      | float,faxvalue,0 |</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>You can imagine that this change was very trivial to do in the string.
+Now finally, lets say I want to add an empty space in the middle of the GUI.</p>
+<p><img alt="image" src="../assets/AegiGUI_showcase_3.png" /></p>
+<p>All I'd to do is add <code>null</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">| drop,lineselect,Selected lines::All lines,Selected lines |                  |</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">null</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">| check,unitalic,Unitalicize already italic lines          |                  |</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">| label, \\fax value:                                      | float,faxvalue,0 |</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>If this does not convince you to use this module, I don't think anything else in this page will and you can stop reading further. For someone new to making Aegisub GUI, the reason why I believe this showcase is impressive is because if I wanted to add an empty space in the middle like this, I would have to change the coordinates of all the elements that came after this. It's easy in small GUI like this but imagine doing the same in a decently large GUI. If the difference of simply adding <code>null</code> versus manually updating every single coordinate of all the items does not impress you, nothing else about this module will.</p>
+<h1 id="basic-usage">Basic Usage</h1>
+<p>There are three methods provided by this module.</p>
+<h2 id="aegiguicreate">AegiGUI.create</h2>
+<p>This method converts the string you pass to tables that can be understood by Aegisub to create GUIs.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Arguments</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>GUI string</code></td>
+<td style="text-align: left;">String that has all the class info</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON string</code></td>
+<td style="text-align: left;">String that has all the button info</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Returns</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>GUI table</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to create GUI</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON table</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to create buttons</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON ids</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to assign ID to buttons</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Error Message</code></td>
+<td style="text-align: left;">Any error messages that the module might have found in your GUI string</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Error Level</code></td>
+<td style="text-align: left;">0 means non-fatal errors while 1 means fatal errors in your GUI string</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">gui</span> <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">create</span> <span class="n">str</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">aegisub</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">display</span><span class="kt">(</span><span class="n">gui</span><span class="kt">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">gui</span><span class="p">,</span> <span class="n">button</span> <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">create</span> <span class="n">str</span><span class="p">,</span> <span class="n">btn</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">aegisub</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">display</span><span class="kt">(</span><span class="n">gui</span><span class="p">,</span> <span class="n">button</span><span class="kt">)</span>
+</code></pre></div>
+<h2 id="aegiguidebug">AegiGUI.debug</h2>
+<p>This method is supposed to be used only when you are writing a script. Normally when there are fatal errors, the module will show you those errors as they generally mean GUI cannot be initialized. However, all non-fatal errors are suppressed. As a script author, you should fix them as well since they could have undesired effects and could have been caused by some oversight.</p>
+<p>So this method collects them and shows you giving an opportunity to fix them. After you fix them, initializing GUI is as easy as changing <code>AegiGUI.debug</code> to <code>AegiGUI.create</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method does not initialize any GUI. In fact this stops any further execution of the script and only shows if there are any issues initializing the GUI string or not.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Same as AegiGUI.create</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Nothing</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nc">AegiGUI</span><span class="o">.</span><span class="n">debug</span> <span class="n">str</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nc">AegiGUI</span><span class="o">.</span><span class="n">debug</span> <span class="n">str</span><span class="p">,</span> <span class="n">btn</span>
+</code></pre></div>
+<h2 id="aegiguiopen">AegiGUI.open</h2>
+<p>This method not only converts the string but also uses that table to initialize the GUI so you don't have to.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Same as AegiGUI.create</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Returns</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>pressed</code></td>
+<td style="text-align: left;">String or boolean that shows info about which buttons was pressed</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>result</code></td>
+<td style="text-align: left;">Table that contains values of all the items of the GUI</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>pressed</code> is boolean false if button with <code>cancel</code> id is pressed. Similarly, it is boolean true if button with <code>ok</code> id is pressed. It is string i.e. button name which was pressed for custom buttons.</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">pressed</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">open</span> <span class="n">str</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">pressed</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">open</span> <span class="n">str</span><span class="p">,</span> <span class="n">btn</span>
+</code></pre></div>
+<h2 id="aegiguimerge">AegiGUI.merge</h2>
+<p>This method allows you to merge two gui strings. It can directly open the gui and return pressed button and gui result or it can just return the combined gui table that can be fed to aegisub.dialog.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Arguments</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>Source GUI string</code></td>
+<td style="text-align: left;">The gui string that you want another gui string be appended to</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Target GUI string</code></td>
+<td style="text-align: left;">The gui string that you want to appended to another gui string</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON string</code></td>
+<td style="text-align: left;">String that has all the button info</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x Offset</code></td>
+<td style="text-align: left;">All elements in target GUI string will be ofset by this amount (Default = 0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>y Offset</code></td>
+<td style="text-align: left;">All elements in target GUI string will be ofset by this amount (Default = 0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>open</code></td>
+<td style="text-align: left;">Boolen if you want to open the merged gui(Default = false)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Returns</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>GUI table</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to create GUI</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON table</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to create buttons</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BUTTON ids</code></td>
+<td style="text-align: left;">Table that can be fed to aegisub.dialog to assign ID to buttons</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">gui</span>  <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">merge</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Apply, Cancel:cancel</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">aegisub</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">display</span><span class="kt">(</span><span class="n">gui</span><span class="kt">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">pressed</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="nc">AegiGUI</span><span class="o">.</span><span class="n">merge</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">true</span>
+</code></pre></div>
+<h1 id="formatting-the-gui-string">Formatting the GUI string</h1>
+<p>There are a few rules that the GUI string follows:</p>
+<ol>
+<li>Every class will be enclosed by <code>|</code> character. A space between two <code>|</code> is called a cell like a spreadsheet cell.</li>
+<li>One cell has an width of 1 and height of 1 in GUI table.</li>
+<li>There will be equal number of cells in each line of GUI string. This effectively means there will be equal number of <code>|</code> in each line.</li>
+<li><code>null</code> is a special keyword that tells the module to leave that cell or that whole row alone. If all cells in a row is empty, it is equivalent to a <code>null</code> row.</li>
+<li>An empty cell means the width of this cell will be added to whatever non-empty cell it finds before it in its row. (Unless it encounters a <code>null</code> cell before it finds a non-empty cell.)</li>
+<li>If there is a text (for textbox or label class for example) that has characters like <code>\n</code>, <code>,</code> or <code>|</code>, the whole text must be enclosed inside <code>[[...]]</code> to escape them. Naturally you cant use <code>[[]]</code> in any text. Hopefully you never have its need.</li>
+</ol>
+<h2 id="list-of-all-classes">List of all classes</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Class</th>
+<th>Alias</th>
+<th>Argument 1</th>
+<th>Argument 2</th>
+<th>Argument 3</th>
+<th>Argument 4</th>
+<th>Argument 5</th>
+<th>Argument 6</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">label</td>
+<td>-</td>
+<td>label</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">edit</td>
+<td>-</td>
+<td>name</td>
+<td>text (opt)</td>
+<td>hint (opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">textbox</td>
+<td>text</td>
+<td>name</td>
+<td>height</td>
+<td>text(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">checkbox</td>
+<td>check</td>
+<td>name</td>
+<td>label</td>
+<td>value(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">intedit</td>
+<td>int</td>
+<td>name</td>
+<td>value(opt)</td>
+<td>min(opt)</td>
+<td>max(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">floatedit</td>
+<td>float</td>
+<td>name</td>
+<td>value(opt)</td>
+<td>min(opt)</td>
+<td>max(opt)</td>
+<td>step(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">dropdown</td>
+<td>drop</td>
+<td>name</td>
+<td>items</td>
+<td>value(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">color</td>
+<td>-</td>
+<td>name</td>
+<td>colorstring(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">coloralpha</td>
+<td>-</td>
+<td>name</td>
+<td>colorstring(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">alpha</td>
+<td>-</td>
+<td>name</td>
+<td>alphastring(opt)</td>
+<td>hint(opt)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align: left;">pad</td>
+<td>-</td>
+<td>value</td>
+<td></td>
+<td></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Non-Aegi class</td>
+</tr>
+</tbody>
+</table>
+<h2 id="label">label</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_label_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s">| label, Label 1          | label, Label 2          | label, Label 3 |</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">| label, Label of width 3 |                         |                |</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">|                         | label, Label of width 2 |                |</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">| label, Label of width 1 | null                    |                |</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p><img align="right" alt="image" src="../assets/AegiGUI_label_2.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">lblStr</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">This is a string in variable.</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s">| label, #{lblStr}                                   |</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">| label, [[Escaping illegal characters like , or |]] |</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="intedit">intedit</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_intedit_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s">| label, Basic intedit class          |</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="s">| intedit, int1, 10                   |</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">| label, With alias                   |</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">| int, int2, 10                       |</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s">| label, with minimum value           |</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s">| int, int3, 10, 0                    |</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s">| label, with maximum value           |</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s">| int, int4, 10, _, 100               |</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="s">| label, with both max and min value  |</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="s">| int, int5, 10, 0, 100               |</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="s">| label, with hint                    |</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="s">| int, int6, 10, _, _, This is a hint |</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p><br/><br/></p>
+<h2 id="floatedit">floatedit</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_floatedit_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s">| label, Basic floatedit class                |</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s">| floatedit, float1, 1.5                      |</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s">| label, With alias                           |</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s">| float, float2, 1.5                          |</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="s">| label, with minimum value                   |</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="s">| float, float3, 1.5, 0                       |</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s">| label, with maximum value                   |</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="s">| float, float4, 1.5, _, 10.5                 |</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="s">| label, with both max and min value          |</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="s">| float, float5, 1.5, 0, 10.5                 |</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="s">| label, [[with both max,min and step value]] |</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="s">| float, float6, 1.5, 0, 10.5, 0.5            |</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="s">| label, with hint                            |</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="s">| float, float7, 1.5, _, _, _, This is a hint |</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p><br/><br/>
+<br/><br/></p>
+<h2 id="checkbox">checkbox</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_check_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="s">| label, Basic checkbox class                 |</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="s">| checkbox, chk1, Checkbox 1                  |</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">| label, With alias                           |</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">| check, chk2, Checkbox 2                     |</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s">| label, Force true value                     |</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s">| check, chk3, Checkbox 3, true               |</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s">| label, Force false value                    |</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s">| check, chk4, Checkbox 4, false              |</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s">| label, With hints                           |</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="s">| check, chk5, Checkbox 5, _, This is a hint. |</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="dropdown">dropdown</h2>
+<p>This one was a bit tricky because you have to pass a table to dropdown items so all table items are delimited by <code>::</code> which is then converted to table by the module.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_dropdown_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="s">| label, Basic dropdown class |</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="s">| dropdown, drp1, 1::2::3, 1  |</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="s">| label, With alias           |</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="s">| drop, drp2, item1::item2    |</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Since tables can mostly be quite large, it is better to create the table outside the GUI string and append it later.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_dropdown_2.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">alfa</span> <span class="o">=</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">00</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">20</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">30</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">40</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">50</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">60</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">70</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">80</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">90</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">A0</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">B0</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">C0</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">D0</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">F0</span><span class="s2">&quot;</span><span class="kt">}</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">drop_alfa</span> <span class="o">=</span> <span class="nb">table.concat</span><span class="kt">(</span><span class="n">alfa</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">::</span><span class="s2">&quot;</span><span class="kt">)</span><span class="o">..</span><span class="s2">&quot;</span><span class="s">,</span><span class="s2">&quot;</span><span class="o">..</span><span class="n">alfa</span><span class="kt">[</span><span class="mi">8</span><span class="kt">]</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">layer</span> <span class="o">=</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">-5</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">-4</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">-3</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">-2</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">-1</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">+1</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">+2</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">+3</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">+4</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">+5</span><span class="s2">&quot;</span><span class="kt">}</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">drop_layer</span> <span class="o">=</span> <span class="nb">table.concat</span><span class="kt">(</span><span class="n">layer</span><span class="p">,</span><span class="s2">&quot;</span><span class="s">::</span><span class="s2">&quot;</span><span class="kt">)</span><span class="o">..</span><span class="s2">&quot;</span><span class="s">,</span><span class="s2">&quot;</span><span class="o">..</span><span class="n">layer</span><span class="kt">[</span><span class="mi">6</span><span class="kt">]</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="s">| label, alpha | drop, alpha, #{drop_alfa}  |</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="s">| label, layer | drop, layer, #{drop_layer} |</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="textbox">textbox</h2>
+<p>This is the point where you will feel like this module is held with nothing but a duct tape and for good reason. <code>textbox</code> is notoriously hard to work with in complex GUIs. When I tell Aegisub to make a textbox that is one has width 1, how wide is that? Nobody knows. That width is in fact equal to the longest width of other items in that column. What if there are no other items in that column. Well then your textbox has no width. Lets say your textbox has a certain width and I set its width to two. Does that mean its width has been doubled? No again. Its width is sum of longest element of each column. Because of this nature of textbox where its width depends on dimensions of other elements in that row, there is no deterministic way to make textbox. Textbox is always hard to get right without some trial and error and unfortunately, this module does not solve this issue.</p>
+<p>This module does provide a class called <code>pad</code> which can force a cell to be a certain characters wide which will help use maintain the width of a textbox.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_textbox_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="s">| label, Textbox without padding |</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="s">| text, txt1, 5                  |</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="s">|                                |</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="s">|                                |</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="s">|                                |</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="s">|                                |</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Notice that textbox is as wide as the label above it. If the label was shorter, the textbox would be less wide as well. Also notice that since I gave it the height of 5, I have to add five empty cells (counting itself) below it.I could also add <code>null</code> to get the same effect instead of empty cells.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_textbox_2.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="s">| label, Textbox with padding | pad, 50 |</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="s">| text, txt1, 5               |         |</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="s">|                             |         |</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="s">|                             |         |</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="s">null</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="s">null</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Here I padded the second column by 50 characters which made the textbox longer than the first example. I also mixed empty cells and <code>null</code> lines to show that they effectively work as the same.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_textbox_3.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">textboxValue</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">My name is Yoshikage Kira. I&#39;m 33 years old. My house is in the northeast section of Morioh, where all the villas are...</span><span class="s2">&quot;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="s">|label, Textbox with value       |null |label, Using variable as value    |</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="s">|text, txt1, 5, This is some text|pad,5|text, txt2, 5, [[#{textboxValue}]]|</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="s">null</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="s">null</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="s">null</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="s">null</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Here I put value inside the textbox. In the second box, I put the text from a variable that was put inside <code>[[..]]</code> so that any illegal characters inside can be escaped. Additionally, padding here is not to add width to textbox but to separate two textboxes.</p>
+<h2 id="edit">edit</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_edit_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="s">| edit, edit1 |</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>At the very least, width 1 of edit class has some default width.</p>
+<p><img align="right" alt="image" src="../assets/AegiGUI_edit_2.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="s">| label, It&#39;s width also depends on other elements of row|</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="s">| edit, edit1, Value inside edit box                     |</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Width of edit class is also dependant on longest element of that column so that can be manipulated just like we manipulated width of textbox.</p>
+<h2 id="color">color</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_color_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="s">| label, Empty color value is valid      | color, cl1            |</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="s">| label, BGR value can be used like this | color, cl2, &amp;H0405F7&amp; |</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="s">| label, RGB can be used like this       | color, cl3, #F70504   |</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="coloralpha">coloralpha</h2>
+<p><img align="right" alt="image" src="../assets/AegiGUI_coloralpha_1.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="s">| label, Empty coloralpha value is valid  | coloralpha, cl1              |</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="s">| label, ABGR value can be used like this | coloralpha, cl2, &amp;HAA0405F7&amp; |</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<h1 id="buttons">Buttons</h1>
+<p>Button string is optional. If you do not pass button string, you will get a default <code>OK</code> and <code>Cancel</code> buttons.</p>
+<p>A simple button string looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">btn</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Button 1,Button 2</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>If you want to provide button IDs to a specific button, the button string looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">btn</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Button 1:ok, Button 2:cancel</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>This will assign <code>Button1</code> with <code>ok</code> button ID and <code>Button2</code> with <code>cancel</code> button ID. To see which button IDs are valid, see <a href="https://aegisub.org/docs/latest/automation/lua/dialogs/#dialog-button-ids">here.</a></p>
+<p>If you want multiple custom buttons, you can assign a specific class to specific button.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">btn</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Button 1,Button 2, Button 3:cancel</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>This will make <code>Button3</code> return boolean false and every other button returns button name.</p>
+<h1 id="some-minor-things-that-the-module-will-handle-for-you">Some minor things that the module will handle for you</h1>
+<ol>
+<li>Unless an argument for a class is stated to be optional, every argument must be supplied. It will raise fatal errors if you do not.</li>
+<li>If you do not provide optional arguments, default value will be used for them. Please be aware of their default values when you skip them.</li>
+<li>If you provide more arguments than is necessary for a class, they will be ignored with non-fatal warnings.</li>
+<li>Every arguments type will be checked and if it does not match, fatal error will be raised.</li>
+<li>If you provide float number when an argument demands an integer, every value after decimal will be truncated with non-fatal error raised. (This is default behaviour for intedit class in Aegisub)</li>
+<li>All elements of list in dropdown must be unique. If they are not, duplicated items will be dropped with non-fatal warnings.</li>
+<li>All names of class must be unique. If they are not, fatal error is raised.</li>
+</ol>
+<h1 id="some-tips">Some Tips</h1>
+<ul>
+<li>
+<p>You can use a spreadsheet tool like <strong>Excel</strong> or <strong>LibreCalc</strong> to create the basic structure of the GUI string. Pop in the values in the cells like you want to see them in the GUI and save it as csv file with <code>|</code> as a delimiter. This will do most of the work for you. You can now clean up the text and fix anything if necessary.</p>
+</li>
+<li>
+<p>There is actually no need for any formatting as long as the rules of GUI strings are followed. You don't need to align the cells like I did in examples. You don't need to strip spaces around the cell as well. However doing so will give you a better picture of how the GUI will look by looking at the code itself which will only benefit you. I personally use neovim and use <a href="https://github.com/junegunn/vim-easy-align">this plugin</a> to automagically format them. You could also pop the string in a markdown file and use formatter like prettier to format it as markdown tables. Alternately, format it manually with bunch of spaces.</p>
+</li>
+<li>
+<p>All the examples in this page along with two of the GUIs from my own script has been made into a script <a href="https://github.com/PhosCity/Aegisub-Scripts/blob/main/docs/examples/AegiGUI.moon">here</a>.</p>
+</li>
+</ul>
+<h1 id="this-module-may-not-be-for-you">This module may not be for you</h1>
+<p>While this module does a lot of what I imagined it to do, it is not a perfect alternative to how we traditionally made Aegisub GUI. While I was able to easily replicate the GUIs of of my own scripts, when I tried to replicate unanimated's behemoth of GUIs, it still amounted to a lot of frustration. Unanimated merges a lot of cells and adds a ton of elements in a single GUI so that did not help the matter at all.</p>
+<p>To spin this weakness to its strength, I guess this module forces you to write simpler GUIs because if you want an easier time writing a GUI using this module, you need to keep your elements aligned to grids majority of the time. Keep your GUIs simple and this module will surely make the job easier for you.</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
