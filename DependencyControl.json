@@ -807,6 +807,55 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.terrain": {
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "terrain",
+			"description": "Interpolate between two vectorial clips with same number of points.",
+			"channels": {
+				"main": {
+					"version": "0.0.1",
+					"released": "2025-12-30",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "a8e6e36297a61f56984834dd15d1ae11d3970ac7"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "a-mo.LineCollection",
+							"name": "Aegisub-Motion (LineCollection)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.3.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.ASSFoundation",
+							"name": "ASSFoundation",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.5.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "phos.AegiGui",
+							"name": "AegiGui",
+							"url": "https://github.com/PhosCity/Aegisub-Scripts",
+							"version": "1.0.0",
+							"feed": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	},
 	"modules": {
