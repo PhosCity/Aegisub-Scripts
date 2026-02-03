@@ -169,7 +169,6 @@ main = (sub, sel) ->
             style: style
         }
         lines\addLine newLine, nil, true, sel[1]
-        -- lines\replaceLines!
         lines\insertLines!
 
 
