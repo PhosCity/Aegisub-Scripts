@@ -13,6 +13,9 @@ The only requirement for this script is to have fontforge in path.
 Your browser does not support the video tag.
 </video>
 
+- Write a character you want to assign to the shape in the effect field. You
+    cannot reuse same character twice. You also cannot use multiple character
+    in effect field.
 - Select lines with shapes in Aegisub.
 - Run the script.
 - Navigate to the folder where you want to save the font and input the filename
