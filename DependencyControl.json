@@ -856,6 +856,41 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.ASS2TTF": {
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "ASS2TTF",
+			"description": "Convert shapes to a TTF font",
+			"channels": {
+				"main": {
+					"version": "1.0.2",
+					"released": "2025-06-23",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "be31779f08657264216799023bbbfe8a2c57bebd"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "ILL.ILL",
+							"name": "ILL Library",
+							"url": "https://github.com/TypesettingTools/ILL-Aegisub-Scripts",
+							"version": "1.7.7",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ILL-Aegisub-Scripts/main/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	},
 	"modules": {
