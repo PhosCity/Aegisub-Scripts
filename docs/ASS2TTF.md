@@ -1,6 +1,6 @@
 <font color="green">**Available in Dependency Control**</font>
 
-[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.ASS2SVG.moon)
+[Link to script](https://github.com/PhosCity/Aegisub-Scripts/blob/main/macros/phos.ASS2TTF.moon)
 
 `ASS2TTF` allows you to convert shape from ass subtitles to a ttf font. This script
 only works in shapes and not text. For best result use a shape with 7 alignment.
