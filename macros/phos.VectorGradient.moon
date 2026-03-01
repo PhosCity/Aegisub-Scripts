@@ -1,8 +1,8 @@
-export script_name = "Vector Gradient Test"
+export script_name = "Vector Gradient"
 export script_description = "Magic triangles + blur gradients"
 export script_version = "1.0.0"
 export script_author = "PhosCity"
-export script_namespace = "phos.VectorGradientTest"
+export script_namespace = "phos.VectorGradient"
 
 DependencyControl = require "l0.DependencyControl"
 depctrl = DependencyControl{
