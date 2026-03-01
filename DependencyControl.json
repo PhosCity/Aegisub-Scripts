@@ -891,6 +891,55 @@
 					"Added to Dependency Control"
 				]
 			}
+		},
+		"phos.VectorGradient": {
+			"fileBaseUrl": "@{fileBaseUrl}/macros/@{namespace}",
+			"url": "@{baseUrl}#@{namespace}",
+			"author": "PhosCity",
+			"name": "Vector Gradient",
+			"description": "Magic triangles + blur gradients",
+			"channels": {
+				"main": {
+					"version": "1.0.0",
+					"released": "2026-02-26",
+					"default": true,
+					"files": [
+						{
+							"name": ".moon",
+							"url": "@{fileBaseUrl}@{fileName}",
+							"sha1": "25e1f56c3ee6133da66bb6fe24e42c3600451728"
+						}
+					],
+					"requiredModules": [
+						{
+							"moduleName": "a-mo.LineCollection",
+							"name": "Aegisub-Motion (LineCollection)",
+							"url": "https://github.com/TypesettingTools/Aegisub-Motion",
+							"version": "1.3.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/Aegisub-Motion/DepCtrl/DependencyControl.json"
+						},
+						{
+							"moduleName": "l0.ASSFoundation",
+							"name": "ASSFoundation",
+							"url": "https://github.com/TypesettingTools/ASSFoundation",
+							"version": "0.5.0",
+							"feed": "https://raw.githubusercontent.com/TypesettingTools/ASSFoundation/master/DependencyControl.json"
+						},
+						{
+							"moduleName": "phos.AegiGui",
+							"name": "AegiGui",
+							"url": "https://github.com/PhosCity/Aegisub-Scripts",
+							"version": "1.0.0",
+							"feed": "https://raw.githubusercontent.com/PhosCity/Aegisub-Scripts/main/DependencyControl.json"
+						}
+					]
+				}
+			},
+			"changelog": {
+				"1.0.0": [
+					"Added to Dependency Control"
+				]
+			}
 		}
 	},
 	"modules": {
