@@ -19,9 +19,39 @@ Your browser does not support the video tag.
 | Ring  | 2                     | Radial        |
 | Star  | 2                     | Radial        |
 
-- Create the vectorial clip with the required number of clips. For wedge, create the clip in clockwise direction.
+- Create the vectorial clip with the required number of clips. For wedge, create
+the clip in clockwise direction.
 
 - Run the script and choose which type of gradient you want.
+
+# Controls
+
+## Wedge
+
+
+| Item | Description |
+| ------------- | -------------- |
+| Spacing | Distance between peaks of two consecutive wedge |
+| Thickness | The thickness of the base from which wedge originates |
+
+## Box
+
+| Item | Description |
+| ------------- | -------------- |
+| Spacing | Distance between two consecutive box |
+
+## Ring
+
+| Item | Description |
+| ------------- | -------------- |
+| Spacing | Distance between two consecutive rings |
+
+## Star
+
+| Item | Description |
+| ------------- | -------------- |
+| Spike Count | The number of spikes |
+| Central Radius | The Radius of the central circle from which spikes originate |
 
 # Examples
 
