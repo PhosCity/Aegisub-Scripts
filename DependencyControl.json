@@ -187,14 +187,14 @@
 			"description": "Add static and dynamic grain",
 			"channels": {
 				"main": {
-					"version": "1.1.7",
+					"version": "1.1.8",
 					"released": "2026-04-16",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "8617b381efedc712d33abca8932254bad3a5e0e3"
+							"sha1": "ff1eac25ee21b1fad149959b8a97fa4b3ab0e51f"
 						}
 					],
 					"requiredModules": [
