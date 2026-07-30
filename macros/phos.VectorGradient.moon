@@ -1,6 +1,6 @@
 export script_name = "Vector Gradient"
 export script_description = "Magic triangles + blur gradients"
-export script_version = "1.0.0"
+export script_version = "1.0.1"
 export script_author = "PhosCity"
 export script_namespace = "phos.VectorGradient"
 
@@ -18,6 +18,11 @@ depctrl = DependencyControl{
 }
 LineCollection, ASS, AegiGui = depctrl\requireModules!
 logger = depctrl\getLogger!
+
+round = (num, idp = 0) ->
+    return num if idp == math.huge
+    fac = 10^idp
+    return math.floor(num * fac + 0.5) / fac
 
 
 createGUI = ->
@@ -237,7 +242,7 @@ rings = (data, clip, res) ->
     ringsList = {}
     for i = 1, N
         rOuter = rInner + boxes[i]
-        table.insert ringsList, {rInner, rOuter}
+        table.insert ringsList, {round(rInner, 4), round(rOuter, 4)}
         rInner = rOuter + gaps[i]
 
     finalShape = ""
