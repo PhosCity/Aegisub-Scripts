@@ -184,31 +184,32 @@ box = (data, clip, res) ->
     data
 
 
--- helper function to add cubic Bezier circle
-bezier_circle = (cx, cy, r, reverse=false) ->
+-- helper function to add cubic Bezier ellipse (a circle when rx == ry)
+bezier_ellipse = (cx, cy, rx, ry, reverse=false) ->
     -- constant factor for cubic Bezier circle approximation
     k = 0.5522847498
 
-    c = r * k
+    cx_off = rx * k
+    cy_off = ry * k
     unless reverse
         return {
             "m",
-            cx + r, cy, -- start at rightmost point
+            cx + rx, cy, -- start at rightmost point
             "b",
-            cx + r, cy - c, cx + c, cy - r, cx, cy - r, -- first quadrant
-            cx - c, cy - r, cx - r, cy - c, cx - r, cy, -- second quadrant
-            cx - r, cy + c, cx - c, cy + r, cx, cy + r, -- third quadrant
-            cx + c, cy + r, cx + r, cy + c, cx + r, cy  -- fourth quadrant
+            cx + rx, cy - cy_off, cx + cx_off, cy - ry, cx, cy - ry, -- first quadrant
+            cx - cx_off, cy - ry, cx - rx, cy - cy_off, cx - rx, cy, -- second quadrant
+            cx - rx, cy + cy_off, cx - cx_off, cy + ry, cx, cy + ry, -- third quadrant
+            cx + cx_off, cy + ry, cx + rx, cy + cy_off, cx + rx, cy  -- fourth quadrant
         }
     else
         return {
             "m",
-            cx + r, cy, -- start at rightmost point
+            cx + rx, cy, -- start at rightmost point
             "b",
-            cx + r, cy + c, cx + c, cy + r, cx, cy + r  -- fourth quadrant
-            cx - c, cy + r, cx - r, cy + c, cx - r, cy, -- third quadrant
-            cx - r, cy - c, cx - c, cy - r, cx, cy - r, -- second quadrant
-            cx + c, cy - r, cx + r, cy - c, cx + r, cy, -- first quadrant
+            cx + rx, cy + cy_off, cx + cx_off, cy + ry, cx, cy + ry  -- fourth quadrant
+            cx - cx_off, cy + ry, cx - rx, cy + cy_off, cx - rx, cy, -- third quadrant
+            cx - rx, cy - cy_off, cx - cx_off, cy - ry, cx, cy - ry, -- second quadrant
+            cx + cx_off, cy - ry, cx + rx, cy - cy_off, cx + rx, cy, -- first quadrant
         }
 
 
@@ -248,10 +249,10 @@ rings = (data, clip, res) ->
     finalShape = ""
     for ring in *ringsList
         -- outer circle
-        finalShape ..= table.concat(bezier_circle(cx, cy, ring[2]), " ") .. " "
+        finalShape ..= table.concat(bezier_ellipse(cx, cy, ring[2], ring[2]), " ") .. " "
 
         -- inner circle (hole)
-        finalShape ..= table.concat(bezier_circle(cx, cy, ring[1], true), " ") .. " "
+        finalShape ..= table.concat(bezier_ellipse(cx, cy, ring[1], ring[1], true), " ") .. " "
 
     data = add_line data, finalShape
     data
