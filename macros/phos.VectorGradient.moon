@@ -27,20 +27,21 @@ round = (num, idp = 0) ->
 
 createGUI = ->
     dialog_str = "
-    | label, -- Wedge -------- |                                            |                        |                                                |                                         |
-    | label, Thickness         | float, wedgeThicknessRatio, 0.1, 1, 0, 0.1 | label, Spacing         | float, wedgeSpacing, 10, 0                     |                                         |
+    | label, -- Wedge -------- |                                            |                                         |                                                |
+    | label, Thickness         | float, wedgeThicknessRatio, 0.1, 1, 0, 0.1 | label, Spacing                          | float, wedgeSpacing, 10, 0                     |
     null
-    | label, -- Box ---------- |                                            |                        |                                                |                                         |
-    | label, Spacing           | float, boxSpacing, 20, 0                   |                        |                                                |                                         |
+    | label, -- Box ---------- |                                            |                                         |                                                |
+    | label, Spacing           | float, boxSpacing, 20, 0                   |                                         |                                                |
     null
-    | label, -- Ring --------- |                                            |                        |                                                |                                         |
-    | label, Spacing           | float, ringSpacing, 20, 0                  |                        |                                                |                                         |
+    | label, -- Ring --------- |                                            |                                         |                                                |
+    | label, Spacing           | float, ringSpacing, 20, 0                  |                                         |                                                |
     null
-    | label, -- Star --------- |                                            |                        |                                                |                                         |
-    | label, Spike Count       | float, spikeCount, 20, 0                   | label, Central Radius  | float, centralRadius, 0.22, 0.1, 1, 0.01       |                                         |
+    | label, -- Star --------- |                                            |                                         |                                                |
+    | label, Spike Count       | float, spikeCount, 20, 0                   | label, Central Radius                   | float, centralRadius, 0.22, 0.1, 1, 0.01       |
     null
-    | label, -- Vignette ----- |                                            |                        |                                                |                                         |
-    | label, Spacing           | float, vignetteSpacing, 20, 0              | label, Hole Radius     | float, vignetteInnerRadius, 0.0, 0, 0.95, 0.05 | checkbox, vignetteFillOuter, Fill Edges |
+    | label, -- Vignette ----- |                                            |                                         |                                                |
+    | label, Spacing           | float, vignetteSpacing, 20, 0              | label, Hole Radius                      | float, vignetteInnerRadius, 0.0, 0, 0.95, 0.05 |
+    | label, Expand Edges      | float, vignetteExpand, 0, 0                | checkbox, vignetteFillOuter, Fill Edges |                                                |
     "
     dialog, button, buttonID = AegiGui.create dialog_str, "Wedge, Box, Ring, Star, Vignette, Cancel:cancel"
     btn, res = aegisub.dialog.display(dialog, button, buttonID)
@@ -351,12 +352,21 @@ vignette = (data, clip, res) ->
         tInner = tOuter + gaps[i]
 
     finalShape = ""
+    expand = res.vignetteExpand or 0
+    
+    local outerBoundary
+    if res.vignetteFillOuter
+        exMin, eyMin = xMin - expand, yMin - expand
+        exMax, eyMax = xMax + expand, yMax + expand
+        outerBoundary = "m #{exMin} #{eyMin} l #{exMin} #{eyMax} #{exMax} #{eyMax} #{exMax} #{eyMin} #{exMin} #{eyMin} "
+    else
+        outerBoundary = table.concat(bezier_ellipse(cx, cy, rxMax + expand, ryMax + expand), " ") .. " "
+
     -- i == 1 = outermost boundary
     for i, ring in ipairs ringsList
         -- outer boundary
-        if i == 1 and res.vignetteFillOuter
-            -- fill the entire clip bounds as a rectangle instead of an ellipse
-            finalShape ..= "m #{xMin} #{yMin} l #{xMin} #{yMax} #{xMax} #{yMax} #{xMax} #{yMin} #{xMin} #{yMin} "
+        if i == 1
+            finalShape ..= outerBoundary
         else
             outerScale = 1 - ring[1] / axisMax
             finalShape ..= table.concat(bezier_ellipse(cx, cy, rxMax * outerScale, ryMax * outerScale), " ") .. " "
