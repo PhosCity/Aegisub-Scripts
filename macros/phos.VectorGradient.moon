@@ -1,6 +1,6 @@
 export script_name = "Vector Gradient"
 export script_description = "Magic triangles + blur gradients"
-export script_version = "1.0.1"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.VectorGradient"
 
@@ -27,19 +27,23 @@ round = (num, idp = 0) ->
 
 createGUI = ->
     dialog_str = "
-    | label, -- Wedge -------- |                                            |                        |                                          |
-    | label, Thickness         | float, wedgeThicknessRatio, 0.1, 1, 0, 0.1 | label, Spacing         | float, wedgeSpacing, 10, 0               |
+    | label, -- Wedge -------- |                                            |                                         |                                                |
+    | label, Thickness         | float, wedgeThicknessRatio, 0.1, 1, 0, 0.1 | label, Spacing                          | float, wedgeSpacing, 10, 0                     |
     null
-    | label, -- Box ---------- |                                            |                        |                                          |
-    | label, Spacing           | float, boxSpacing, 20, 0                   |                        |                                          |
+    | label, -- Box ---------- |                                            |                                         |                                                |
+    | label, Spacing           | float, boxSpacing, 20, 0                   |                                         |                                                |
     null
-    | label, -- Ring --------- |                                            |                        |                                          |
-    | label, Spacing           | float, ringSpacing, 20, 0                  |                        |                                          |
+    | label, -- Ring --------- |                                            |                                         |                                                |
+    | label, Spacing           | float, ringSpacing, 20, 0                  |                                         |                                                |
     null
-    | label, -- Star --------- |                                            |                        |                                          |
-    | label, Spike Count       | float, spikeCount, 20, 0                   | label, Central Radius  | float, centralRadius, 0.22, 0.1, 1, 0.01 |
+    | label, -- Star --------- |                                            |                                         |                                                |
+    | label, Spike Count       | float, spikeCount, 20, 0                   | label, Central Radius                   | float, centralRadius, 0.22, 0.1, 1, 0.01       |
+    null
+    | label, -- Vignette ----- |                                            |                                         |                                                |
+    | label, Spacing           | float, vignetteSpacing, 20, 0              | label, Hole Radius                      | float, vignetteInnerRadius, 0.0, 0, 0.95, 0.05 |
+    | label, Expand Edges      | float, vignetteExpand, 0, 0                | checkbox, vignetteFillOuter, Fill Edges |                                                |
     "
-    dialog, button, buttonID = AegiGui.create dialog_str, "Wedge, Box, Ring, Star, Cancel:cancel"
+    dialog, button, buttonID = AegiGui.create dialog_str, "Wedge, Box, Ring, Star, Vignette, Cancel:cancel"
     btn, res = aegisub.dialog.display(dialog, button, buttonID)
     aegisub.cancel! if btn == "Cancel"
     return res, btn
@@ -184,31 +188,32 @@ box = (data, clip, res) ->
     data
 
 
--- helper function to add cubic Bezier circle
-bezier_circle = (cx, cy, r, reverse=false) ->
+-- helper function to add cubic Bezier ellipse (a circle when rx == ry)
+bezier_ellipse = (cx, cy, rx, ry, reverse=false) ->
     -- constant factor for cubic Bezier circle approximation
     k = 0.5522847498
 
-    c = r * k
+    cx_off = rx * k
+    cy_off = ry * k
     unless reverse
         return {
             "m",
-            cx + r, cy, -- start at rightmost point
+            cx + rx, cy, -- start at rightmost point
             "b",
-            cx + r, cy - c, cx + c, cy - r, cx, cy - r, -- first quadrant
-            cx - c, cy - r, cx - r, cy - c, cx - r, cy, -- second quadrant
-            cx - r, cy + c, cx - c, cy + r, cx, cy + r, -- third quadrant
-            cx + c, cy + r, cx + r, cy + c, cx + r, cy  -- fourth quadrant
+            cx + rx, cy - cy_off, cx + cx_off, cy - ry, cx, cy - ry, -- first quadrant
+            cx - cx_off, cy - ry, cx - rx, cy - cy_off, cx - rx, cy, -- second quadrant
+            cx - rx, cy + cy_off, cx - cx_off, cy + ry, cx, cy + ry, -- third quadrant
+            cx + cx_off, cy + ry, cx + rx, cy + cy_off, cx + rx, cy  -- fourth quadrant
         }
     else
         return {
             "m",
-            cx + r, cy, -- start at rightmost point
+            cx + rx, cy, -- start at rightmost point
             "b",
-            cx + r, cy + c, cx + c, cy + r, cx, cy + r  -- fourth quadrant
-            cx - c, cy + r, cx - r, cy + c, cx - r, cy, -- third quadrant
-            cx - r, cy - c, cx - c, cy - r, cx, cy - r, -- second quadrant
-            cx + c, cy - r, cx + r, cy - c, cx + r, cy, -- first quadrant
+            cx + rx, cy + cy_off, cx + cx_off, cy + ry, cx, cy + ry  -- fourth quadrant
+            cx - cx_off, cy + ry, cx - rx, cy + cy_off, cx - rx, cy, -- third quadrant
+            cx - rx, cy - cy_off, cx - cx_off, cy - ry, cx, cy - ry, -- second quadrant
+            cx + cx_off, cy - ry, cx + rx, cy - cy_off, cx + rx, cy, -- first quadrant
         }
 
 
@@ -248,10 +253,10 @@ rings = (data, clip, res) ->
     finalShape = ""
     for ring in *ringsList
         -- outer circle
-        finalShape ..= table.concat(bezier_circle(cx, cy, ring[2]), " ") .. " "
+        finalShape ..= table.concat(bezier_ellipse(cx, cy, ring[2], ring[2]), " ") .. " "
 
         -- inner circle (hole)
-        finalShape ..= table.concat(bezier_circle(cx, cy, ring[1], true), " ") .. " "
+        finalShape ..= table.concat(bezier_ellipse(cx, cy, ring[1], ring[1], true), " ") .. " "
 
     data = add_line data, finalShape
     data
@@ -296,6 +301,84 @@ star = (data, clip, res) ->
     data
 
 
+vignette = (data, clip, res) ->
+    x1, y1, x2, y2 = unpack clip
+    -- clip is a diagonal line that sets the aspect ratio
+    xMin, xMax = math.min(x1, x2), math.max(x1, x2)
+    yMin, yMax = math.min(y1, y2), math.max(y1, y2)
+    cx = (xMin + xMax) / 2
+    cy = (yMin + yMax) / 2
+
+    -- semi-axes of the largest ellipse, i.e. the one touching the clip bounds
+    rxMax = (xMax - xMin) / 2
+    ryMax = (yMax - yMin) / 2
+
+    spacing = res.vignetteSpacing
+    innerRatio = res.vignetteInnerRadius
+
+    -- use the larger semi-axis to decide how many rings fit
+    -- both axes shrink together so a square AR gives circles and
+    -- a rectangular AR gives matching ovals
+    axisMax = math.max(rxMax, ryMax)
+
+    if axisMax == 0
+        logger\warn "Vignette clip has zero size. Skipping this line."
+        return data
+
+    -- the rings fill the band between the outer edge and the inner hole
+    -- innerRatio controls how much of the axis stays untouched in the middle
+    axisInner = axisMax * innerRatio
+    bandWidth = axisMax - axisInner
+
+    -- number of rings based on spacing
+    N = math.max(1, math.ceil(bandWidth / spacing))
+
+    -- arithmetic progression for ring thickness, thickest at the border
+    boxes = [ (N - i + 1) for i = 1, N ]   -- N, N-1, ..., 1
+    gaps = [ i for i = 1, N ]              -- 1, 2, ..., N
+
+    s = N * (N + 1) / 2
+    scale = (bandWidth / 2) / s
+
+    boxes = [x * scale for x in *boxes]
+    gaps  = [x * scale for x in *gaps]
+
+    -- generate ring insets, measured from the outer edge inward
+    tInner = 0
+    ringsList = {}
+    for i = 1, N
+        tOuter = tInner + boxes[i]
+        table.insert ringsList, {round(tInner, 4), round(tOuter, 4)}
+        tInner = tOuter + gaps[i]
+
+    finalShape = ""
+    expand = res.vignetteExpand or 0
+
+    local outerBoundary
+    if res.vignetteFillOuter
+        exMin, eyMin = xMin - expand, yMin - expand
+        exMax, eyMax = xMax + expand, yMax + expand
+        outerBoundary = "m #{exMin} #{eyMin} l #{exMin} #{eyMax} #{exMax} #{eyMax} #{exMax} #{eyMin} #{exMin} #{eyMin} "
+    else
+        outerBoundary = table.concat(bezier_ellipse(cx, cy, rxMax + expand, ryMax + expand), " ") .. " "
+
+    -- i == 1 = outermost boundary
+    for i, ring in ipairs ringsList
+        -- outer boundary
+        if i == 1
+            finalShape ..= outerBoundary
+        else
+            outerScale = 1 - ring[1] / axisMax
+            finalShape ..= table.concat(bezier_ellipse(cx, cy, rxMax * outerScale, ryMax * outerScale), " ") .. " "
+
+        -- inner ellipse (hole), shrunk further toward the center
+        innerScale = 1 - ring[2] / axisMax
+        finalShape ..= table.concat(bezier_ellipse(cx, cy, rxMax * innerScale, ryMax * innerScale, true), " ") .. " "
+
+    data = add_line data, finalShape
+    data
+
+
 main = (sub, sel) ->
     res, btn = createGUI!
     lines = LineCollection sub, sel
@@ -327,6 +410,8 @@ main = (sub, sel) ->
             data = rings data, clip, res
         elseif btn == "Star"
             data = star data, clip, res
+        elseif btn == "Vignette"
+            data = vignette data, clip, res
         data\commit!
     lines\replaceLines!
 
