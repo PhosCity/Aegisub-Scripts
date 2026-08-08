@@ -900,14 +900,14 @@
 			"description": "Magic triangles + blur gradients",
 			"channels": {
 				"main": {
-					"version": "1.0.1",
-					"released": "2026-07-30",
+					"version": "1.1.0",
+					"released": "2026-08-08",
 					"default": true,
 					"files": [
 						{
 							"name": ".moon",
 							"url": "@{fileBaseUrl}@{fileName}",
-							"sha1": "0962b9df7dba03aee038743fc72c4c94f10aacfd"
+							"sha1": "96e8f4edf55e2fa7c80e884feb70fb48ea21480b"
 						}
 					],
 					"requiredModules": [
