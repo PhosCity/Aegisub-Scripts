@@ -1,6 +1,6 @@
 export script_name = "Vector Gradient"
 export script_description = "Magic triangles + blur gradients"
-export script_version = "1.0.1"
+export script_version = "1.1.0"
 export script_author = "PhosCity"
 export script_namespace = "phos.VectorGradient"
 
@@ -353,7 +353,7 @@ vignette = (data, clip, res) ->
 
     finalShape = ""
     expand = res.vignetteExpand or 0
-    
+
     local outerBoundary
     if res.vignetteFillOuter
         exMin, eyMin = xMin - expand, yMin - expand
